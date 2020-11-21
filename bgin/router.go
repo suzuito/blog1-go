@@ -11,6 +11,10 @@ func SetUpRoot(root *gin.Engine) {
 		"",
 		HandlerGetArticles(),
 	)
+	gArticles.POST(
+		"",
+		HandlerPostArticles(),
+	)
 	gArticle := gArticles.Group(":articleID")
 	gArticle.Use(MiddlewareGetArticle())
 	gArticle.GET(

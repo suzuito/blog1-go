@@ -1,12 +1,16 @@
 package model
 
+// ArticleID ...
+type ArticleID string
+
 // Article ...
 type Article struct {
-	ID          string
+	ID          ArticleID
 	Title       string
 	Description string
 	CreatedAt   int64
 	UpdatedAt   int64
+	PublishedAt int64
 	Versions    ArticleVersions
 	Tags        []Tag
 }
