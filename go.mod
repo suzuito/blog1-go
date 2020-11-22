@@ -13,7 +13,6 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/suzuito/common-env v1.1.0
 	github.com/suzuito/common-go v0.8.0
-	github.com/suzuito/terakoya-go v0.0.12
 	github.com/yuin/goldmark v1.2.1 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/api v0.19.0
