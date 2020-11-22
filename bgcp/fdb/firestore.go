@@ -14,11 +14,20 @@ import (
 var (
 	// CollArticles ...
 	CollArticles = "articles"
+	// CollTags ...
+	CollTags = "tags"
 )
 
-// ClientFirestore ...
-type ClientFirestore struct {
+// Client ...
+type Client struct {
 	cli *firestore.Client
+}
+
+// NewClient ...
+func NewClient(cli *firestore.Client) *Client {
+	return &Client{
+		cli: cli,
+	}
 }
 
 func getDoc(
@@ -35,7 +44,27 @@ func getDoc(
 		}
 		return xerrors.Errorf("%s : %w", err.Error(), usecase.ErrNotFound)
 	}
-	if err := s.DataTo(ctx, doc); err != nil {
+	if err := shp.DataTo(doc); err != nil {
+		return xerrors.Errorf("%s : %w", err.Error(), err)
+	}
+	return nil
+}
+
+func getDocByTx(
+	tx *firestore.Transaction,
+	coll *firestore.CollectionRef,
+	docID string,
+	doc interface{},
+) error {
+	ref := coll.Doc(docID)
+	shp, err := tx.Get(ref)
+	if err != nil {
+		if grpc.Code(err) == codes.NotFound {
+			return xerrors.Errorf("Document '%s' is not found : %w", docID, usecase.ErrNotFound)
+		}
+		return xerrors.Errorf("%s : %w", err.Error(), usecase.ErrNotFound)
+	}
+	if err := shp.DataTo(doc); err != nil {
 		return xerrors.Errorf("%s : %w", err.Error(), err)
 	}
 	return nil
@@ -66,7 +95,25 @@ func setDoc(ctx context.Context, coll *firestore.CollectionRef, docid string, v 
 	ref := coll.Doc(docid)
 	_, err := ref.Set(ctx, v)
 	if err != nil {
-		return err
+		return xerrors.Errorf("Cannot set doc '%s/%s' : %w", coll.Path, docid, err)
+	}
+	return nil
+}
+
+func setDocByTx(tx *firestore.Transaction, coll *firestore.CollectionRef, docid string, v interface{}) error {
+	ref := coll.Doc(docid)
+	err := tx.Set(ref, v)
+	if err != nil {
+		return xerrors.Errorf("Cannot set doc '%s/%s' : %w", coll.Path, docid, err)
+	}
+	return nil
+}
+
+func deleteDocByTx(tx *firestore.Transaction, coll *firestore.CollectionRef, docid string) error {
+	ref := coll.Doc(docid)
+	err := tx.Delete(ref)
+	if err != nil {
+		return xerrors.Errorf("Cannot delete doc '%s/%s' : %w", coll.Path, docid, err)
 	}
 	return nil
 }
