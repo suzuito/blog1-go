@@ -14,6 +14,4 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
       - run: go build main_uploader/main.go
-      - run: source dev.sh
-      - run: env
-      - run: ./main
+      - run: source dev.sh && ./main
