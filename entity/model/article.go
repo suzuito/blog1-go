@@ -92,6 +92,7 @@ func NewArticleFromRawContent(r io.Reader) (*Article, error) {
 		return nil, xerrors.Errorf("Cannot parse date '%s' : %w", embedMeta.Date, err)
 	}
 	article := Article{
+		ID:          ArticleID(fmt.Sprintf("%s-%s", embedMeta.Date, embedMeta.Title)),
 		Title:       embedMeta.Title,
 		Description: embedMeta.Description,
 		Tags:        *NewTags(embedMeta.Tags),

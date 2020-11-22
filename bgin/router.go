@@ -1,39 +1,33 @@
 package bgin
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/suzuito/blog1-go/application"
+)
 
 // SetUpRoot ...
-func SetUpRoot(root *gin.Engine) {
-	root.Use(MiddlewareLogger())
+func SetUpRoot(root *gin.Engine, app *application.Application) {
+	root.Use(MiddlewareLogger(app))
+	root.Use(MiddlewareUsecase(app))
 
-	gArticles := root.Group("articles")
-	gArticles.GET(
-		"",
-		HandlerGetArticles(),
-	)
-	gArticles.POST(
-		"",
-		HandlerPostArticles(),
-	)
-	gArticle := gArticles.Group(":articleID")
-	gArticle.Use(MiddlewareGetArticle())
-	gArticle.GET(
-		"",
-		HandlerGetArticlesByID(),
-	)
-	gTags := root.Group("tags")
-	gTags.GET(
-		"",
-		HandlerGetTags(),
-	)
-	gTag := gTags.Group(":tagID")
-	gTag.Use(MiddlewareGetTag())
-	gTag.GET(
-		"",
-		HandlerGetTagsByID(),
-	)
-	gTag.GET(
-		"articles",
-		HandlerGetArticles(),
-	)
+	{
+		gArticles := root.Group("articles")
+		gArticles.GET("", HandlerGetArticles(app))
+		{
+			gArticle := gArticles.Group(":articleID")
+			gArticle.Use(MiddlewareGetArticle(app))
+			gArticle.GET("", HandlerGetArticlesByID(app))
+		}
+	}
+
+	{
+		gTags := root.Group("tags")
+		gTags.GET("", HandlerGetTags(app))
+		{
+			gTag := gTags.Group(":tagID")
+			gTag.Use(MiddlewareGetTag(app))
+			gTag.GET("", HandlerGetTagsByID(app))
+			gTag.GET("articles", HandlerGetArticles(app))
+		}
+	}
 }

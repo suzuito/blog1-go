@@ -10,12 +10,20 @@ import (
 // GetArticles ...
 func (u *Impl) GetArticles(
 	ctx context.Context,
-	startPublishedAt int64,
+	cursorPublishedAt int64,
+	cursorTitle string,
+	order CursorOrder,
 	n int,
 	articles *[]model.Article,
 ) error {
-	// return u.db.GetArticles(ctx, startPublishedAt, n, articles)
-	return nil
+	return u.db.GetArticles(
+		ctx,
+		cursorPublishedAt,
+		cursorTitle,
+		order,
+		n,
+		articles,
+	)
 }
 
 // GetArticle ...
@@ -24,8 +32,7 @@ func (u *Impl) GetArticle(
 	articleID model.ArticleID,
 	article *model.Article,
 ) error {
-	// return u.db.GetArticle(ctx, articleID, article)
-	return nil
+	return u.db.GetArticle(ctx, articleID, article)
 }
 
 // CreateArticle ...

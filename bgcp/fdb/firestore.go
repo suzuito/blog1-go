@@ -30,6 +30,13 @@ func NewClient(cli *firestore.Client) *Client {
 	}
 }
 
+func newFirestoreOrder(o usecase.CursorOrder) firestore.Direction {
+	if o == usecase.CursorOrderAsc {
+		return firestore.Asc
+	}
+	return firestore.Desc
+}
+
 func getDoc(
 	ctx context.Context,
 	coll *firestore.CollectionRef,
@@ -72,10 +79,10 @@ func getDocByTx(
 
 func getDocs(
 	ctx context.Context,
-	coll *firestore.CollectionRef,
+	q *firestore.Query,
 	f func(*firestore.DocumentSnapshot) error,
 ) error {
-	it := coll.Documents(ctx)
+	it := q.Documents(ctx)
 	for {
 		doc, err := it.Next()
 		if err == iterator.Done {

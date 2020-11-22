@@ -20,7 +20,7 @@ func (c *Client) GetArticle(
 	return getDoc(
 		ctx,
 		c.cli.Collection(CollArticles),
-		fmt.Sprintf("%s/%s", CollArticles, articleID),
+		string(articleID),
 		article,
 	)
 }
@@ -28,22 +28,26 @@ func (c *Client) GetArticle(
 // GetArticles ...
 func (c *Client) GetArticles(
 	ctx context.Context,
-	articleID model.ArticleID,
+	cursorPublishedAt int64,
+	cursorTitle string,
+	order usecase.CursorOrder,
+	n int,
 	articles *[]model.Article,
 ) error {
-	// return getDocs(
-	// 	ctx,
-	// 	c.cli.Collection(CollArticles),
-	// 	func(shp *firestore.DocumentSnapshot) error {
-	// 		article := model.Article{}
-	// 		if err := shp.DataTo(&article); err != nil {
-	// 			return err
-	// 		}
-	// 		*articles = append(*articles, &article)
-	// 		return nil
-	// 	},
-	// )
-	return nil
+	coll := c.cli.Collection(CollArticles)
+	query := coll.
+		OrderBy("PublishedAt", newFirestoreOrder(order)).
+		OrderBy("Title", firestore.Asc).
+		StartAfter(cursorPublishedAt, cursorTitle).
+		Limit(n)
+	return getDocs(ctx, &query, func(shp *firestore.DocumentSnapshot) error {
+		article := model.Article{}
+		if err := shp.DataTo(&article); err != nil {
+			return xerrors.Errorf("Cannot data to : %w", err)
+		}
+		*articles = append(*articles, article)
+		return nil
+	})
 }
 
 // CreateArticle ...
@@ -151,9 +155,6 @@ func (c *Client) SetArticle(
 	afterArticle *model.Article,
 ) error {
 	now := time.Now()
-	if afterArticle.ID == "" {
-		afterArticle.ID = model.ArticleID(fmt.Sprintf("%d-%s", afterArticle.PublishedAt, afterArticle.Title))
-	}
 	if afterArticle.CreatedAt == 0 {
 		afterArticle.CreatedAt = now.Unix()
 	}

@@ -24,7 +24,8 @@ Sync all
 go build main_uploader/main.go
 ```
 
-Sync changed articles only
+### API
 
 ```bash
+go build main_api/main.go
 ```

@@ -5,25 +5,23 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/suzuito/blog1-go/application"
 	"github.com/suzuito/blog1-go/entity/model"
-	env "github.com/suzuito/common-env"
+	"github.com/suzuito/blog1-go/usecase"
+	"github.com/suzuito/common-go/cgin"
 )
 
 // HandlerGetArticles ...
-func HandlerGetArticles() gin.HandlerFunc {
+func HandlerGetArticles(app *application.Application) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		u := GetCtxUsecase(ctx)
-		n := env.GetenvAsInt("n", 10)
-		startPublishedAt := env.GetenvAsInt64("start", -1)
-		if startPublishedAt < 0 {
-			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest,
-				"Param 'start' must be set",
-			)
-			return
-		}
+		now := time.Now()
+		u := getCtxUsecase(ctx)
+		n := cgin.DefaultQueryAsInt(ctx, "n", 10)
+		cursorPublishedAt := cgin.DefaultQueryAsInt64(ctx, "cursor_published_at", now.Unix())
+		cursorTitle := ctx.DefaultQuery("cursor_title", "")
+		order := usecase.CursorOrder(ctx.DefaultQuery("order", string(usecase.CursorOrderDesc)))
 		articles := []model.Article{}
-		if err := u.GetArticles(ctx, startPublishedAt, n, &articles); err != nil {
+		if err := u.GetArticles(ctx, cursorPublishedAt, cursorTitle, order, n, &articles); err != nil {
 			ctx.AbortWithStatusJSON(
 				http.StatusInternalServerError,
 				err.Error(),
@@ -38,45 +36,12 @@ func HandlerGetArticles() gin.HandlerFunc {
 }
 
 // HandlerGetArticlesByID ...
-func HandlerGetArticlesByID() gin.HandlerFunc {
+func HandlerGetArticlesByID(app *application.Application) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		article := GetCtxArticle(ctx)
+		article := getCtxArticle(ctx)
 		ctx.JSON(
 			http.StatusOK,
 			NewResponseArticle(article),
 		)
-	}
-}
-
-// HandlerPostArticles ...
-func HandlerPostArticles() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		u := GetCtxUsecase(ctx)
-		body := struct {
-			Title       string   `json:"title"`
-			Description string   `json:"description"`
-			PublishedAt int64    `json:"publishedAt"`
-			Tags        []string `json:"tags"`
-		}{}
-		if err := ctx.BindJSON(&body); err != nil {
-			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest,
-				err.Error(),
-			)
-			return
-		}
-		article := model.Article{}
-		if err := u.CreateArticle(ctx, &article); err != nil {
-			ctx.AbortWithStatusJSON(
-				http.StatusInternalServerError,
-				err.Error(),
-			)
-			return
-		}
-		now := time.Now()
-		article.CreatedAt = now.Unix()
-		article.UpdatedAt = now.Unix()
-		ctx.JSON(http.StatusCreated, NewResponseArticle(&article))
-		return
 	}
 }

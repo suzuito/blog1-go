@@ -1,23 +1,16 @@
 package main
 
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/suzuito/blog1-go/application"
+	"github.com/suzuito/blog1-go/bgin"
+)
+
 func main() {
-	/*
-		ctx := context.Background()
-		app, err := newApplicationImpl(ctx)
-		if err != nil {
-			panic(err)
-		}
-		root := gin.New()
-		if os.Getenv("GAE_APPLICATION") == "" {
-			root.Use(gin.Logger())
-		}
-		root.Use(gin.Recovery())
-		cgin.UseCORS(app, root)
-		tgin.SetUpRoute(root)
-		tgin.SetUpGeoRoute(root)
-		tgin.SetUpRouteForGeo(root)
-		if err := root.Run(); err != nil {
-			panic(err)
-		}
-	*/
+	app := application.NewApplication()
+	root := gin.New()
+	bgin.SetUpRoot(root, app)
+	if err := root.Run(); err != nil {
+		panic(err)
+	}
 }
