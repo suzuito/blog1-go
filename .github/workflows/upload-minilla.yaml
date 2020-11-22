@@ -15,4 +15,5 @@ jobs:
           export_default_credentials: true
       - run: go build main_uploader/main.go
       - run: source dev.sh
+      - run: env
       - run: ./main
