@@ -8,13 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - uses: google-github-actions/setup-gcloud@master
         with:
+          project_id: blog-minilla
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - run: echo ${{ secrets.GCP_SA_KEY }} > cred.json
-      - run: cat cred.json
-      - run: export GOOGLE_APPLICATION_CREDENTIALS=./cred.json
+          export_default_credentials: true
       - run: go build main_uploader/main.go
-      - run: source minilla.sh
       - run: env
       - run: ./main
