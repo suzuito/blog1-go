@@ -1,4 +1,6 @@
+# Blog
 
+BFF for http://blog.tach.dev
 
 ## Set up development environment
 
@@ -17,8 +19,6 @@ export GOOGLE_APPLICATION_CREDENTIALS=./blog-minilla-276dbb450e29.json
 ## Usage
 
 ### Uploade `data/articles`
-
-Sync all
 
 ```bash
 go build main_uploader/main.go
