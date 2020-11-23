@@ -27,6 +27,17 @@ type Usecase interface {
 		n int,
 		articles *[]model.Article,
 	) error
+
+	GenerateBlogSiteMap(
+		ctx context.Context,
+		origin string,
+	) (string, error)
+
+	GetAdminAuth(
+		ctx context.Context,
+		headerAdminAuth string,
+		adminAuth *model.AdminAuth,
+	) error
 }
 
 // Impl ...

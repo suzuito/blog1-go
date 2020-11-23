@@ -30,4 +30,10 @@ func SetUpRoot(root *gin.Engine, app *application.Application) {
 			gTag.GET("articles", HandlerGetArticles(app))
 		}
 	}
+
+	{
+		gAdmin := root.Group("admin")
+		gAdmin.Use(MiddlewareAdminAuth(app))
+		gAdmin.GET("sitemap.xml", HandlerGetSitemapXML(app))
+	}
 }
