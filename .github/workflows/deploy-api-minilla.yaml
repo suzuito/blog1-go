@@ -19,4 +19,4 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
       - run: gcloud builds submit --tag gcr.io/blog-minilla/api
-      - run: gcloud beta run services replace main_api/service-minilla.yaml --platform managed --region asia-northeast1 --quiet
+      - run: gcloud --quiet beta run services replace main_api/service-minilla.yaml --platform managed --region asia-northeast1
