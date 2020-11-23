@@ -48,24 +48,10 @@ func (u *Impl) SyncArticles(
 	ctx context.Context,
 	source ArticleReader,
 ) error {
-	if err := source.Walk(ctx, func(article *model.Article, _ []byte) error {
+	if err := source.Walk(ctx, func(article *model.Article, raw []byte) error {
 		if err := u.db.SetArticle(ctx, article); err != nil {
 			return xerrors.Errorf("Cannot set article '%+v' : %w", article, err)
 		}
-		return nil
-	}); err != nil {
-		return xerrors.Errorf("ArticleReader walk is failed : %w", err)
-	}
-	return nil
-}
-
-// UploadArticleMDs ...
-func (u *Impl) UploadArticleMDs(
-	ctx context.Context,
-	source ArticleReader,
-) error {
-	u.logger.Infof("Upload article MarkDown")
-	if err := source.Walk(ctx, func(article *model.Article, raw []byte) error {
 		converted := []byte{}
 		if err := u.converterMD.Convert(ctx, article, raw, &converted); err != nil {
 			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)

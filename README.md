@@ -21,7 +21,10 @@ export GOOGLE_APPLICATION_CREDENTIALS=./blog-minilla-276dbb450e29.json
 ### Uploade `data/articles`
 
 ```bash
-go build main_uploader/main.go
+go build main_uploader/main.go [file,..]
+
+# Example
+go build main_uploader/main.go data/articles/hoge.md data/articles/fuga.md
 ```
 
 ### API
