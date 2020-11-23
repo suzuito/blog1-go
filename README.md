@@ -2,7 +2,7 @@
 
 ## Set up development environment
 
-Environment variables
+Environment variables1
 
 ```bash
 source dev.sh
