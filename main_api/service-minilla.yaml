@@ -20,6 +20,6 @@ spec:
         - name: ENV
           value: minilla
         - name: ALLOWED_ORIGINS
-          value: https://blog.tach.dev
+          value: https://blog.tach.dev,http://localhost:4200
         - name: ALLOWED_METHODS
           value: GET,POST,DELETE
