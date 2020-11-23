@@ -1,6 +1,7 @@
 [
     {
         "origin": [
+            "http://localhost:4200",
             "https://blog.tach.dev"
         ],
         "method": [
