@@ -24,7 +24,7 @@ func NewArticleReader(
 }
 
 // Walk ...
-func (r *ArticleReader) Walk(ctx context.Context, each func(article *model.Article) error) error {
+func (r *ArticleReader) Walk(ctx context.Context, each func(article *model.Article, raw []byte) error) error {
 	err := filepath.Walk(r.dirBase, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
@@ -33,11 +33,11 @@ func (r *ArticleReader) Walk(ctx context.Context, each func(article *model.Artic
 		if err != nil {
 			return xerrors.Errorf("Reading file '%s' is failed : %w", path, err)
 		}
-		article, err := model.NewArticleFromRawContent(file)
+		article, raw, err := model.NewArticleFromRawContent(file)
 		if err != nil {
 			return xerrors.Errorf("Parse file '%s' is failed : %w", path, err)
 		}
-		return each(article)
+		return each(article, raw)
 	})
 	if err != nil {
 		return xerrors.Errorf("Walk dir '%s' is failed : %w", r.dirBase, err)

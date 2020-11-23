@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/suzuito/blog1-go/entity/model"
+	"github.com/suzuito/common-go/clogger"
 )
 
 // Usecase ...
@@ -30,12 +31,23 @@ type Usecase interface {
 
 // Impl ...
 type Impl struct {
-	db DB
+	db          DB
+	storage     Storage
+	converterMD MDConverter
+	logger      clogger.Logger
 }
 
 // NewImpl ...
-func NewImpl(db DB) *Impl {
+func NewImpl(
+	logger clogger.Logger,
+	db DB,
+	storage Storage,
+	converterMD MDConverter,
+) *Impl {
 	return &Impl{
-		db: db,
+		logger:      logger,
+		db:          db,
+		storage:     storage,
+		converterMD: converterMD,
 	}
 }

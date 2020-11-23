@@ -52,7 +52,7 @@ func NewTags(tags []string) *[]Tag {
 }
 
 // NewArticleFromRawContent ...
-func NewArticleFromRawContent(r io.Reader) (*Article, error) {
+func NewArticleFromRawContent(r io.Reader) (*Article, []byte, error) {
 	s := bufio.NewScanner(r)
 	isMetaBlock := false
 	isMetaBlockDone := false
@@ -76,7 +76,7 @@ func NewArticleFromRawContent(r io.Reader) (*Article, error) {
 		}
 	}
 	if !isMetaBlockDone {
-		return nil, xerrors.Errorf("Meta data is not found : %w", ErrArticleMetaBlockNotFound)
+		return nil, nil, xerrors.Errorf("Meta data is not found : %w", ErrArticleMetaBlockNotFound)
 	}
 	embedMeta := struct {
 		Title       string   `yaml:"title"`
@@ -85,11 +85,11 @@ func NewArticleFromRawContent(r io.Reader) (*Article, error) {
 		Date        string   `yaml:"date"`
 	}{}
 	if err := yaml.Unmarshal([]byte(metaBlock), &embedMeta); err != nil {
-		return nil, xerrors.Errorf("Cannot parse yaml block '%s' : %w", metaBlock, err)
+		return nil, nil, xerrors.Errorf("Cannot parse yaml block '%s' : %w", metaBlock, err)
 	}
 	date, err := time.Parse("2006-01-02", embedMeta.Date)
 	if err != nil {
-		return nil, xerrors.Errorf("Cannot parse date '%s' : %w", embedMeta.Date, err)
+		return nil, nil, xerrors.Errorf("Cannot parse date '%s' : %w", embedMeta.Date, err)
 	}
 	article := Article{
 		ID:          ArticleID(fmt.Sprintf("%s-%s", embedMeta.Date, embedMeta.Title)),
@@ -98,5 +98,5 @@ func NewArticleFromRawContent(r io.Reader) (*Article, error) {
 		Tags:        *NewTags(embedMeta.Tags),
 		PublishedAt: date.Unix(),
 	}
-	return &article, nil
+	return &article, []byte(notMetaBlock), nil
 }

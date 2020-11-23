@@ -21,7 +21,10 @@ func MiddlewareUsecase(app *application.Application) gin.HandlerFunc {
 		}
 		defer fcli.Close()
 		u := usecase.NewImpl(
+			nil,
 			fdb.NewClient(fcli),
+			nil,
+			nil,
 		)
 		setCtxUsecase(ctx, u)
 		ctx.Next()

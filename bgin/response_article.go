@@ -34,8 +34,3 @@ func NewResponseArticles(a *[]model.Article) *[]ResponseArticle {
 	}
 	return &b
 }
-
-// ResponseArticleVersions ...
-type ResponseArticleVersions struct {
-	Current int64 `json:"current"`
-}
