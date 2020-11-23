@@ -39,9 +39,6 @@ func main() {
 	}
 	defer scli.Close()
 
-	areader := local.NewArticleReader(path.Join(app.DirData, "articles"))
-	defer areader.Close()
-
 	converter := local.BlackFridayMDConverter{}
 	db := fdb.NewClient(fcli)
 	str := storage.New(scli, app.GCPBucket)
@@ -50,21 +47,24 @@ func main() {
 
 	u := usecase.NewImpl(&logger, db, str, &converter)
 
-	syncDB := flag.Bool("syncdb", false, "Sync articles")
-	syncStorage := flag.Bool("syncstorage", false, "Sync storage")
+	mode := flag.String("target", "changed-only", "'all', 'changed-only', 'fixed'")
 	flag.Parse()
 
-	if *syncDB {
-		if err := u.SyncArticles(ctx, areader); err != nil {
-			fmt.Printf("%+v\n", err)
-			os.Exit(1)
+	var areader usecase.ArticleReader
+	switch *mode {
+	case "all":
+		areader = local.NewArticleReaderAll(path.Join(app.DirData, "articles"))
+	default:
+		areaderFix := local.NewArticleReaderFix()
+		for _, filePath := range flag.Args() {
+			areaderFix.AddFilePath(filePath)
 		}
+		areader = areaderFix
 	}
+	defer areader.Close()
 
-	if *syncStorage {
-		if err := u.UploadArticleMDs(ctx, areader); err != nil {
-			fmt.Printf("%+v\n", err)
-			os.Exit(1)
-		}
+	if err := u.SyncArticles(ctx, areader); err != nil {
+		fmt.Printf("%+v\n", err)
+		os.Exit(1)
 	}
 }
