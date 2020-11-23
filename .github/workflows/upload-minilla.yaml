@@ -1,16 +1,16 @@
-name: upload-minilla
-on:
-  pull_request:
-
-jobs:
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - run: go build main_uploader/main.go
-      - run: source minilla.sh
-      - run: ./main
+# name: upload-minilla
+# on:
+#   pull_request:
+# jobs:
+#   deploy:
+#     name: Deploy
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: google-github-actions/setup-gcloud@master
+#         with:
+#           project_id: blog-minilla
+#           service_account_key: ${{ secrets.GCP_SA_KEY }}
+#           export_default_credentials: true
+#       - run: go build main_uploader/main.go
+#       - run: source dev.sh && ./main

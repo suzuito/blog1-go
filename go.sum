@@ -175,8 +175,6 @@ github.com/suzuito/common-go v0.0.0-20200128140735-e974e068b050/go.mod h1:MXs0SU
 github.com/suzuito/common-go v0.8.0 h1:+sx8q+jlXNBQV7i003A37ObJO7ez76ZquYjq3j43KBY=
 github.com/suzuito/common-go v0.8.0/go.mod h1:qFTEf8Oci5f9GI+6AL2itzo9xiCwFviJs8Da8FpWV9w=
 github.com/suzuito/common-herror v0.3.0/go.mod h1:YGzhlwb7C2ThmHYW4ZFZk/nuQEv3cuf46p/EJCJlz5c=
-github.com/suzuito/terakoya-go v0.0.12 h1:TqtwVdokqQyKdowYVUlEtmcaeeRWrpyJFUuWOHZiqbI=
-github.com/suzuito/terakoya-go v0.0.12/go.mod h1:spidCt3ZqMcW6Vn3k4T/8a3EwkzwMp5Q2qsof3v6Yr4=
 github.com/suzuito/wikipedia-on-map-go v0.0.0-20200203004811-50d3c9554880/go.mod h1:YWdiyx8HzbBff5DC04DSPdJSUYE1SThQXQa9nzBqyBY=
 github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf h1:Z2X3Os7oRzpdJ75iPqWZc0HeJWFYNCvKsfpQwFpRNTA=
 github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf/go.mod h1:M8agBzgqHIhgj7wEn9/0hJUZcrvt9VY+Ln+S1I5Mha0=

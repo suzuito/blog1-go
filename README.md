@@ -1,8 +1,10 @@
+# Blog
 
+BFF for http://blog.tach.dev
 
 ## Set up development environment
 
-Environment variables
+Environment variables1
 
 ```bash
 source dev.sh
@@ -18,13 +20,12 @@ export GOOGLE_APPLICATION_CREDENTIALS=./blog-minilla-276dbb450e29.json
 
 ### Uploade `data/articles`
 
-Sync all
-
 ```bash
 go build main_uploader/main.go
 ```
 
-Sync changed articles only
+### API
 
 ```bash
+go build main_api/main.go
 ```

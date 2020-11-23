@@ -8,6 +8,6 @@ import (
 
 // ArticleReader ...
 type ArticleReader interface {
-	Walk(ctx context.Context, each func(article *model.Article) error) error
+	Walk(ctx context.Context, each func(article *model.Article, raw []byte) error) error
 	Close() error
 }
