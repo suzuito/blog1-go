@@ -20,3 +20,4 @@ jobs:
           export_default_credentials: true
       - run: gcloud builds submit --tag gcr.io/blog-minilla/api
       - run: gcloud --quiet beta run services replace main_api/service-minilla.yaml --platform managed --region asia-northeast1
+      - run: gsutil cors set gcs-cors-minilla.json gs://blog-static-minilla

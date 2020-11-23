@@ -1,0 +1,12 @@
+[
+    {
+        "origin": [
+            "https://blog.tach.dev"
+        ],
+        "method": [
+            "GET"
+        ],
+        "responseHeader": [],
+        "maxAgeSeconds": 600
+    }
+]
