@@ -25,7 +25,7 @@ type xmlURL struct {
 	Lastmod string   `xml:"lastmod"`
 }
 
-func newXMLURL(a *model.Article, origin string) *xmlURL {
+func newXMLURLFromArticle(a *model.Article, origin string) *xmlURL {
 	mod := time.Unix(a.PublishedAt, 0).Format("2006-01-02")
 	return &xmlURL{
 		Loc:     fmt.Sprintf("%s/blog/%s", origin, url.QueryEscape(string(a.ID))),
@@ -50,13 +50,22 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (string, 
 			break
 		}
 		for _, article := range articles {
-			x := newXMLURL(&article, origin)
+			x := newXMLURLFromArticle(&article, origin)
 			urls.URLs = append(urls.URLs, *x)
 		}
 		last := articles[len(articles)-1]
 		cursorPublishedAt = last.PublishedAt
 		cursorTitle = last.Title
 	}
+
+	urls.URLs = append(urls.URLs, xmlURL{
+		Lastmod: "2020-11-01",
+		Loc:     fmt.Sprintf("%s", origin),
+	})
+	urls.URLs = append(urls.URLs, xmlURL{
+		Lastmod: "2020-11-01",
+		Loc:     fmt.Sprintf("%s/blog", origin),
+	})
 
 	urls.XMLNSXsi = "http://www.w3.org/2001/XMLSchema-instance"
 	urls.XMLNS = "http://www.sitemaps.org/schemas/sitemap/0.9"
