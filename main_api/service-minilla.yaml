@@ -9,7 +9,7 @@ spec:
         autoscaling.knative.dev/maxScale: '1'
     spec:
       containers:
-      - image: gcr.io/blog-minilla/api
+      - image: gcr.io/blog-minilla/api:latest
         resources:
           limits:
             memory: 256Mi
