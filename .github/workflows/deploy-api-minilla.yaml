@@ -19,7 +19,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
       - run: gcloud builds submit --tag gcr.io/blog-minilla/api
-      - run: apt-get install gettext-base
+      - run: sudo apt-get install gettext-base
       - run: envsubst '${GITHUB_SHA}' < main_api/service-minilla.yaml > k.yaml
       - run: gcloud --quiet beta run services replace k.yaml --platform managed --region asia-northeast1
       - run: gsutil cors set gcs-cors-minilla.json gs://blog-static-minilla
