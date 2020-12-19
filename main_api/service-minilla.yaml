@@ -2,7 +2,6 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: api
-  gh_sha: ${GITHUB_SHA}
 spec:
   template:
     metadata:
@@ -24,3 +23,8 @@ spec:
           value: https://blog.tach.dev,http://localhost:4200
         - name: ALLOWED_METHODS
           value: GET,PUT,POST,DELETE
+        # Command `gcloud --quiet beta run services replace` does not deploy new instance
+        # unless this yaml is updated.
+        # To force deploying new instance, add GH_SHA every time sources on GH is updated.
+        - name: GH_SHA
+          value: ${GITHUB_SHA}
