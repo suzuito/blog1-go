@@ -60,11 +60,11 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (string, 
 
 	urls.URLs = append(urls.URLs, xmlURL{
 		Lastmod: time.Now().Format("2006-01-02"),
-		Loc:     fmt.Sprintf("%s", origin),
+		Loc:     fmt.Sprintf("%s/", origin),
 	})
 	urls.URLs = append(urls.URLs, xmlURL{
 		Lastmod: time.Now().Format("2006-01-02"),
-		Loc:     fmt.Sprintf("%s/blog", origin),
+		Loc:     fmt.Sprintf("%s/blog/", origin),
 	})
 
 	urls.XMLNSXsi = "http://www.w3.org/2001/XMLSchema-instance"
