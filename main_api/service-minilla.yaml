@@ -2,8 +2,7 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: api
-  gh_sha:
-    ${GITHUB_SHA}
+  gh_sha: ${GITHUB_SHA}
 spec:
   template:
     metadata:
