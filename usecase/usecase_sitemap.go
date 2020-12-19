@@ -26,7 +26,7 @@ type xmlURL struct {
 }
 
 func newXMLURLFromArticle(a *model.Article, origin string) *xmlURL {
-	mod := time.Unix(a.PublishedAt, 0).Format("2006-01-02")
+	mod := time.Unix(a.UpdatedAt, 0).Format("2006-01-02")
 	return &xmlURL{
 		Loc:     fmt.Sprintf("%s/blog/%s", origin, url.QueryEscape(string(a.ID))),
 		Lastmod: mod,
@@ -59,11 +59,11 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (string, 
 	}
 
 	urls.URLs = append(urls.URLs, xmlURL{
-		Lastmod: "2020-11-01",
+		Lastmod: time.Now().Format("2006-01-02"),
 		Loc:     fmt.Sprintf("%s", origin),
 	})
 	urls.URLs = append(urls.URLs, xmlURL{
-		Lastmod: "2020-11-01",
+		Lastmod: time.Now().Format("2006-01-02"),
 		Loc:     fmt.Sprintf("%s/blog", origin),
 	})
 
