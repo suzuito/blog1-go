@@ -20,7 +20,7 @@ spec:
         - name: ENV
           value: minilla
         - name: ALLOWED_ORIGINS
-          value: https://blog.tach.dev,http://localhost:4200
+          value: https://blog.tach.dev,http://localhost:4200,http://localhost:8080
         - name: ALLOWED_METHODS
           value: GET,PUT,POST,DELETE
         # Command `gcloud --quiet beta run services replace` does not deploy new instance

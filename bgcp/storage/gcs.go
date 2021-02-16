@@ -4,10 +4,13 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"strings"
 
+	"cloud.google.com/go/storage"
 	gstorage "cloud.google.com/go/storage"
 	"github.com/suzuito/blog1-go/entity/model"
+	"github.com/suzuito/blog1-go/usecase"
 	"golang.org/x/xerrors"
 )
 
@@ -40,5 +43,28 @@ func (c *GCS) UploadArticle(
 	if err := w.Close(); err != nil {
 		return xerrors.Errorf("Cannot upload article '%s' into '%s/%s' : %w", article.ID, c.bucket, p, err)
 	}
+	return nil
+}
+
+func (c *GCS) GetFileAsHTTPResponse(
+	ctx context.Context,
+	p string,
+	body *[]byte,
+	headers map[string]string,
+) error {
+	b := c.cli.Bucket(c.bucket)
+	o := b.Object(p)
+	reader, err := o.NewReader(ctx)
+	if err != nil {
+		if xerrors.Is(err, storage.ErrObjectNotExist) {
+			return xerrors.Errorf("Not found '%s': %w", p, usecase.ErrNotFound)
+		}
+		return xerrors.Errorf("Cannot new reader '%s': %w", p, err)
+	}
+	*body, err = ioutil.ReadAll(reader)
+	if err != nil {
+		return xerrors.Errorf("Cannot read '%s': %w", p, err)
+	}
+	headers["Content-Type"] = reader.ContentType()
 	return nil
 }

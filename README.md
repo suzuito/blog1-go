@@ -18,6 +18,13 @@ export GOOGLE_APPLICATION_CREDENTIALS=./blog-minilla-276dbb450e29.json
 
 ## Usage
 
+### Front
+
+```bash
+go build -o main.exe main_front/main.go
+./main.exe
+```
+
 ### Uploade `data/articles`
 
 ```bash
@@ -30,7 +37,8 @@ go build main_uploader/main.go
 ### API
 
 ```bash
-go build main_api/main.go
+go build -o main.exe main_api/main.go
+./main.exe
 ```
 
 

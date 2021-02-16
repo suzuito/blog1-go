@@ -13,4 +13,10 @@ type Storage interface {
 		article *model.Article,
 		raw string,
 	) error
+	GetFileAsHTTPResponse(
+		ctx context.Context,
+		p string,
+		body *[]byte,
+		headers map[string]string,
+	) error
 }
