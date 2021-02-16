@@ -62,5 +62,16 @@ func (i *Impl) ServeFront(ctx context.Context, w http.ResponseWriter, r *http.Re
 		&body,
 		headers,
 	)
+	if err != nil {
+		if xerrors.Is(err, ErrNotFound) {
+			p = "/index.html"
+			err = i.storage.GetFileAsHTTPResponse(
+				ctx,
+				fmt.Sprintf("app%s", p),
+				&body,
+				headers,
+			)
+		}
+	}
 	return err
 }
