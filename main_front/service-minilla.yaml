@@ -1,0 +1,26 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: api
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '1'
+    spec:
+      containers:
+      - image: gcr.io/blog-minilla/front:latest
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 1000m
+        env:
+        - name: ENV
+          value: minilla
+        - name: GCP_BUCKET
+          value: blog-static-minilla
+        # Command `gcloud --quiet beta run services replace` does not deploy new instance
+        # unless this yaml is updated.
+        # To force deploying new instance, add GH_SHA every time sources on GH is updated.
+        - name: GH_SHA
+          value: ${GITHUB_SHA}
