@@ -65,6 +65,6 @@ func (c *GCS) GetFileAsHTTPResponse(
 	if err != nil {
 		return xerrors.Errorf("Cannot read '%s': %w", p, err)
 	}
-	headers["Content-Type"] = reader.ContentType()
+	headers["Content-Type"] = fmt.Sprintf("%s", reader.ContentType())
 	return nil
 }

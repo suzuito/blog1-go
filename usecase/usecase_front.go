@@ -22,7 +22,6 @@ func (i *Impl) ServeFront(ctx context.Context, w http.ResponseWriter, r *http.Re
 		}{
 			Path: r.URL.Path,
 		}
-		b, _ := json.Marshal(m)
 		if err != nil {
 			if xerrors.Is(err, ErrNotFound) {
 				status = http.StatusNotFound
@@ -35,11 +34,13 @@ func (i *Impl) ServeFront(ctx context.Context, w http.ResponseWriter, r *http.Re
 		} else {
 			status = http.StatusOK
 		}
-		w.WriteHeader(status)
 		for k, v := range headers {
 			w.Header().Add(k, v)
 		}
+		w.WriteHeader(status)
 		w.Write(body)
+		m.Status = status
+		b, _ := json.Marshal(m)
 		i.logger.Infof("%s", string(b))
 	})()
 	p := r.URL.Path
