@@ -5,3 +5,5 @@ steps:
   - "--tag=gcr.io/blog-minilla/api"
   - "--file=./api.Dockerfile"
   - "."
+images:
+  - gcr.io/blog-minilla/api
