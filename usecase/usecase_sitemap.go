@@ -11,32 +11,43 @@ import (
 	"golang.org/x/xerrors"
 )
 
-type xmlURLSet struct {
+type XMLURLSet struct {
 	XMLName           xml.Name `xml:"urlset"`
-	URLs              []xmlURL `xml:"url"`
+	URLs              []XMLURL `xml:"url"`
 	XMLNSXsi          string   `xml:"xmlns:xsi,attr"`
 	XMLNS             string   `xml:"xmlns,attr"`
 	XsiSchemaLocation string   `xml:"xsi:schemaLocation,attr"`
 }
 
-type xmlURL struct {
+func (x *XMLURLSet) Marshal() (string, error) {
+	b, err := xml.MarshalIndent(x, "", "    ")
+	if err != nil {
+		return "", xerrors.Errorf("Cannot marshal xml : %w", err)
+	}
+
+	c := string(b)
+	c = `<?xml version="1.0" encoding="UTF-8"?>` + "\n" + c
+	return c, nil
+}
+
+type XMLURL struct {
 	XMLName xml.Name `xml:"url"`
 	Loc     string   `xml:"loc"`
 	Lastmod string   `xml:"lastmod"`
 }
 
-func newXMLURLFromArticle(a *model.Article, origin string) *xmlURL {
+func newXMLURLFromArticle(a *model.Article, origin string) *XMLURL {
 	mod := time.Unix(a.UpdatedAt, 0).Format("2006-01-02")
-	return &xmlURL{
+	return &XMLURL{
 		Loc:     fmt.Sprintf("%s/blog/%s", origin, url.QueryEscape(string(a.ID))),
 		Lastmod: mod,
 	}
 }
 
 // GenerateBlogSiteMap ...
-func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (string, error) {
-	urls := xmlURLSet{
-		URLs: []xmlURL{},
+func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (*XMLURLSet, error) {
+	urls := XMLURLSet{
+		URLs: []XMLURL{},
 	}
 	// Articles
 	cursorPublishedAt := int64(0)
@@ -44,7 +55,7 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (string, 
 	for {
 		articles := []model.Article{}
 		if err := u.db.GetArticles(ctx, cursorPublishedAt, cursorTitle, CursorOrderAsc, 100, &articles); err != nil {
-			return "", xerrors.Errorf("Cannot get articles : %w", err)
+			return nil, xerrors.Errorf("Cannot get articles : %w", err)
 		}
 		if len(articles) <= 0 {
 			break
@@ -58,11 +69,11 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (string, 
 		cursorTitle = last.Title
 	}
 
-	urls.URLs = append(urls.URLs, xmlURL{
+	urls.URLs = append(urls.URLs, XMLURL{
 		Lastmod: time.Now().Format("2006-01-02"),
 		Loc:     fmt.Sprintf("%s/", origin),
 	})
-	urls.URLs = append(urls.URLs, xmlURL{
+	urls.URLs = append(urls.URLs, XMLURL{
 		Lastmod: time.Now().Format("2006-01-02"),
 		Loc:     fmt.Sprintf("%s/blog/", origin),
 	})
@@ -71,12 +82,5 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (string, 
 	urls.XMLNS = "http://www.sitemaps.org/schemas/sitemap/0.9"
 	urls.XsiSchemaLocation = "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 
-	b, err := xml.MarshalIndent(urls, "", "    ")
-	if err != nil {
-		return "", xerrors.Errorf("Cannot marshal xml : %w", err)
-	}
-
-	c := string(b)
-	c = `<?xml version="1.0" encoding="UTF-8"?>` + "\n" + c
-	return c, nil
+	return &urls, nil
 }

@@ -32,7 +32,7 @@ type Usecase interface {
 	GenerateBlogSiteMap(
 		ctx context.Context,
 		origin string,
-	) (string, error)
+	) (*XMLURLSet, error)
 
 	GetAdminAuth(
 		ctx context.Context,
@@ -42,6 +42,8 @@ type Usecase interface {
 
 	ServeFront(
 		ctx context.Context,
+		urlPrerendering string,
+		originFront string,
 		w http.ResponseWriter,
 		r *http.Request,
 	) error

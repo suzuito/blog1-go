@@ -13,6 +13,7 @@ type Application struct {
 	DirData      string
 	GCPProjectID string
 	GCPBucket    string
+	URLPrerender string
 }
 
 // NewApplication ...
@@ -27,5 +28,6 @@ func NewApplication(ctx context.Context) (*Application, error) {
 	a.DirData = env.GetenvAsString("DIR_DATA", "data")
 	a.GCPProjectID = env.GetenvAsString("GCP_PROJECT_ID", "")
 	a.GCPBucket = env.GetenvAsString("GCP_BUCKET", "")
+	a.URLPrerender = env.GetenvAsString("URL_PRERENDER", "")
 	return &a, nil
 }

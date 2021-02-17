@@ -68,3 +68,22 @@ func (c *GCS) GetFileAsHTTPResponse(
 	headers["Content-Type"] = fmt.Sprintf("%s", reader.ContentType())
 	return nil
 }
+
+func (c *GCS) UploadHTML(
+	ctx context.Context,
+	p string,
+	body string,
+) error {
+	b := c.cli.Bucket(c.bucket)
+	o := b.Object(p)
+	w := o.NewWriter(ctx)
+	w.ContentType = "text/html;charset=utf-8"
+	buf := strings.NewReader(body)
+	if _, err := io.Copy(w, buf); err != nil {
+		return xerrors.Errorf("Cannot upload html into '%s/%s' : %w", c.bucket, p, err)
+	}
+	if err := w.Close(); err != nil {
+		return xerrors.Errorf("Cannot upload html into '%s/%s' : %w", c.bucket, p, err)
+	}
+	return nil
+}

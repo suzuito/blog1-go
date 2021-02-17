@@ -45,8 +45,10 @@ go build -o main.exe main_api/main.go
 ### Site map generator
 
 ```bash
-go build main_sitemap_generator/main.go
+go build -o main.exe main_sitemap_generator/main.go
 
 # Example
-./main https://hoge.com
+./main.exe https://blog.tach.dev
+
+./main.exe -prerender https://blog.tach.dev
 ```

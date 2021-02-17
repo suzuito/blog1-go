@@ -26,6 +26,8 @@ func handler() http.HandlerFunc {
 		u := usecase.NewImpl(&clogger.LoggerPrint{}, nil, storage.New(scli, env.GetenvAsString("GCP_BUCKET", "")), nil)
 		u.ServeFront(
 			ctx,
+			env.GetenvAsString("URL_PRERENDER", ""),
+			env.GetenvAsString("ORIGIN_FRONT", ""),
 			w,
 			r,
 		)

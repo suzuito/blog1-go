@@ -19,4 +19,9 @@ type Storage interface {
 		body *[]byte,
 		headers map[string]string,
 	) error
+	UploadHTML(
+		ctx context.Context,
+		p string,
+		body string,
+	) error
 }

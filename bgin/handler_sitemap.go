@@ -20,6 +20,13 @@ func HandlerGetSitemapXML(app *application.Application) gin.HandlerFunc {
 			return
 		}
 		ctx.Header("Content-type", "application/xml")
-		ctx.String(http.StatusOK, b)
+		body, err := b.Marshal()
+		if err != nil {
+			ctx.AbortWithStatus(
+				http.StatusInternalServerError,
+			)
+			return
+		}
+		ctx.String(http.StatusOK, body)
 	}
 }
