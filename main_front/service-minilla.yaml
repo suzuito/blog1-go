@@ -21,6 +21,8 @@ spec:
           value: blog-static-minilla
         - name: ORIGIN_FRONT
           value: https://blog.tach.dev
+        - name: URL_PRERENDER
+          value: https://prerendering-4dzd7suxtq-an.a.run.app
         # Command `gcloud --quiet beta run services replace` does not deploy new instance
         # unless this yaml is updated.
         # To force deploying new instance, add GH_SHA every time sources on GH is updated.
