@@ -53,7 +53,9 @@ func (i *Impl) ServeFront(
 		i.logger.Infof("%s", string(b))
 	})()
 	p := r.URL.Path
-	if strings.Contains(r.UserAgent(), "Googlebot") || strings.Contains(r.UserAgent(), "Twitterbot") {
+	if strings.Contains(r.UserAgent(), "Googlebot") ||
+		strings.Contains(r.UserAgent(), "Twitterbot") ||
+		strings.Contains(r.UserAgent(), "facebookexternalhit") {
 		u := fmt.Sprintf("%s%s", originFront, r.RequestURI)
 		bodyString := ""
 		err := GeneratePrerenderingPage(
