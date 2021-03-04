@@ -67,4 +67,9 @@ func main() {
 		fmt.Printf("%+v\n", err)
 		os.Exit(1)
 	}
+
+	if err := u.WriteArticleHTMLs(ctx, areader); err != nil {
+		fmt.Printf("%+v\n", err)
+		os.Exit(1)
+	}
 }
