@@ -2,6 +2,9 @@ package usecase
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"os"
 
 	"github.com/suzuito/blog1-go/entity/model"
 	"golang.org/x/xerrors"
@@ -59,6 +62,31 @@ func (u *Impl) SyncArticles(
 		u.logger.Infof("Upload '%s'", article.ID)
 		if err := u.storage.UploadArticle(ctx, article, string(converted)); err != nil {
 			return xerrors.Errorf("Cannot upload article '%+v' : %w", article, err)
+		}
+		return nil
+	}); err != nil {
+		return xerrors.Errorf("ArticleReader walk is failed : %w", err)
+	}
+	return nil
+}
+
+// WriteArticleHTMLs ...
+func (u *Impl) WriteArticleHTMLs(
+	ctx context.Context,
+	source ArticleReader,
+) error {
+	if err := source.Walk(ctx, func(article *model.Article, raw []byte) error {
+		converted := []byte{}
+		if err := u.converterMD.Convert(ctx, article, raw, &converted); err != nil {
+			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
+		}
+		filePath := fmt.Sprintf(".output/%s.html", article.Title)
+		u.logger.Infof("Write '%s' into '%s'", article.ID, filePath)
+		if err := os.RemoveAll(filePath); err != nil {
+			return xerrors.Errorf("Cannot remove '%s'", filePath)
+		}
+		if err := ioutil.WriteFile(filePath, converted, 0644); err != nil {
+			return xerrors.Errorf("Cannot write '%s'", filePath)
 		}
 		return nil
 	}); err != nil {
