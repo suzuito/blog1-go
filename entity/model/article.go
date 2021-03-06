@@ -29,12 +29,22 @@ type Article struct {
 	UpdatedAt   int64
 	PublishedAt int64
 	Tags        []Tag
+	Images      []ArticleImage
 }
 
 // Validate ...
 func (a *Article) Validate() error {
 	validator := validator.New()
 	return validator.Struct(a)
+}
+
+// ArticleImage ...
+type ArticleImage struct {
+	Width      int
+	Height     int
+	URL        string
+	RealWidth  int
+	RealHeight int
 }
 
 // Tag ...

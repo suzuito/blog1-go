@@ -41,7 +41,6 @@ go build -o main.exe main_api/main.go
 ./main.exe
 ```
 
-
 ### Site map generator
 
 ```bash

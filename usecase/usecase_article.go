@@ -52,9 +52,6 @@ func (u *Impl) SyncArticles(
 	source ArticleReader,
 ) error {
 	if err := source.Walk(ctx, func(article *model.Article, raw []byte) error {
-		if err := u.db.SetArticle(ctx, article); err != nil {
-			return xerrors.Errorf("Cannot set article '%+v' : %w", article, err)
-		}
 		converted := []byte{}
 		if err := u.converterMD.Convert(ctx, article, raw, &converted); err != nil {
 			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
@@ -62,6 +59,12 @@ func (u *Impl) SyncArticles(
 		u.logger.Infof("Upload '%s'", article.ID)
 		if err := u.storage.UploadArticle(ctx, article, string(converted)); err != nil {
 			return xerrors.Errorf("Cannot upload article '%+v' : %w", article, err)
+		}
+		if err := u.attacheArticleImages(article, converted); err != nil {
+			return xerrors.Errorf("Cannot attacheArticleImages : %w", err)
+		}
+		if err := u.db.SetArticle(ctx, article); err != nil {
+			return xerrors.Errorf("Cannot set article '%+v' : %w", article, err)
 		}
 		return nil
 	}); err != nil {
