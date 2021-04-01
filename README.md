@@ -28,10 +28,10 @@ go build -o main.exe main_front/main.go
 ### Uploade `data/articles`
 
 ```bash
-go build -o main.exe main_uploader/main.go
+make uploader
 
 # Example
-./main.exe data/articles/hoge.md data/articles/fuga.md
+./uploader.exe data/articles/hoge.md data/articles/fuga.md
 ```
 
 ### API
