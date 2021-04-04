@@ -1,0 +1,9 @@
+steps:
+- name: "gcr.io/cloud-builders/docker"
+  args:
+  - build
+  - "--tag=gcr.io/suzuito-godzilla/blog1-api"
+  - "--file=./api.Dockerfile"
+  - "."
+images:
+  - gcr.io/suzuito-godzilla/blog1-api
