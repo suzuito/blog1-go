@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/suzuito/blog1-go/entity/model"
 	"github.com/suzuito/common-go/clogger"
@@ -38,14 +37,6 @@ type Usecase interface {
 		ctx context.Context,
 		headerAdminAuth string,
 		adminAuth *model.AdminAuth,
-	) error
-
-	ServeFront(
-		ctx context.Context,
-		urlPrerendering string,
-		originFront string,
-		w http.ResponseWriter,
-		r *http.Request,
 	) error
 }
 
