@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: api
+  name: blog1-api
 spec:
   template:
     metadata:
@@ -9,16 +9,16 @@ spec:
         autoscaling.knative.dev/maxScale: '1'
     spec:
       containers:
-      - image: gcr.io/blog-minilla/api:latest
+      - image: gcr.io/suzuito-godzilla/blog1-api:latest
         resources:
           limits:
             memory: 256Mi
             cpu: 1000m
         env:
         - name: GCP_PROJECT_ID
-          value: blog-minilla
+          value: suzuito-godzilla
         - name: ENV
-          value: minilla
+          value: godzilla
         - name: ALLOWED_ORIGINS
           value: https://blog.tach.dev,http://localhost:4200,http://localhost:8080
         - name: ALLOWED_METHODS

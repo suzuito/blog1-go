@@ -15,6 +15,7 @@
 # vendor/
 
 blog-minilla-*.json
+suzuito-godzilla-*.json
 main
 
 .output/*.html

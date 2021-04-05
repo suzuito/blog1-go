@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY . ./
 
-RUN go build -o api main_api/main.go
+RUN make api.exe
 
-CMD [ "./api" ]
+CMD [ "./api.exe" ]

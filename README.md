@@ -13,32 +13,23 @@ source dev.sh
 Google cloud platform credentials
 
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS=./blog-minilla-276dbb450e29.json
+export GOOGLE_APPLICATION_CREDENTIALS=./suzuito-godzilla-276dbb450e29.json
 ```
 
 ## Usage
 
-### Front
-
-```bash
-go build -o main.exe main_front/main.go
-./main.exe
-```
-
 ### Uploade `data/articles`
 
 ```bash
-make uploader
-
-# Example
+make uploader.exe
 ./uploader.exe data/articles/hoge.md data/articles/fuga.md
 ```
 
 ### API
 
 ```bash
-go build -o main.exe main_api/main.go
-./main.exe
+make api.exe
+./api.exe
 ```
 
 ### Site map generator
@@ -48,6 +39,4 @@ go build -o main.exe main_sitemap_generator/main.go
 
 # Example
 ./main.exe https://blog.tach.dev
-
-./main.exe -prerender https://blog.tach.dev
 ```
