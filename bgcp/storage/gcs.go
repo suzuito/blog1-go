@@ -32,7 +32,7 @@ func (c *GCS) UploadArticle(
 	raw string,
 ) error {
 	b := c.cli.Bucket(c.bucket)
-	p := fmt.Sprintf("articles/%s.html", article.ID)
+	p := fmt.Sprintf("%s.html", article.ID)
 	o := b.Object(p)
 	w := o.NewWriter(ctx)
 	w.ContentType = "text/html;charset=utf-8"
