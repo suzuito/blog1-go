@@ -8,3 +8,6 @@ api.exe: ${GO_SOURCES}
 
 sitemap_generator.exe: ${GO_SOURCES}
 	go build -o sitemap_generator.exe main_sitemap_generator/main.go
+
+start-api:
+	source dev.sh && $(shell go env GOPATH)/bin/air -c .air-api.toml

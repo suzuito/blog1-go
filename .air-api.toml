@@ -1,0 +1,5 @@
+root = "."
+
+[build]
+cmd = "make api.exe"
+bin = "api.exe"
