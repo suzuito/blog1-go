@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/suzuito/blog1-go/entity/model"
+	"github.com/suzuito/blog1-go/setting"
 	"github.com/suzuito/common-go/clogger"
 )
 
@@ -42,6 +43,7 @@ type Usecase interface {
 
 // Impl ...
 type Impl struct {
+	env         *setting.Environment
 	db          DB
 	storage     Storage
 	converterMD MDConverter
@@ -50,6 +52,7 @@ type Impl struct {
 
 // NewImpl ...
 func NewImpl(
+	env *setting.Environment,
 	logger clogger.Logger,
 	db DB,
 	storage Storage,

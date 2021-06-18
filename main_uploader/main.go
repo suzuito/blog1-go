@@ -13,12 +13,18 @@ import (
 	"github.com/suzuito/blog1-go/bgcp/fdb"
 	"github.com/suzuito/blog1-go/bgcp/storage"
 	"github.com/suzuito/blog1-go/local"
+	"github.com/suzuito/blog1-go/setting"
 	"github.com/suzuito/blog1-go/usecase"
 	"github.com/suzuito/common-go/clogger"
 )
 
 func main() {
 	ctx := context.Background()
+	env, err := setting.NewEnvironment()
+	if err != nil {
+		fmt.Printf("%+v\n", err)
+		os.Exit(1)
+	}
 	app, err := application.NewApplication(ctx)
 	if err != nil {
 		fmt.Printf("%+v\n", err)
@@ -45,7 +51,7 @@ func main() {
 
 	logger := clogger.LoggerPrint{}
 
-	u := usecase.NewImpl(&logger, db, str, &converter)
+	u := usecase.NewImpl(env, &logger, db, str, &converter)
 
 	mode := flag.String("target", "changed-only", "'all', 'changed-only', 'fixed'")
 	flag.Parse()

@@ -3,12 +3,13 @@ package bgin
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/suzuito/blog1-go/application"
+	"github.com/suzuito/blog1-go/setting"
 )
 
 // SetUpRoot ...
-func SetUpRoot(root *gin.Engine, app *application.Application) {
+func SetUpRoot(root *gin.Engine, env *setting.Environment, app *application.Application) {
 	root.Use(MiddlewareLogger(app))
-	root.Use(MiddlewareUsecase(app))
+	root.Use(MiddlewareUsecase(app, env))
 
 	{
 		gArticles := root.Group("articles")
