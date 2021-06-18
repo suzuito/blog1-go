@@ -30,12 +30,19 @@ type Article struct {
 	PublishedAt int64
 	Tags        []Tag
 	Images      []ArticleImage
+	TOC         []ArticleIndex
 }
 
 // Validate ...
 func (a *Article) Validate() error {
 	validator := validator.New()
 	return validator.Struct(a)
+}
+
+// ArticleIndex ...
+type ArticleIndex struct {
+	Name     string
+	Children []ArticleIndex
 }
 
 // ArticleImage ...
