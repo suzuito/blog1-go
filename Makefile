@@ -11,3 +11,6 @@ sitemap_generator.exe: ${GO_SOURCES}
 
 start-api:
 	source dev.sh && $(shell go env GOPATH)/bin/air -c .air-api.toml
+
+clean:
+	rm *.exe
