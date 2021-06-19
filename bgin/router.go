@@ -2,39 +2,38 @@ package bgin
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/application"
 	"github.com/suzuito/blog1-go/setting"
 )
 
 // SetUpRoot ...
-func SetUpRoot(root *gin.Engine, env *setting.Environment, app *application.Application) {
-	root.Use(MiddlewareLogger(app))
-	root.Use(MiddlewareUsecase(app, env))
+func SetUpRoot(root *gin.Engine, env *setting.Environment) {
+	root.Use(MiddlewareLogger())
+	root.Use(MiddlewareUsecase(env))
 
 	{
 		gArticles := root.Group("articles")
-		gArticles.GET("", HandlerGetArticles(app))
+		gArticles.GET("", HandlerGetArticles())
 		{
 			gArticle := gArticles.Group(":articleID")
-			gArticle.Use(MiddlewareGetArticle(app))
-			gArticle.GET("", HandlerGetArticlesByID(app))
+			gArticle.Use(MiddlewareGetArticle())
+			gArticle.GET("", HandlerGetArticlesByID())
 		}
 	}
 
 	{
 		gTags := root.Group("tags")
-		gTags.GET("", HandlerGetTags(app))
+		gTags.GET("", HandlerGetTags())
 		{
 			gTag := gTags.Group(":tagID")
-			gTag.Use(MiddlewareGetTag(app))
-			gTag.GET("", HandlerGetTagsByID(app))
-			gTag.GET("articles", HandlerGetArticles(app))
+			gTag.Use(MiddlewareGetTag())
+			gTag.GET("", HandlerGetTagsByID())
+			gTag.GET("articles", HandlerGetArticles())
 		}
 	}
 
 	{
 		gAdmin := root.Group("admin")
-		gAdmin.Use(MiddlewareAdminAuth(app))
-		gAdmin.GET("sitemap.xml", HandlerGetSitemapXML(app))
+		gAdmin.Use(MiddlewareAdminAuth())
+		gAdmin.GET("sitemap.xml", HandlerGetSitemapXML())
 	}
 }

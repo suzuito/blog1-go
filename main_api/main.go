@@ -1,22 +1,14 @@
 package main
 
 import (
-	"context"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/application"
 	"github.com/suzuito/blog1-go/bgin"
 	"github.com/suzuito/blog1-go/setting"
 )
 
 func main() {
 	env, err := setting.NewEnvironment()
-	if err != nil {
-		panic(err)
-	}
-	ctx := context.Background()
-	app, err := application.NewApplication(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -28,7 +20,7 @@ func main() {
 		ExposeHeaders:    []string{},
 		AllowCredentials: false,
 	}))
-	bgin.SetUpRoot(root, env, app)
+	bgin.SetUpRoot(root, env)
 	if err := root.Run(); err != nil {
 		panic(err)
 	}

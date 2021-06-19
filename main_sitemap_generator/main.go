@@ -7,7 +7,6 @@ import (
 
 	"cloud.google.com/go/firestore"
 	gstorage "cloud.google.com/go/storage"
-	"github.com/suzuito/blog1-go/application"
 	"github.com/suzuito/blog1-go/bgcp/fdb"
 	"github.com/suzuito/blog1-go/bgcp/storage"
 	"github.com/suzuito/blog1-go/setting"
@@ -29,13 +28,8 @@ func main() {
 	}
 
 	ctx := context.Background()
-	app, err := application.NewApplication(ctx)
-	if err != nil {
-		fmt.Printf("%+v\n", err)
-		os.Exit(1)
-	}
 
-	fcli, err := firestore.NewClient(ctx, app.GCPProjectID)
+	fcli, err := firestore.NewClient(ctx, env.GCPProjectID)
 	if err != nil {
 		fmt.Printf("%+v\n", err)
 		os.Exit(1)
@@ -51,7 +45,7 @@ func main() {
 
 	db := fdb.NewClient(fcli)
 	logger := clogger.LoggerPrint{}
-	sscli := storage.New(scli, app.GCPBucket)
+	sscli := storage.New(scli, "suzuito-godzilla-blog1-article") // FIXME env
 
 	u := usecase.NewImpl(env, &logger, db, sscli, nil)
 
