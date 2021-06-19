@@ -1,0 +1,14 @@
+[
+    {
+        "origin": [
+            "http://localhost:4200",
+            "http://localhost:8080",
+            "https://minilla-blog.tach.dev"
+        ],
+        "method": [
+            "GET"
+        ],
+        "responseHeader": [],
+        "maxAgeSeconds": 600
+    }
+]
