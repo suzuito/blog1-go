@@ -3,7 +3,7 @@ module github.com/suzuito/blog1-go
 go 1.15
 
 require (
-	cloud.google.com/go/firestore v1.1.1
+	cloud.google.com/go/firestore v1.5.0
 	cloud.google.com/go/storage v1.15.0
 	github.com/PuerkitoBio/goquery v1.6.1
 	github.com/gin-contrib/cors v1.3.0
