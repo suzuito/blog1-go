@@ -16,6 +16,6 @@ require (
 	github.com/suzuito/common-go v0.8.0
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/api v0.45.0
-	google.golang.org/grpc v1.37.0
-	gopkg.in/yaml.v2 v2.2.8
+	google.golang.org/grpc v1.38.0
+	gopkg.in/yaml.v2 v2.4.0
 )
