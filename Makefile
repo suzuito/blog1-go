@@ -12,5 +12,3 @@ init:
 
 clean:
 	rm -f *.exe
-	docker-compose down
-	# docker-compose down -v

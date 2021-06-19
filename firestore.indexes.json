@@ -1,0 +1,33 @@
+{
+    "indexes": [
+      {
+        "collectionGroup": "articles",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "PublishedAt",
+            "order": "DESCENDING"
+          },
+          {
+            "fieldPath": "Title",
+            "order": "ASCENDING"
+          }
+        ]
+      },
+      {
+        "collectionGroup": "articles",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "PublishedAt",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "Title",
+            "order": "ASCENDING"
+          }
+        ]
+      }
+    ],
+    "fieldOverrides": []
+  }
