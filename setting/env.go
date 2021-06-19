@@ -7,11 +7,12 @@ import (
 
 // Environment ...
 type Environment struct {
-	Env            string   `envconfig:"ENV"`
-	GCPProjectID   string   `envconfig:"GCP_PROJECT_ID"`
-	AllowedOrigins []string `envconfig:"ALLOWED_ORIGINS"`
-	AllowedMethods []string `envconfig:"ALLOWED_METHODS"`
-	GHSHA          string   `envconfig:"GH_SHA"`
+	Env              string   `envconfig:"ENV"`
+	GCPProjectID     string   `envconfig:"GCP_PROJECT_ID"`
+	GCPBucketArticle string   `envconfig:"GCP_BUCKET_ARTICLE"`
+	AllowedOrigins   []string `envconfig:"ALLOWED_ORIGINS"`
+	AllowedMethods   []string `envconfig:"ALLOWED_METHODS"`
+	GHSHA            string   `envconfig:"GH_SHA"`
 }
 
 func NewEnvironment() (*Environment, error) {

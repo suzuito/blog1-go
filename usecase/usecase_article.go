@@ -56,7 +56,7 @@ func (u *Impl) SyncArticles(
 		if err := u.converterMD.Convert(ctx, article, raw, &converted); err != nil {
 			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
 		}
-		u.logger.Infof("Upload '%s'", article.ID)
+		fmt.Printf("Upload '%s'\n", article.ID)
 		if err := u.storage.UploadArticle(ctx, article, string(converted)); err != nil {
 			return xerrors.Errorf("Cannot upload article '%+v' : %w", article, err)
 		}
@@ -84,7 +84,7 @@ func (u *Impl) WriteArticleHTMLs(
 			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
 		}
 		filePath := fmt.Sprintf(".output/%s.html", article.Title)
-		u.logger.Infof("Write '%s' into '%s'", article.ID, filePath)
+		fmt.Printf("Write '%s' into '%s'", article.ID, filePath)
 		if err := os.RemoveAll(filePath); err != nil {
 			return xerrors.Errorf("Cannot remove '%s'", filePath)
 		}

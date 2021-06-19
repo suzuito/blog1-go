@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"cloud.google.com/go/firestore"
+	"github.com/suzuito/blog1-go/setting"
 	"github.com/suzuito/blog1-go/usecase"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
@@ -17,6 +18,14 @@ var (
 	// CollTags ...
 	CollTags = "tags"
 )
+
+func NewResource(ctx context.Context, env *setting.Environment) (*firestore.Client, error) {
+	cli, err := firestore.NewClient(ctx, env.GCPProjectID)
+	if err != nil {
+		return nil, xerrors.Errorf(": %w", err)
+	}
+	return cli, nil
+}
 
 // Client ...
 type Client struct {

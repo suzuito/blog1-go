@@ -5,7 +5,6 @@ import (
 
 	"github.com/suzuito/blog1-go/entity/model"
 	"github.com/suzuito/blog1-go/setting"
-	"github.com/suzuito/common-go/clogger"
 )
 
 // Usecase ...
@@ -47,19 +46,16 @@ type Impl struct {
 	db          DB
 	storage     Storage
 	converterMD MDConverter
-	logger      clogger.Logger
 }
 
 // NewImpl ...
 func NewImpl(
 	env *setting.Environment,
-	logger clogger.Logger,
 	db DB,
 	storage Storage,
 	converterMD MDConverter,
 ) *Impl {
 	return &Impl{
-		logger:      logger,
 		db:          db,
 		storage:     storage,
 		converterMD: converterMD,

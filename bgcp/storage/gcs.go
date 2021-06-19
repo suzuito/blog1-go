@@ -10,9 +10,19 @@ import (
 	"cloud.google.com/go/storage"
 	gstorage "cloud.google.com/go/storage"
 	"github.com/suzuito/blog1-go/entity/model"
+	"github.com/suzuito/blog1-go/setting"
 	"github.com/suzuito/blog1-go/usecase"
 	"golang.org/x/xerrors"
 )
+
+// NewResource ...
+func NewResource(ctx context.Context, env *setting.Environment) (*gstorage.Client, error) {
+	cli, err := gstorage.NewClient(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("%w", err)
+	}
+	return cli, nil
+}
 
 // GCS ...
 type GCS struct {

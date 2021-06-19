@@ -7,14 +7,10 @@ import (
 	"os"
 	"path"
 
-	"cloud.google.com/go/firestore"
-	gstorage "cloud.google.com/go/storage"
-	"github.com/suzuito/blog1-go/bgcp/fdb"
-	"github.com/suzuito/blog1-go/bgcp/storage"
+	"github.com/suzuito/blog1-go/inject"
 	"github.com/suzuito/blog1-go/local"
 	"github.com/suzuito/blog1-go/setting"
 	"github.com/suzuito/blog1-go/usecase"
-	"github.com/suzuito/common-go/clogger"
 )
 
 func main() {
@@ -24,29 +20,25 @@ func main() {
 		fmt.Printf("%+v\n", err)
 		os.Exit(1)
 	}
-
-	fcli, err := firestore.NewClient(ctx, env.GCPProjectID)
+	gdeps, gcloseFunc, err := inject.NewGlobalDepends(ctx, env)
 	if err != nil {
 		fmt.Printf("%+v\n", err)
 		os.Exit(1)
 	}
-	defer fcli.Close()
-
-	scli, err := gstorage.NewClient(ctx)
+	defer gcloseFunc()
+	cdeps, ccloseFunc, err := inject.NewContextDepends(ctx, env)
 	if err != nil {
 		fmt.Printf("%+v\n", err)
 		os.Exit(1)
 	}
-	defer scli.Close()
+	defer ccloseFunc()
 
-	converter := local.BlackFridayMDConverter{}
-	db := fdb.NewClient(fcli)
-	str := storage.New(scli, "suzuito-godzilla-blog1-article") // FIXME env
-
-	logger := clogger.LoggerPrint{}
-
-	u := usecase.NewImpl(env, &logger, db, str, &converter)
-
+	u := usecase.NewImpl(
+		env,
+		cdeps.DB,
+		cdeps.Storage,
+		gdeps.MDConverter,
+	)
 	mode := flag.String("target", "changed-only", "'all', 'changed-only', 'fixed'")
 	flag.Parse()
 

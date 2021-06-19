@@ -4,28 +4,26 @@ import (
 	"fmt"
 	"os"
 
-	"cloud.google.com/go/firestore"
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/bgcp/fdb"
+	"github.com/suzuito/blog1-go/inject"
 	"github.com/suzuito/blog1-go/setting"
 	"github.com/suzuito/blog1-go/usecase"
 )
 
 // MiddlewareUsecase ...
-func MiddlewareUsecase(env *setting.Environment) gin.HandlerFunc {
+func MiddlewareUsecase(env *setting.Environment, gdeps *inject.GlobalDepends) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		fcli, err := firestore.NewClient(ctx, env.GCPProjectID)
+		cdeps, ccloseFunc, err := inject.NewContextDepends(ctx, env)
 		if err != nil {
 			fmt.Printf("%+v\n", err)
 			os.Exit(1)
 		}
-		defer fcli.Close()
+		defer ccloseFunc()
 		u := usecase.NewImpl(
 			env,
-			nil,
-			fdb.NewClient(fcli),
-			nil,
-			nil,
+			cdeps.DB,
+			cdeps.Storage,
+			gdeps.MDConverter,
 		)
 		setCtxUsecase(ctx, u)
 		ctx.Next()

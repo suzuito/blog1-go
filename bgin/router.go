@@ -2,12 +2,13 @@ package bgin
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/suzuito/blog1-go/inject"
 	"github.com/suzuito/blog1-go/setting"
 )
 
 // SetUpRoot ...
-func SetUpRoot(root *gin.Engine, env *setting.Environment) {
-	root.Use(MiddlewareUsecase(env))
+func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalDepends) {
+	root.Use(MiddlewareUsecase(env, gdeps))
 
 	{
 		gArticles := root.Group("articles")
