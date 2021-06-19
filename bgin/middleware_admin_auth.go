@@ -4,14 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/application"
 	"github.com/suzuito/blog1-go/entity/model"
 )
 
 var headerNameAdminAuth = "X-Admin-Auth"
 
 // MiddlewareAdminAuth ...
-func MiddlewareAdminAuth(app *application.Application) gin.HandlerFunc {
+func MiddlewareAdminAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := getCtxUsecase(ctx)
 		adminAuthHeader := ctx.GetHeader(headerNameAdminAuth)

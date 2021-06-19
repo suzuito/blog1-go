@@ -4,11 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/application"
 )
 
 // HandlerGetSitemapXML ...
-func HandlerGetSitemapXML(app *application.Application) gin.HandlerFunc {
+func HandlerGetSitemapXML() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := getCtxUsecase(ctx)
 		origin := ctx.DefaultQuery("origin", "http://localhost:4200")

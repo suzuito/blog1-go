@@ -9,7 +9,6 @@ import (
 
 	"cloud.google.com/go/firestore"
 	gstorage "cloud.google.com/go/storage"
-	"github.com/suzuito/blog1-go/application"
 	"github.com/suzuito/blog1-go/bgcp/fdb"
 	"github.com/suzuito/blog1-go/bgcp/storage"
 	"github.com/suzuito/blog1-go/local"
@@ -25,13 +24,8 @@ func main() {
 		fmt.Printf("%+v\n", err)
 		os.Exit(1)
 	}
-	app, err := application.NewApplication(ctx)
-	if err != nil {
-		fmt.Printf("%+v\n", err)
-		os.Exit(1)
-	}
 
-	fcli, err := firestore.NewClient(ctx, app.GCPProjectID)
+	fcli, err := firestore.NewClient(ctx, env.GCPProjectID)
 	if err != nil {
 		fmt.Printf("%+v\n", err)
 		os.Exit(1)
@@ -47,7 +41,7 @@ func main() {
 
 	converter := local.BlackFridayMDConverter{}
 	db := fdb.NewClient(fcli)
-	str := storage.New(scli, app.GCPBucket)
+	str := storage.New(scli, "suzuito-godzilla-blog1-article") // FIXME env
 
 	logger := clogger.LoggerPrint{}
 
@@ -59,7 +53,7 @@ func main() {
 	var areader usecase.ArticleReader
 	switch *mode {
 	case "all":
-		areader = local.NewArticleReaderAll(path.Join(app.DirData, "articles"))
+		areader = local.NewArticleReaderAll(path.Join("data", "articles")) // FIXME data => env
 	default:
 		areaderFix := local.NewArticleReaderFix()
 		for _, filePath := range flag.Args() {

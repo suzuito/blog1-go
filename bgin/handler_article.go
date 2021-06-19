@@ -5,14 +5,13 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/application"
 	"github.com/suzuito/blog1-go/entity/model"
 	"github.com/suzuito/blog1-go/usecase"
 	"github.com/suzuito/common-go/cgin"
 )
 
 // HandlerGetArticles ...
-func HandlerGetArticles(app *application.Application) gin.HandlerFunc {
+func HandlerGetArticles() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		now := time.Now()
 		u := getCtxUsecase(ctx)
@@ -36,7 +35,7 @@ func HandlerGetArticles(app *application.Application) gin.HandlerFunc {
 }
 
 // HandlerGetArticlesByID ...
-func HandlerGetArticlesByID(app *application.Application) gin.HandlerFunc {
+func HandlerGetArticlesByID() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		article := getCtxArticle(ctx)
 		ctx.JSON(

@@ -4,14 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/application"
 	"github.com/suzuito/blog1-go/entity/model"
 	"github.com/suzuito/blog1-go/usecase"
 	"golang.org/x/xerrors"
 )
 
 // MiddlewareGetArticle ...
-func MiddlewareGetArticle(app *application.Application) gin.HandlerFunc {
+func MiddlewareGetArticle() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := getCtxUsecase(ctx)
 		articleID := model.ArticleID(ctx.Param("articleID"))
