@@ -7,7 +7,10 @@ BFF for http://blog.tach.dev
 Environment variables1
 
 ```bash
-source dev.sh
+# Up
+make init
+# Down
+make clean
 ```
 
 Google cloud platform credentials

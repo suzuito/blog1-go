@@ -1,0 +1,31 @@
+version: '3'
+services:
+  env:
+    build: .
+    environment:
+      - ENV=dev
+      - DIR_DATA=data
+      - GCP_PROJECT_ID=suzuito-godzilla
+      - GCP_BUCKET_ARTICLE=suzuito-godzilla-blog1-article
+      - ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8080
+      - ALLOWED_METHODS=GET,POST,DELETE
+      # pubsub emulator
+      - PUBSUB_EMULATOR_HOST=gcp:8432
+      - PUBSUB_EMULATOR_HOST=fastalert-dummy
+      # Google
+      - GOOGLE_APPLICATION_CREDENTIALS=./suzuito-godzilla-b1180092f56f.json
+    working_dir: /opt/app
+    volumes:
+      - .:/opt/app
+    links:
+      - gcp:gcp
+    depends_on:
+      - gcp
+    command: /bin/bash -c 'air -c .air-api.toml'
+    ports:
+      - 8080:8080
+  gcp:
+    image: google/cloud-sdk:emulators
+    command: gcloud beta emulators pubsub start --project=fastalert-dummy
+    ports:
+      - 8085:8085 # pubsub

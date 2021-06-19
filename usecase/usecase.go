@@ -5,6 +5,7 @@ import (
 
 	"github.com/suzuito/blog1-go/entity/model"
 	"github.com/suzuito/blog1-go/setting"
+	"github.com/suzuito/common-go/cmarkdown"
 )
 
 // Usecase ...
@@ -45,7 +46,7 @@ type Impl struct {
 	env         *setting.Environment
 	db          DB
 	storage     Storage
-	converterMD MDConverter
+	converterMD cmarkdown.Converter
 }
 
 // NewImpl ...
@@ -53,7 +54,7 @@ func NewImpl(
 	env *setting.Environment,
 	db DB,
 	storage Storage,
-	converterMD MDConverter,
+	converterMD cmarkdown.Converter,
 ) *Impl {
 	return &Impl{
 		db:          db,

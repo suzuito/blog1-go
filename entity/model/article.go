@@ -1,15 +1,9 @@
 package model
 
 import (
-	"bufio"
 	"fmt"
-	"io"
-	"strings"
-	"time"
 
 	"github.com/go-playground/validator/v10"
-	"golang.org/x/xerrors"
-	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -39,10 +33,22 @@ func (a *Article) Validate() error {
 	return validator.Struct(a)
 }
 
+// ArticleIndexLevel ...
+type ArticleIndexLevel int
+
+const (
+	ArticleIndexLevel1 ArticleIndexLevel = 1
+	ArticleIndexLevel2 ArticleIndexLevel = 2
+	ArticleIndexLevel3 ArticleIndexLevel = 3
+	ArticleIndexLevel4 ArticleIndexLevel = 4
+	ArticleIndexLevel5 ArticleIndexLevel = 5
+)
+
 // ArticleIndex ...
 type ArticleIndex struct {
-	Name     string
-	Children []ArticleIndex
+	ID    string
+	Name  string
+	Level ArticleIndexLevel
 }
 
 // ArticleImage ...
@@ -66,54 +72,4 @@ func NewTags(tags []string) *[]Tag {
 		r = append(r, Tag{Name: tag})
 	}
 	return &r
-}
-
-// NewArticleFromRawContent ...
-func NewArticleFromRawContent(r io.Reader) (*Article, []byte, error) {
-	s := bufio.NewScanner(r)
-	isMetaBlock := false
-	isMetaBlockDone := false
-	metaBlock := ""
-	notMetaBlock := ""
-	for s.Scan() {
-		l := s.Text()
-		if strings.HasPrefix(l, "---") && !isMetaBlockDone {
-			if !isMetaBlock {
-				isMetaBlock = true
-				continue
-			}
-			isMetaBlock = false
-			isMetaBlockDone = true
-			continue
-		}
-		if isMetaBlock {
-			metaBlock += l + "\n"
-		} else {
-			notMetaBlock += l + "\n"
-		}
-	}
-	if !isMetaBlockDone {
-		return nil, nil, xerrors.Errorf("Meta data is not found : %w", ErrArticleMetaBlockNotFound)
-	}
-	embedMeta := struct {
-		Title       string   `yaml:"title"`
-		Tags        []string `yaml:"tags"`
-		Description string   `yaml:"description"`
-		Date        string   `yaml:"date"`
-	}{}
-	if err := yaml.Unmarshal([]byte(metaBlock), &embedMeta); err != nil {
-		return nil, nil, xerrors.Errorf("Cannot parse yaml block '%s' : %w", metaBlock, err)
-	}
-	date, err := time.Parse("2006-01-02", embedMeta.Date)
-	if err != nil {
-		return nil, nil, xerrors.Errorf("Cannot parse date '%s' : %w", embedMeta.Date, err)
-	}
-	article := Article{
-		ID:          ArticleID(fmt.Sprintf("%s-%s", embedMeta.Date, embedMeta.Title)),
-		Title:       embedMeta.Title,
-		Description: embedMeta.Description,
-		Tags:        *NewTags(embedMeta.Tags),
-		PublishedAt: date.Unix(),
-	}
-	return &article, []byte(notMetaBlock), nil
 }
