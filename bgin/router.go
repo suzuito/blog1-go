@@ -7,7 +7,6 @@ import (
 
 // SetUpRoot ...
 func SetUpRoot(root *gin.Engine, env *setting.Environment) {
-	root.Use(MiddlewareLogger())
 	root.Use(MiddlewareUsecase(env))
 
 	{
@@ -17,17 +16,6 @@ func SetUpRoot(root *gin.Engine, env *setting.Environment) {
 			gArticle := gArticles.Group(":articleID")
 			gArticle.Use(MiddlewareGetArticle())
 			gArticle.GET("", HandlerGetArticlesByID())
-		}
-	}
-
-	{
-		gTags := root.Group("tags")
-		gTags.GET("", HandlerGetTags())
-		{
-			gTag := gTags.Group(":tagID")
-			gTag.Use(MiddlewareGetTag())
-			gTag.GET("", HandlerGetTagsByID())
-			gTag.GET("articles", HandlerGetArticles())
 		}
 	}
 
