@@ -17,6 +17,8 @@ spec:
         env:
         - name: GCP_PROJECT_ID
           value: suzuito-godzilla
+        - name: GCP_BUCKET_ARTICLE
+          value: suzuito-godzilla-blog1-article
         - name: ENV
           value: godzilla
         - name: ALLOWED_ORIGINS
