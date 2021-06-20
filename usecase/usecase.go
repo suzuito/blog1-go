@@ -29,6 +29,13 @@ type Usecase interface {
 		articles *[]model.Article,
 	) error
 
+	ConvertMD(
+		ctx context.Context,
+		source []byte,
+		article *model.Article,
+		converted *[]byte,
+	) error
+
 	GenerateBlogSiteMap(
 		ctx context.Context,
 		origin string,
