@@ -49,6 +49,33 @@ func (u *Impl) CreateArticle(
 	return u.CreateArticle(ctx, article)
 }
 
+func (u *Impl) UpdateArticle(
+	ctx context.Context,
+	path string,
+) error {
+	source := []byte{}
+	headers := map[string]string{}
+	if err := u.storage.GetFileAsHTTPResponse(ctx, path, &source, &headers); err != nil {
+		return xerrors.Errorf("Cannot get file from %s : %w", path, err)
+	}
+	converted := []byte{}
+	article := model.Article{}
+	if err := u.ConvertMD(ctx, source, &article, &converted); err != nil {
+		return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
+	}
+	fmt.Printf("Upload '%s'\n", article.ID)
+	if err := u.storage.UploadArticle(ctx, &article, string(converted)); err != nil {
+		return xerrors.Errorf("Cannot upload article '%+v' : %w", article, err)
+	}
+	if err := u.attacheArticleImages(&article, converted); err != nil {
+		return xerrors.Errorf("Cannot attacheArticleImages : %w", err)
+	}
+	if err := u.db.SetArticle(ctx, &article); err != nil {
+		return xerrors.Errorf("Cannot set article '%+v' : %w", article, err)
+	}
+	return nil
+}
+
 // SyncArticles ...
 func (u *Impl) SyncArticles(
 	ctx context.Context,
