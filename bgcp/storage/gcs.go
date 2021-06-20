@@ -71,6 +71,7 @@ func (c *GCS) GetFileAsHTTPResponse(
 		}
 		return xerrors.Errorf("Cannot new reader '%s': %w", p, err)
 	}
+	defer reader.Close()
 	*body, err = ioutil.ReadAll(reader)
 	if err != nil {
 		return xerrors.Errorf("Cannot read '%s': %w", p, err)

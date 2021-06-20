@@ -12,6 +12,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/litao91/goldmark-mathjax v0.0.0-20210217064022-a43cf739a50f // indirect
+	github.com/rs/zerolog v1.23.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/suzuito/autr-go v0.0.0-20190927125214-bc5f7aea5bdc // indirect
 	github.com/suzuito/common-env v1.1.0 // indirect
