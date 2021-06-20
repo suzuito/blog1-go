@@ -16,14 +16,11 @@ type ArticleReader struct {
 }
 
 func NewArticleReader(
-	bucket string,
 	cli *gstorage.Client,
-	key string,
+	bucket, key string,
 ) *ArticleReader {
 	return &ArticleReader{
-		bucket: bucket,
-		key:    key,
-		cli:    cli,
+		cli: cli,
 	}
 }
 
