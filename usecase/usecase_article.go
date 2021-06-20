@@ -77,6 +77,7 @@ func (u *Impl) UpdateArticle(
 }
 
 // SyncArticles ...
+// :Deprecated
 func (u *Impl) SyncArticles(
 	ctx context.Context,
 	source ArticleReader,
@@ -104,6 +105,7 @@ func (u *Impl) SyncArticles(
 }
 
 // WriteArticleHTMLs ...
+// :Deprecated
 func (u *Impl) WriteArticleHTMLs(
 	ctx context.Context,
 	source ArticleReader,
