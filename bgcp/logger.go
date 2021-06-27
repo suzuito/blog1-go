@@ -12,7 +12,6 @@ type logEntry struct {
 	Message     string         `json:"message,omitempty"`
 	Severity    xlogging.Level `json:"severity,omitempty"`
 	Trace       string         `json:"logging.googleapis.com/trace,omitempty"`
-	Component   string         `json:"component,omitempty"`
 	JSONPayload interface{}    `json:"jsonPayload,omitempty"`
 }
 
@@ -31,16 +30,6 @@ func (l *Logger) Payloadf(severity xlogging.Level, format string, a ...interface
 		Message:  fmt.Sprintf(format, a...),
 		Severity: severity,
 		Trace:    l.trace,
-	}
-	body, _ := json.Marshal(&entry)
-	fmt.Println(string(body))
-}
-
-func (l *Logger) PayloadJSON(severity xlogging.Level, v interface{}) {
-	entry := logEntry{
-		JSONPayload: v,
-		Severity:    severity,
-		Trace:       l.trace,
 	}
 	body, _ := json.Marshal(&entry)
 	fmt.Println(string(body))

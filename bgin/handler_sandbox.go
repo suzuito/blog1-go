@@ -23,9 +23,6 @@ func HandlerGetSandbox() gin.HandlerFunc {
 		logger.Payloadf(xlogging.SeverityDebug, "hoge1")
 		logger.Payloadf(xlogging.SeverityInfo, "hoge2")
 		logger.Payloadf(xlogging.SeverityError, "hoge3")
-		logger.PayloadJSON(xlogging.SeverityDebug, map[string]string{"hoge": "fuga"})
-		logger.PayloadJSON(xlogging.SeverityInfo, map[string]string{"hoge": "fuga"})
-		logger.PayloadJSON(xlogging.SeverityError, map[string]string{"hoge": "fuga"})
 		ctx.Status(
 			status,
 		)

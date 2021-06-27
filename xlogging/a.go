@@ -10,5 +10,4 @@ const (
 
 type Logger interface {
 	Payloadf(severity Level, format string, a ...interface{})
-	PayloadJSON(severity Level, v interface{})
 }
