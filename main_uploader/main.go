@@ -26,7 +26,7 @@ func main() {
 		os.Exit(1)
 	}
 	defer gcloseFunc()
-	cdeps, ccloseFunc, err := inject.NewContextDepends(ctx, env)
+	cdeps, ccloseFunc, err := inject.NewContextDepends(ctx, env, "")
 	if err != nil {
 		fmt.Printf("%+v\n", err)
 		os.Exit(1)
