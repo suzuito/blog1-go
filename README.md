@@ -58,3 +58,7 @@ go build -o main.exe main_sitemap_generator/main.go
 # Example
 ./main.exe https://blog.tach.dev
 ```
+
+## Design
+
+- https://github.com/suzuito/private/blob/main/hack/blog
