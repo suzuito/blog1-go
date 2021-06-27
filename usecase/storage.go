@@ -17,7 +17,7 @@ type Storage interface {
 		ctx context.Context,
 		p string,
 		body *[]byte,
-		headers map[string]string,
+		headers *map[string]string,
 	) error
 	UploadHTML(
 		ctx context.Context,

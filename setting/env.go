@@ -12,7 +12,6 @@ type Environment struct {
 	GCPBucketArticle string   `envconfig:"GCP_BUCKET_ARTICLE"`
 	AllowedOrigins   []string `envconfig:"ALLOWED_ORIGINS"`
 	AllowedMethods   []string `envconfig:"ALLOWED_METHODS"`
-	GHSHA            string   `envconfig:"GH_SHA"`
 }
 
 func NewEnvironment() (*Environment, error) {

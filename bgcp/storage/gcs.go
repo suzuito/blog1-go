@@ -60,7 +60,7 @@ func (c *GCS) GetFileAsHTTPResponse(
 	ctx context.Context,
 	p string,
 	body *[]byte,
-	headers map[string]string,
+	headers *map[string]string,
 ) error {
 	b := c.cli.Bucket(c.bucket)
 	o := b.Object(p)
@@ -71,11 +71,12 @@ func (c *GCS) GetFileAsHTTPResponse(
 		}
 		return xerrors.Errorf("Cannot new reader '%s': %w", p, err)
 	}
+	defer reader.Close()
 	*body, err = ioutil.ReadAll(reader)
 	if err != nil {
 		return xerrors.Errorf("Cannot read '%s': %w", p, err)
 	}
-	headers["Content-Type"] = fmt.Sprintf("%s", reader.ContentType())
+	(*headers)["Content-Type"] = fmt.Sprintf("%s", reader.ContentType())
 	return nil
 }
 

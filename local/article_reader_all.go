@@ -2,6 +2,7 @@ package local
 
 import (
 	"context"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -29,16 +30,12 @@ func (r *ArticleReaderAll) Walk(ctx context.Context, each func(article *model.Ar
 		if info.IsDir() {
 			return nil
 		}
-		file, err := os.Open(path)
+		file, err := ioutil.ReadFile(path)
 		if err != nil {
 			return xerrors.Errorf("Reading file '%s' is failed : %w", path, err)
 		}
-		defer file.Close()
-		article, raw, err := model.NewArticleFromRawContent(file)
-		if err != nil {
-			return xerrors.Errorf("Parse file '%s' is failed : %w", path, err)
-		}
-		return each(article, raw)
+		article := model.Article{}
+		return each(&article, file)
 	})
 	if err != nil {
 		return xerrors.Errorf("Walk dir '%s' is failed : %w", r.dirBase, err)

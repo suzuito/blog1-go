@@ -21,7 +21,8 @@ func (u *Impl) attacheArticleImages(article *model.Article, htmlBody []byte) err
 	if err := extractImageURLs(htmlBody, &article.Images); err != nil {
 		return xerrors.Errorf("Cannot extract image urls : %w", err)
 	}
-	cli := retryablehttp.NewClient().StandardClient()
+	cli1 := retryablehttp.NewClient()
+	cli := cli1.StandardClient()
 	for i := range article.Images {
 		img := article.Images[i]
 		if err := u.refineArticleImage(cli, &img); err != nil {

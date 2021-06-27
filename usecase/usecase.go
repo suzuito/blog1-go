@@ -5,6 +5,7 @@ import (
 
 	"github.com/suzuito/blog1-go/entity/model"
 	"github.com/suzuito/blog1-go/setting"
+	"github.com/suzuito/common-go/cmarkdown"
 )
 
 // Usecase ...
@@ -28,6 +29,13 @@ type Usecase interface {
 		articles *[]model.Article,
 	) error
 
+	ConvertMD(
+		ctx context.Context,
+		source []byte,
+		article *model.Article,
+		converted *[]byte,
+	) error
+
 	GenerateBlogSiteMap(
 		ctx context.Context,
 		origin string,
@@ -45,7 +53,7 @@ type Impl struct {
 	env         *setting.Environment
 	db          DB
 	storage     Storage
-	converterMD MDConverter
+	converterMD cmarkdown.Converter
 }
 
 // NewImpl ...
@@ -53,7 +61,7 @@ func NewImpl(
 	env *setting.Environment,
 	db DB,
 	storage Storage,
-	converterMD MDConverter,
+	converterMD cmarkdown.Converter,
 ) *Impl {
 	return &Impl{
 		db:          db,

@@ -16,6 +16,8 @@
 
 blog-minilla-*.json
 suzuito-godzilla-*.json
+suzuito-minilla-*.json
 main
 
 .output/*.html
+tmp/

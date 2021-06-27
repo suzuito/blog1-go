@@ -5,14 +5,14 @@ import (
 
 	"github.com/suzuito/blog1-go/bgcp/fdb"
 	"github.com/suzuito/blog1-go/bgcp/storage"
-	"github.com/suzuito/blog1-go/local"
 	"github.com/suzuito/blog1-go/setting"
 	"github.com/suzuito/blog1-go/usecase"
+	"github.com/suzuito/common-go/cmarkdown"
 	"golang.org/x/xerrors"
 )
 
 type GlobalDepends struct {
-	MDConverter usecase.MDConverter
+	MDConverter cmarkdown.Converter
 }
 
 func NewGlobalDepends(ctx context.Context, env *setting.Environment) (*GlobalDepends, func(), error) {
@@ -23,7 +23,7 @@ func NewGlobalDepends(ctx context.Context, env *setting.Environment) (*GlobalDep
 		}
 	}
 	r := GlobalDepends{}
-	r.MDConverter = &local.BlackFridayMDConverter{}
+	r.MDConverter = cmarkdown.NewV1()
 	return &r, closeFunc, nil
 }
 
