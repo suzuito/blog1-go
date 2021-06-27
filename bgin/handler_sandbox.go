@@ -1,12 +1,11 @@
 package bgin
 
 import (
-	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/suzuito/blog1-go/xlogging"
 )
 
 func HandlerGetSandbox() gin.HandlerFunc {
@@ -20,7 +19,13 @@ func HandlerGetSandbox() gin.HandlerFunc {
 				status = http.StatusOK
 			}
 		}
-		fmt.Fprint(os.Stderr, "hoge\n")
+		logger := getCtxLogger(ctx)
+		logger.Payloadf(xlogging.SeverityDebug, "hoge1")
+		logger.Payloadf(xlogging.SeverityInfo, "hoge2")
+		logger.Payloadf(xlogging.SeverityError, "hoge3")
+		logger.PayloadJSON(xlogging.SeverityDebug, map[string]string{"hoge": "fuga"})
+		logger.PayloadJSON(xlogging.SeverityInfo, map[string]string{"hoge": "fuga"})
+		logger.PayloadJSON(xlogging.SeverityError, map[string]string{"hoge": "fuga"})
 		ctx.Status(
 			status,
 		)

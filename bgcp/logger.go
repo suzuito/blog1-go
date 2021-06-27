@@ -9,7 +9,7 @@ import (
 )
 
 type logEntry struct {
-	Message     string         `json:"message"`
+	Message     string         `json:"message,omitempty"`
 	Severity    xlogging.Level `json:"severity,omitempty"`
 	Trace       string         `json:"logging.googleapis.com/trace,omitempty"`
 	Component   string         `json:"component,omitempty"`

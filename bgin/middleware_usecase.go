@@ -30,6 +30,7 @@ func MiddlewareUsecase(env *setting.Environment, gdeps *inject.GlobalDepends) gi
 			gdeps.MDConverter,
 		)
 		setCtxUsecase(ctx, u)
+		setCtxLogger(ctx, cdeps.Logger)
 		ctx.Next()
 	}
 }
