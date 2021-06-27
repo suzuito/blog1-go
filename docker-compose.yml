@@ -5,15 +5,15 @@ services:
     environment:
       - ENV=dev
       - DIR_DATA=data
-      - GCP_PROJECT_ID=suzuito-godzilla
-      - GCP_BUCKET_ARTICLE=suzuito-godzilla-blog1-article
+      - GCP_PROJECT_ID=suzuito-minilla
+      - GCP_BUCKET_ARTICLE=suzuito-minilla-blog1-article
       - ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8080
       - ALLOWED_METHODS=GET,POST,DELETE
       # pubsub emulator
       - PUBSUB_EMULATOR_HOST=gcp:8432
       - PUBSUB_EMULATOR_HOST=fastalert-dummy
       # Google
-      - GOOGLE_APPLICATION_CREDENTIALS=./suzuito-godzilla-b1180092f56f.json
+      - GOOGLE_APPLICATION_CREDENTIALS=./suzuito-minilla-9b66c0d5d334.json
     working_dir: /opt/app
     volumes:
       - .:/opt/app

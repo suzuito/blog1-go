@@ -1,6 +1,8 @@
 package bgin
 
-import "github.com/suzuito/blog1-go/entity/model"
+import (
+	"github.com/suzuito/blog1-go/entity/model"
+)
 
 // ResponseArticle ...
 type ResponseArticle struct {
@@ -12,6 +14,7 @@ type ResponseArticle struct {
 	PublishedAt int64                  `json:"publishedAt"`
 	Tags        []ResponseTag          `json:"tags"`
 	Images      []ResponseArticleImage `json:"images"`
+	TOC         []ResponseArticleIndex `json:"toc"`
 }
 
 // NewResponseArticle ...
@@ -19,6 +22,14 @@ func NewResponseArticle(a *model.Article) *ResponseArticle {
 	imgs := []ResponseArticleImage{}
 	for _, aimg := range a.Images {
 		imgs = append(imgs, *NewResponseArticleImage(&aimg))
+	}
+	indexes := []ResponseArticleIndex{}
+	for _, index := range a.TOC {
+		indexes = append(indexes, ResponseArticleIndex{
+			ID:    index.ID,
+			Name:  index.Name,
+			Level: index.Level,
+		})
 	}
 	return &ResponseArticle{
 		ID:          a.ID,
@@ -29,6 +40,7 @@ func NewResponseArticle(a *model.Article) *ResponseArticle {
 		PublishedAt: a.PublishedAt,
 		Tags:        *NewResponseTags(&a.Tags),
 		Images:      imgs,
+		TOC:         indexes,
 	}
 }
 
@@ -59,4 +71,10 @@ func NewResponseArticleImage(a *model.ArticleImage) *ResponseArticleImage {
 		RealWidth:  a.RealWidth,
 		RealHeight: a.RealHeight,
 	}
+}
+
+type ResponseArticleIndex struct {
+	ID    string                  `json:"id"`
+	Name  string                  `json:"name"`
+	Level model.ArticleIndexLevel `json:"level"`
 }
