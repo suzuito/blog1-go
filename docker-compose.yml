@@ -11,7 +11,7 @@ services:
       - ALLOWED_METHODS=GET,POST,DELETE
       # pubsub emulator
       - PUBSUB_EMULATOR_HOST=gcp:8432
-      - PUBSUB_EMULATOR_HOST=fastalert-dummy
+      - PUBSUB_EMULATOR_HOST=dummy
       # Google
       - GOOGLE_APPLICATION_CREDENTIALS=./suzuito-minilla-9b66c0d5d334.json
     working_dir: /opt/app
@@ -26,6 +26,6 @@ services:
       - 8080:8080
   gcp:
     image: google/cloud-sdk:emulators
-    command: gcloud beta emulators pubsub start --project=fastalert-dummy
+    command: gcloud beta emulators pubsub start --project=dummy
     ports:
       - 8085:8085 # pubsub
