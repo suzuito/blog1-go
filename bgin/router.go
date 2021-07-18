@@ -14,6 +14,7 @@ func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalD
 		c.Status(http.StatusOK)
 	})
 	root.Use(MiddlewareUsecase(env, gdeps))
+	root.GET("sandbox", HandlerGetSandbox())
 
 	{
 		gArticles := root.Group("articles")
