@@ -8,18 +8,14 @@ require (
 	github.com/PuerkitoBio/goquery v1.7.0
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.6.3
-	github.com/go-playground/validator/v10 v10.4.1
+	github.com/go-playground/validator/v10 v10.9.0
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/litao91/goldmark-mathjax v0.0.0-20210217064022-a43cf739a50f // indirect
-	github.com/rs/zerolog v1.23.0 // indirect
-	github.com/russross/blackfriday/v2 v2.1.0
-	github.com/suzuito/autr-go v0.0.0-20190927125214-bc5f7aea5bdc // indirect
 	github.com/suzuito/common-env v1.1.0 // indirect
 	github.com/suzuito/common-go v0.11.1-0.20210619102721-eeff73a75c11
 	github.com/yuin/goldmark v1.3.8 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/api v0.45.0
 	google.golang.org/grpc v1.38.0
-	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
