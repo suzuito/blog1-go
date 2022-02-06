@@ -10,5 +10,8 @@ init:
 	docker-compose up -d
 	until (docker-compose exec -T env /bin/bash -c 'curl http://localhost:8080') do echo "Wait for ready" && sleep 1; done
 
+test:
+	echo "FIXME"
+
 clean:
 	rm -f *.exe
