@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/bgin"
-	"github.com/suzuito/blog1-go/inject"
-	"github.com/suzuito/blog1-go/setting"
+	"github.com/suzuito/blog1-go/internal/bgin"
+	"github.com/suzuito/blog1-go/internal/inject"
+	"github.com/suzuito/blog1-go/internal/setting"
 )
 
 func main() {

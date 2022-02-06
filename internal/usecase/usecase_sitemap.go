@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/suzuito/blog1-go/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity/model"
 	"golang.org/x/xerrors"
 )
 

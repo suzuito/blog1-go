@@ -2,7 +2,7 @@ package bgin
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/usecase"
+	"github.com/suzuito/blog1-go/internal/usecase"
 )
 
 func getCtxUsecase(ctx *gin.Context) usecase.Usecase {

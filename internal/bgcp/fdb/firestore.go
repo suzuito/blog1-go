@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"cloud.google.com/go/firestore"
-	"github.com/suzuito/blog1-go/setting"
-	"github.com/suzuito/blog1-go/usecase"
+	"github.com/suzuito/blog1-go/internal/setting"
+	"github.com/suzuito/blog1-go/internal/usecase"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc"

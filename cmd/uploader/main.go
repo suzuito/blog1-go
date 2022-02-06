@@ -7,10 +7,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/suzuito/blog1-go/inject"
-	"github.com/suzuito/blog1-go/local"
-	"github.com/suzuito/blog1-go/setting"
-	"github.com/suzuito/blog1-go/usecase"
+	"github.com/suzuito/blog1-go/internal/inject"
+	"github.com/suzuito/blog1-go/internal/local"
+	"github.com/suzuito/blog1-go/internal/setting"
+	"github.com/suzuito/blog1-go/internal/usecase"
 )
 
 func main() {

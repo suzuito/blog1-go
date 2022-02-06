@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/inject"
-	"github.com/suzuito/blog1-go/setting"
-	"github.com/suzuito/blog1-go/usecase"
+	"github.com/suzuito/blog1-go/internal/inject"
+	"github.com/suzuito/blog1-go/internal/setting"
+	"github.com/suzuito/blog1-go/internal/usecase"
 )
 
 // MiddlewareUsecase ...

@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/suzuito/blog1-go/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity/model"
 	"github.com/suzuito/common-go/cmarkdown"
 	"golang.org/x/xerrors"
 )

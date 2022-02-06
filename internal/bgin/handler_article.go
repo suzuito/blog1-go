@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/entity/model"
-	"github.com/suzuito/blog1-go/usecase"
+	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/usecase"
 	"github.com/suzuito/common-go/cgin"
 )
 

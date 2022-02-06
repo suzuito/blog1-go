@@ -3,10 +3,10 @@ package inject
 import (
 	"context"
 
-	"github.com/suzuito/blog1-go/bgcp/fdb"
-	"github.com/suzuito/blog1-go/bgcp/storage"
-	"github.com/suzuito/blog1-go/setting"
-	"github.com/suzuito/blog1-go/usecase"
+	"github.com/suzuito/blog1-go/internal/bgcp/fdb"
+	"github.com/suzuito/blog1-go/internal/bgcp/storage"
+	"github.com/suzuito/blog1-go/internal/setting"
+	"github.com/suzuito/blog1-go/internal/usecase"
 	"github.com/suzuito/common-go/cmarkdown"
 	"golang.org/x/xerrors"
 )
