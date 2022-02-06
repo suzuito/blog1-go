@@ -13,6 +13,9 @@ func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalD
 	root.GET("", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
+	root.GET("/health", func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
 	root.Use(MiddlewareUsecase(env, gdeps))
 
 	{
