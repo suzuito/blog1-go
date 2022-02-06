@@ -1,10 +1,10 @@
 GO_SOURCES := $(shell find . -name '*.go')
 
 uploader.exe: ${GO_SOURCES}
-	go build -o uploader.exe main_uploader/main.go
+	go build -o uploader.exe cmd/uploader/main.go
 
 api.exe: ${GO_SOURCES}
-	go build -o api.exe main_api/main.go
+	go build -o api.exe cmd/api/main.go
 
 init:
 	docker-compose up -d
