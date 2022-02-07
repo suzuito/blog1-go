@@ -1,0 +1,14 @@
+steps:
+- name: "gcr.io/cloud-builders/docker"
+  args:
+  - build
+  - "--build-arg=COMMIT_SHA=${COMMIT_SHA}"
+  - "--tag=gcr.io/suzuito-${_ENV}/blog-api-go"
+  - "--file=./api.Dockerfile"
+  - .
+- name: "gcr.io/cloud-builders/docker"
+  args:
+  - push
+  - "gcr.io/suzuito-${_ENV}/blog-api-go"
+images:
+- gcr.io/suzuito-${_ENV}/blog-api-go
