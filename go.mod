@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/firestore v1.5.0
 	cloud.google.com/go/storage v1.15.0
 	github.com/PuerkitoBio/goquery v1.7.0
-	github.com/gin-contrib/cors v1.3.0
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/hashicorp/go-retryablehttp v0.6.8
