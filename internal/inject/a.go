@@ -7,12 +7,15 @@ import (
 	"github.com/suzuito/blog1-go/internal/bgcp/storage"
 	"github.com/suzuito/blog1-go/internal/setting"
 	"github.com/suzuito/blog1-go/internal/usecase"
+	"github.com/suzuito/common-go/cgcp"
 	"github.com/suzuito/common-go/cmarkdown"
 	"golang.org/x/xerrors"
 )
 
 type GlobalDepends struct {
 	MDConverter cmarkdown.Converter
+	DB          usecase.DB
+	Storage     usecase.Storage
 }
 
 func NewGlobalDepends(ctx context.Context, env *setting.Environment) (*GlobalDepends, func(), error) {
@@ -24,33 +27,16 @@ func NewGlobalDepends(ctx context.Context, env *setting.Environment) (*GlobalDep
 	}
 	r := GlobalDepends{}
 	r.MDConverter = cmarkdown.NewV1()
-	return &r, closeFunc, nil
-}
-
-type ContextDepends struct {
-	DB      usecase.DB
-	Storage usecase.Storage
-}
-
-func NewContextDepends(ctx context.Context, env *setting.Environment) (*ContextDepends, func(), error) {
-	closeFuncs := []func(){}
-	closeFunc := func() {
-		for _, cf := range closeFuncs {
-			cf()
-		}
-	}
-	r := ContextDepends{}
-	cliFirestore, err := fdb.NewResource(ctx, env)
+	gcpResources, err := cgcp.NewGCPResourceGenerator().
+		GCPS(env.GCPProjectID).
+		GCS().
+		GCF().
+		Gen(ctx)
 	if err != nil {
-		return nil, closeFunc, xerrors.Errorf("%w", err)
+		return nil, closeFunc, xerrors.Errorf("cannot generate google resource clients : %w", err)
 	}
-	closeFuncs = append(closeFuncs, func() { cliFirestore.Close() })
-	cliStorage, err := storage.NewResource(ctx, env)
-	if err != nil {
-		return nil, closeFunc, xerrors.Errorf("%w", err)
-	}
-	closeFuncs = append(closeFuncs, func() { cliStorage.Close() })
-	r.Storage = storage.New(cliStorage, env.GCPBucketArticle)
-	r.DB = fdb.NewClient(cliFirestore)
+	closeFuncs = append(closeFuncs, func() { gcpResources.Close() })
+	r.Storage = storage.New(gcpResources.GCS, env.GCPBucketArticle)
+	r.DB = fdb.NewClient(gcpResources.GCF)
 	return &r, closeFunc, nil
 }
