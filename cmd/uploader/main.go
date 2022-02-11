@@ -7,9 +7,9 @@ import (
 	"os"
 	"path"
 
-	"github.com/suzuito/blog1-go/internal/inject"
 	"github.com/suzuito/blog1-go/internal/local"
 	"github.com/suzuito/blog1-go/internal/setting"
+	"github.com/suzuito/blog1-go/pkg/inject"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
