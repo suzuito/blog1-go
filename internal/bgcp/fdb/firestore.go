@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"cloud.google.com/go/firestore"
-	"github.com/suzuito/blog1-go/internal/setting"
+	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"

@@ -6,8 +6,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/suzuito/blog1-go/internal/bgin"
-	"github.com/suzuito/blog1-go/internal/setting"
 	"github.com/suzuito/blog1-go/pkg/inject"
+	"github.com/suzuito/blog1-go/pkg/setting"
 )
 
 func main() {

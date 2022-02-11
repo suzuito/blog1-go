@@ -9,8 +9,8 @@ import (
 
 	"cloud.google.com/go/storage"
 	gstorage "cloud.google.com/go/storage"
-	"github.com/suzuito/blog1-go/internal/setting"
 	"github.com/suzuito/blog1-go/pkg/entity"
+	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 	"golang.org/x/xerrors"
 )

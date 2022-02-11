@@ -8,8 +8,8 @@ import (
 	"path"
 
 	"github.com/suzuito/blog1-go/internal/local"
-	"github.com/suzuito/blog1-go/internal/setting"
 	"github.com/suzuito/blog1-go/pkg/inject"
+	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 

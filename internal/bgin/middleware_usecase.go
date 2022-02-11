@@ -2,8 +2,8 @@ package bgin
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/internal/setting"
 	"github.com/suzuito/blog1-go/pkg/inject"
+	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
