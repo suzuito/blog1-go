@@ -30,7 +30,7 @@ func NewGlobalDepends(ctx context.Context, env *setting.Environment) (*GlobalDep
 	gcpResources, err := cgcp.NewGCPResourceGenerator().
 		GCPS(env.GCPProjectID).
 		GCS().
-		GCF().
+		GCF(env.GCPProjectID).
 		Gen(ctx)
 	if err != nil {
 		return nil, closeFunc, xerrors.Errorf("cannot generate google resource clients : %w", err)

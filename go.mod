@@ -11,7 +11,7 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/suzuito/common-go v0.15.1-0.20220210134234-2a3f21c9e049
+	github.com/suzuito/common-go v0.15.1-0.20220211073048-9923b5039ad8
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/api v0.68.0
 	google.golang.org/grpc v1.44.0
