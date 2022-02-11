@@ -3,9 +3,6 @@ GO_SOURCES := $(shell find . -name '*.go')
 uploader.exe: ${GO_SOURCES}
 	go build -o uploader.exe cmd/uploader/main.go
 
-updator-article.exe: ${GO_SOURCES}
-	go build -o updator-article.exe cmd/updator-article/main.go
-
 api.exe: ${GO_SOURCES}
 	go build -o api.exe cmd/api/main.go
 
