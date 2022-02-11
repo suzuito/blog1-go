@@ -13,11 +13,11 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/hashicorp/go-retryablehttp"
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity"
 	"golang.org/x/xerrors"
 )
 
-func (u *Impl) attacheArticleImages(article *model.Article, htmlBody []byte) error {
+func (u *Impl) attacheArticleImages(article *entity.Article, htmlBody []byte) error {
 	if err := extractImageURLs(htmlBody, &article.Images); err != nil {
 		return xerrors.Errorf("Cannot extract image urls : %w", err)
 	}
@@ -33,7 +33,7 @@ func (u *Impl) attacheArticleImages(article *model.Article, htmlBody []byte) err
 	return nil
 }
 
-func (u *Impl) refineArticleImage(cli *http.Client, articleImage *model.ArticleImage) error {
+func (u *Impl) refineArticleImage(cli *http.Client, articleImage *entity.ArticleImage) error {
 	uri, err := url.Parse(articleImage.URL)
 	if err != nil {
 		return xerrors.Errorf("Invalid url '%s' : %w", articleImage.URL, err)
@@ -62,13 +62,13 @@ func (u *Impl) refineArticleImage(cli *http.Client, articleImage *model.ArticleI
 	return nil
 }
 
-func extractImageURLs(body []byte, articleImages *[]model.ArticleImage) error {
+func extractImageURLs(body []byte, articleImages *[]entity.ArticleImage) error {
 	d, err := goquery.NewDocumentFromReader(bytes.NewReader(body))
 	if err != nil {
 		return xerrors.Errorf("Cannot new goquery : %w", err)
 	}
 	d.Find("img").Each(func(i int, s *goquery.Selection) {
-		articleImage := model.ArticleImage{}
+		articleImage := entity.ArticleImage{}
 		imageURL, exists := s.Attr("src")
 		if exists {
 			uri, err := url.Parse(imageURL)

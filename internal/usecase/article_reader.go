@@ -3,12 +3,12 @@ package usecase
 import (
 	"context"
 
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity"
 )
 
 // ArticleReader ...
 // :Deprecated
 type ArticleReader interface {
-	Walk(ctx context.Context, each func(article *model.Article, raw []byte) error) error
+	Walk(ctx context.Context, each func(article *entity.Article, raw []byte) error) error
 	Close() error
 }

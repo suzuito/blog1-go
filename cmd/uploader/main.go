@@ -28,7 +28,6 @@ func main() {
 	defer gcloseFunc()
 
 	u := usecase.NewImpl(
-		env,
 		gdeps.DB,
 		gdeps.Storage,
 		gdeps.MDConverter,

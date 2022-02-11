@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity"
 	"golang.org/x/xerrors"
 )
 
@@ -36,7 +36,7 @@ type XMLURL struct {
 	Lastmod string   `xml:"lastmod"`
 }
 
-func newXMLURLFromArticle(a *model.Article, origin string) *XMLURL {
+func newXMLURLFromArticle(a *entity.Article, origin string) *XMLURL {
 	mod := time.Unix(a.UpdatedAt, 0).Format("2006-01-02")
 	return &XMLURL{
 		Loc:     fmt.Sprintf("%s/blog/%s", origin, url.QueryEscape(string(a.ID))),
@@ -53,7 +53,7 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (*XMLURLS
 	cursorPublishedAt := int64(0)
 	cursorTitle := ""
 	for {
-		articles := []model.Article{}
+		articles := []entity.Article{}
 		if err := u.db.GetArticles(ctx, cursorPublishedAt, cursorTitle, CursorOrderAsc, 100, &articles); err != nil {
 			return nil, xerrors.Errorf("Cannot get articles : %w", err)
 		}

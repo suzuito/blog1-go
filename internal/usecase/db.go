@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity"
 )
 
 // CursorOrder ...
@@ -24,15 +24,15 @@ type DB interface {
 		cursorTitle string,
 		order CursorOrder,
 		n int,
-		articles *[]model.Article,
+		articles *[]entity.Article,
 	) error
 	GetArticle(
 		ctx context.Context,
-		articleID model.ArticleID,
-		article *model.Article,
+		articleID entity.ArticleID,
+		article *entity.Article,
 	) error
 	SetArticle(
 		ctx context.Context,
-		article *model.Article,
+		article *entity.Article,
 	) error
 }

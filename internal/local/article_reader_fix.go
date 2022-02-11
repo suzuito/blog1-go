@@ -4,7 +4,7 @@ import (
 	"context"
 	"io/ioutil"
 
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity"
 	"golang.org/x/xerrors"
 )
 
@@ -26,13 +26,13 @@ func (r *ArticleReaderFix) AddFilePath(filePath string) {
 }
 
 // Walk ...
-func (r *ArticleReaderFix) Walk(ctx context.Context, each func(article *model.Article, raw []byte) error) error {
+func (r *ArticleReaderFix) Walk(ctx context.Context, each func(article *entity.Article, raw []byte) error) error {
 	for _, filePath := range r.filePaths {
 		file, err := ioutil.ReadFile(filePath)
 		if err != nil {
 			return xerrors.Errorf("Reading file '%s' is failed : %w", filePath, err)
 		}
-		article := model.Article{}
+		article := entity.Article{}
 		if err := each(&article, file); err != nil {
 			return xerrors.Errorf("Error : %w", err)
 		}

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity"
 )
 
 var headerNameAdminAuth = "X-Admin-Auth"
@@ -14,7 +14,7 @@ func MiddlewareAdminAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := getCtxUsecase(ctx)
 		adminAuthHeader := ctx.GetHeader(headerNameAdminAuth)
-		adminAuth := model.AdminAuth{}
+		adminAuth := entity.AdminAuth{}
 		err := u.GetAdminAuth(ctx, adminAuthHeader, &adminAuth)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, ResponseError{

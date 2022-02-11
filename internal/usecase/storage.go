@@ -3,14 +3,14 @@ package usecase
 import (
 	"context"
 
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity"
 )
 
 // Storage ...
 type Storage interface {
 	UploadArticle(
 		ctx context.Context,
-		article *model.Article,
+		article *entity.Article,
 		raw string,
 	) error
 	GetFileAsHTTPResponse(

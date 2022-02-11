@@ -9,7 +9,7 @@ import (
 
 	"cloud.google.com/go/storage"
 	gstorage "cloud.google.com/go/storage"
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/internal/entity"
 	"github.com/suzuito/blog1-go/internal/setting"
 	"github.com/suzuito/blog1-go/internal/usecase"
 	"golang.org/x/xerrors"
@@ -38,7 +38,7 @@ func New(cli *gstorage.Client, bucket string) *GCS {
 // UploadArticle ...
 func (c *GCS) UploadArticle(
 	ctx context.Context,
-	article *model.Article,
+	article *entity.Article,
 	raw string,
 ) error {
 	b := c.cli.Bucket(c.bucket)

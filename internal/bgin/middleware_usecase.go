@@ -11,7 +11,6 @@ import (
 func MiddlewareUsecase(env *setting.Environment, gdeps *inject.GlobalDepends) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := usecase.NewImpl(
-			env,
 			gdeps.DB,
 			gdeps.Storage,
 			gdeps.MDConverter,
