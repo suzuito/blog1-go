@@ -1,7 +1,7 @@
 package bgin
 
 import (
-	"github.com/suzuito/blog1-go/internal/entity"
+	"github.com/suzuito/blog1-go/pkg/entity"
 )
 
 // ResponseArticle ...

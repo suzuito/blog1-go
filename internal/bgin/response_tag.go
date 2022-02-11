@@ -1,6 +1,6 @@
 package bgin
 
-import "github.com/suzuito/blog1-go/internal/entity"
+import "github.com/suzuito/blog1-go/pkg/entity"
 
 // ResponseTag ...
 type ResponseTag struct {

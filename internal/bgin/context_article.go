@@ -2,7 +2,7 @@ package bgin
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/internal/entity"
+	"github.com/suzuito/blog1-go/pkg/entity"
 )
 
 func getCtxArticle(ctx *gin.Context) *entity.Article {

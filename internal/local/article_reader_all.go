@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/suzuito/blog1-go/internal/entity"
+	"github.com/suzuito/blog1-go/pkg/entity"
 	"golang.org/x/xerrors"
 )
 

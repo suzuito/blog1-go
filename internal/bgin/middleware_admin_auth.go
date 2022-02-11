@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/internal/entity"
+	"github.com/suzuito/blog1-go/pkg/entity"
 )
 
 var headerNameAdminAuth = "X-Admin-Auth"
