@@ -107,7 +107,10 @@ func (c *GCS) DeleteArticle(
 	p := fmt.Sprintf("%s.html", articleID)
 	o := b.Object(p)
 	if err := o.Delete(ctx); err != nil {
-		return xerrors.Errorf("Cannot delete into '%s/%s' : %w", c.bucket, p, err)
+		if xerrors.Is(err, storage.ErrObjectNotExist) {
+			return nil
+		}
+		return xerrors.Errorf("Cannot delete from '%s/%s' : %w", c.bucket, p, err)
 	}
 	return nil
 }
