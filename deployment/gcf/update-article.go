@@ -46,6 +46,7 @@ type GCSEvent struct {
 }
 
 func BlogUpdateArticle(ctx context.Context, ev GCSEvent) error {
+	fmt.Println(ev.Kind)
 	if ev.Bucket != env.GCPBucketArticle {
 		return xerrors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
 	}
