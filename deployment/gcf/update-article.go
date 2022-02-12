@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"cloud.google.com/go/functions/metadata"
 	"github.com/rs/zerolog/log"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 	"golang.org/x/xerrors"
@@ -46,7 +47,12 @@ type GCSEvent struct {
 }
 
 func BlogUpdateArticle(ctx context.Context, ev GCSEvent) error {
-	fmt.Println(ev.Kind)
+	meta, err := metadata.FromContext(ctx)
+	if err != nil {
+		return xerrors.Errorf("metadata.FromContext: %w", err)
+	}
+	fmt.Printf("%+v\n", meta)
+	fmt.Printf("%+v\n", ev)
 	if ev.Bucket != env.GCPBucketArticle {
 		return xerrors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
 	}

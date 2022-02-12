@@ -21,6 +21,7 @@ require (
 require (
 	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v1.2.0 // indirect
+	cloud.google.com/go/functions v1.1.0 // indirect
 	cloud.google.com/go/iam v0.1.1 // indirect
 	cloud.google.com/go/pubsub v1.18.0 // indirect
 	cloud.google.com/go/secretmanager v1.0.0 // indirect
