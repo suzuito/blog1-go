@@ -76,6 +76,20 @@ func (u *Impl) UpdateArticle(
 	return nil
 }
 
+func (u *Impl) DeleteArticle(
+	ctx context.Context,
+	articleID entity.ArticleID,
+) error {
+	fmt.Printf("Delete '%s'\n", articleID)
+	if err := u.storage.DeleteArticle(ctx, articleID); err != nil {
+		return xerrors.Errorf("Cannot delete article '%s' : %w", articleID, err)
+	}
+	if err := u.db.DeleteArticle(ctx, articleID); err != nil {
+		return xerrors.Errorf("Cannot delete article '%s' : %w", articleID, err)
+	}
+	return nil
+}
+
 // SyncArticles ...
 // :Deprecated
 func (u *Impl) SyncArticles(

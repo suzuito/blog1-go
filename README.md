@@ -10,6 +10,7 @@ Environment variables1
 make init
 
 docker-compose exec gcf /bin/bash -c './gcf.exe update-article -input-dir=./deployment/gcf/testdata'
+docker-compose exec gcf /bin/bash -c './gcf.exe delete-article -input-dir=./deployment/gcf/testdata'
 ```
 
 Gcloud set up

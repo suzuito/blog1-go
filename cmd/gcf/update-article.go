@@ -2,17 +2,15 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path"
 
 	"github.com/google/subcommands"
 	"github.com/suzuito/blog1-go/deployment/gcf"
 	"github.com/suzuito/blog1-go/pkg/inject"
 	"github.com/suzuito/blog1-go/pkg/setting"
+	"golang.org/x/xerrors"
 )
 
 type runBlogUpdateArticleCmd struct {
@@ -38,26 +36,14 @@ func (c *runBlogUpdateArticleCmd) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *runBlogUpdateArticleCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	entries, err := os.ReadDir(c.dirBase)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "cannot read dir %s : %+v\n", c.dirBase, err)
+	if err := readDirTest(c.dirBase, func(d *testData) error {
+		if err := gcf.BlogUpdateArticle(ctx, &d.Metadata, d.Event); err != nil {
+			return xerrors.Errorf(": %+v\n", err)
+		}
+		return nil
+	}); err != nil {
+		fmt.Fprintf(os.Stderr, "failed: %+v\n", err)
 		return subcommands.ExitFailure
-	}
-	for _, entry := range entries {
-		eventBytes, err := ioutil.ReadFile(path.Join(c.dirBase, entry.Name()))
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "cannot read file : %+v\n", err)
-			return subcommands.ExitFailure
-		}
-		event := gcf.GCSEvent{}
-		if err := json.Unmarshal(eventBytes, &event); err != nil {
-			fmt.Fprintf(os.Stderr, "unmarshal : %+v\n", err)
-			return subcommands.ExitFailure
-		}
-		if err := gcf.BlogUpdateArticle(ctx, event); err != nil {
-			fmt.Fprintf(os.Stderr, ": %+v\n", err)
-			return subcommands.ExitFailure
-		}
 	}
 	return subcommands.ExitSuccess
 }

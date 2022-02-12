@@ -202,3 +202,17 @@ func (c *Client) SetArticle(
 		return nil
 	})
 }
+
+// DeleteArticle ...
+func (c *Client) DeleteArticle(
+	ctx context.Context,
+	articleID entity.ArticleID,
+) error {
+	return c.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		collArticles := c.cli.Collection(CollArticles)
+		if err := deleteDocByTx(tx, collArticles, string(articleID)); err != nil {
+			return xerrors.Errorf("cannot delete article %s : %w", articleID, err)
+		}
+		return nil
+	})
+}

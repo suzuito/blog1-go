@@ -24,4 +24,8 @@ type Storage interface {
 		p string,
 		body string,
 	) error
+	DeleteArticle(
+		ctx context.Context,
+		articleID entity.ArticleID,
+	) error
 }

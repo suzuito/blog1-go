@@ -4,6 +4,6 @@
         "name": "2021-01-01-test.md"
     },
     "metadata": {
-        "eventType": "google.storage.object.finalize"
+        "eventType": "google.storage.object.delete"
     }
 }

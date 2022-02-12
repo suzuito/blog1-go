@@ -98,3 +98,16 @@ func (c *GCS) UploadHTML(
 	}
 	return nil
 }
+
+func (c *GCS) DeleteArticle(
+	ctx context.Context,
+	articleID entity.ArticleID,
+) error {
+	b := c.cli.Bucket(c.bucket)
+	p := fmt.Sprintf("%s.html", articleID)
+	o := b.Object(p)
+	if err := o.Delete(ctx); err != nil {
+		return xerrors.Errorf("Cannot delete into '%s/%s' : %w", c.bucket, p, err)
+	}
+	return nil
+}

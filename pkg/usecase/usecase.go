@@ -45,6 +45,11 @@ type Usecase interface {
 		headerAdminAuth string,
 		adminAuth *entity.AdminAuth,
 	) error
+
+	DeleteArticle(
+		ctx context.Context,
+		articleID entity.ArticleID,
+	) error
 }
 
 // Impl ...

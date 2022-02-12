@@ -35,4 +35,8 @@ type DB interface {
 		ctx context.Context,
 		article *entity.Article,
 	) error
+	DeleteArticle(
+		ctx context.Context,
+		articleID entity.ArticleID,
+	) error
 }
