@@ -1,7 +1,9 @@
 version: '3'
 services:
-  env:
-    build: .
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - ENV=dev
       - DIR_DATA=data
@@ -9,23 +11,23 @@ services:
       - GCP_BUCKET_ARTICLE=suzuito-minilla-blog1-article
       - ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8080
       - ALLOWED_METHODS=GET,POST,DELETE
-      # pubsub emulator
-      - PUBSUB_EMULATOR_HOST=gcp:8432
-      - PUBSUB_EMULATOR_HOST=dummy
-      # Google
-      - GOOGLE_APPLICATION_CREDENTIALS=./suzuito-minilla-9b66c0d5d334.json
+      - GOOGLE_APPLICATION_CREDENTIALS=./application_default_credentials.json
     working_dir: /opt/app
     volumes:
       - .:/opt/app
-    links:
-      - gcp:gcp
-    depends_on:
-      - gcp
     command: /bin/bash -c 'air -c .air-api.toml'
     ports:
       - 8080:8080
-  gcp:
-    image: google/cloud-sdk:emulators
-    command: gcloud beta emulators pubsub start --project=dummy
-    ports:
-      - 8085:8085 # pubsub
+  gcf:
+    build:
+      context: .
+      dockerfile: gcf.Dockerfile
+    environment:
+      - ENV=dev
+      - GCP_PROJECT_ID=suzuito-minilla
+      - GCP_BUCKET_ARTICLE=suzuito-minilla-blog1-article
+      - GOOGLE_APPLICATION_CREDENTIALS=./application_default_credentials.json
+    working_dir: /opt/app
+    volumes:
+      - .:/opt/app
+    command: /bin/bash -c 'air -c .air.gcf.toml'

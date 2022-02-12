@@ -7,10 +7,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/suzuito/blog1-go/internal/inject"
 	"github.com/suzuito/blog1-go/internal/local"
-	"github.com/suzuito/blog1-go/internal/setting"
-	"github.com/suzuito/blog1-go/internal/usecase"
+	"github.com/suzuito/blog1-go/pkg/inject"
+	"github.com/suzuito/blog1-go/pkg/setting"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 func main() {
@@ -26,17 +26,10 @@ func main() {
 		os.Exit(1)
 	}
 	defer gcloseFunc()
-	cdeps, ccloseFunc, err := inject.NewContextDepends(ctx, env)
-	if err != nil {
-		fmt.Printf("%+v\n", err)
-		os.Exit(1)
-	}
-	defer ccloseFunc()
 
 	u := usecase.NewImpl(
-		env,
-		cdeps.DB,
-		cdeps.Storage,
+		gdeps.DB,
+		gdeps.Storage,
 		gdeps.MDConverter,
 	)
 	mode := flag.String("target", "changed-only", "'all', 'changed-only', 'fixed'")

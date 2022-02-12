@@ -1,12 +1,12 @@
 package bgin
 
 import (
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/pkg/entity"
 )
 
 // ResponseArticle ...
 type ResponseArticle struct {
-	ID          model.ArticleID        `json:"id"`
+	ID          entity.ArticleID       `json:"id"`
 	Title       string                 `json:"title"`
 	Description string                 `json:"description"`
 	CreatedAt   int64                  `json:"createdAt"`
@@ -18,7 +18,7 @@ type ResponseArticle struct {
 }
 
 // NewResponseArticle ...
-func NewResponseArticle(a *model.Article) *ResponseArticle {
+func NewResponseArticle(a *entity.Article) *ResponseArticle {
 	imgs := []ResponseArticleImage{}
 	for _, aimg := range a.Images {
 		imgs = append(imgs, *NewResponseArticleImage(&aimg))
@@ -45,7 +45,7 @@ func NewResponseArticle(a *model.Article) *ResponseArticle {
 }
 
 // NewResponseArticles ...
-func NewResponseArticles(a *[]model.Article) *[]ResponseArticle {
+func NewResponseArticles(a *[]entity.Article) *[]ResponseArticle {
 	b := []ResponseArticle{}
 	for _, v := range *a {
 		b = append(b, *NewResponseArticle(&v))
@@ -63,7 +63,7 @@ type ResponseArticleImage struct {
 }
 
 // NewResponseArticleImage ...
-func NewResponseArticleImage(a *model.ArticleImage) *ResponseArticleImage {
+func NewResponseArticleImage(a *entity.ArticleImage) *ResponseArticleImage {
 	return &ResponseArticleImage{
 		Width:      a.Width,
 		Height:     a.Height,
@@ -74,7 +74,7 @@ func NewResponseArticleImage(a *model.ArticleImage) *ResponseArticleImage {
 }
 
 type ResponseArticleIndex struct {
-	ID    string                  `json:"id"`
-	Name  string                  `json:"name"`
-	Level model.ArticleIndexLevel `json:"level"`
+	ID    string                   `json:"id"`
+	Name  string                   `json:"name"`
+	Level entity.ArticleIndexLevel `json:"level"`
 }

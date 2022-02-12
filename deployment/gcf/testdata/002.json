@@ -1,0 +1,9 @@
+{
+    "event": {
+        "bucket": "suzuito-minilla-blog1-article",
+        "name": "2021-01-01-test.md"
+    },
+    "metadata": {
+        "eventType": "google.storage.object.delete"
+    }
+}

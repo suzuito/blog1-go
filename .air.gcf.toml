@@ -1,0 +1,5 @@
+root = "."
+
+[build]
+cmd = "make gcf.exe"
+bin = "gcf.exe"

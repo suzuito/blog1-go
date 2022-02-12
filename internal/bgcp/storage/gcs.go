@@ -9,9 +9,9 @@ import (
 
 	"cloud.google.com/go/storage"
 	gstorage "cloud.google.com/go/storage"
-	"github.com/suzuito/blog1-go/internal/entity/model"
-	"github.com/suzuito/blog1-go/internal/setting"
-	"github.com/suzuito/blog1-go/internal/usecase"
+	"github.com/suzuito/blog1-go/pkg/entity"
+	"github.com/suzuito/blog1-go/pkg/setting"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 	"golang.org/x/xerrors"
 )
 
@@ -38,7 +38,7 @@ func New(cli *gstorage.Client, bucket string) *GCS {
 // UploadArticle ...
 func (c *GCS) UploadArticle(
 	ctx context.Context,
-	article *model.Article,
+	article *entity.Article,
 	raw string,
 ) error {
 	b := c.cli.Bucket(c.bucket)
@@ -95,6 +95,22 @@ func (c *GCS) UploadHTML(
 	}
 	if err := w.Close(); err != nil {
 		return xerrors.Errorf("Cannot upload html into '%s/%s' : %w", c.bucket, p, err)
+	}
+	return nil
+}
+
+func (c *GCS) DeleteArticle(
+	ctx context.Context,
+	articleID entity.ArticleID,
+) error {
+	b := c.cli.Bucket(c.bucket)
+	p := fmt.Sprintf("%s.html", articleID)
+	o := b.Object(p)
+	if err := o.Delete(ctx); err != nil {
+		if xerrors.Is(err, storage.ErrObjectNotExist) {
+			return nil
+		}
+		return xerrors.Errorf("Cannot delete from '%s/%s' : %w", c.bucket, p, err)
 	}
 	return nil
 }

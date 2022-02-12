@@ -7,10 +7,10 @@ BFF for http://blog.tach.dev
 Environment variables1
 
 ```bash
-# Up
 make init
-# Down
-make clean
+
+docker-compose exec gcf /bin/bash -c './gcf.exe update-article -input-dir=./deployment/gcf/testdata'
+docker-compose exec gcf /bin/bash -c './gcf.exe delete-article -input-dir=./deployment/gcf/testdata'
 ```
 
 Gcloud set up
@@ -25,13 +25,6 @@ Google cloud platform credentials
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=./suzuito-godzilla-276dbb450e29.json
-```
-
-## Deployment
-
-```bash
-firebase deploy --only firestore:indexes --project suzuito-minilla
-firebase deploy --only firestore:indexes --project suzuito-godzilla
 ```
 
 ## Usage

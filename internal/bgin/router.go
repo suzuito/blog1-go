@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/internal/inject"
-	"github.com/suzuito/blog1-go/internal/setting"
+	"github.com/suzuito/blog1-go/pkg/inject"
+	"github.com/suzuito/blog1-go/pkg/setting"
 )
 
 // SetUpRoot ...

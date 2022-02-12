@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/pkg/entity"
 	"github.com/suzuito/common-go/cmarkdown"
 	"golang.org/x/xerrors"
 )
@@ -20,7 +20,7 @@ func (u *Impl) GetArticles(
 	cursorTitle string,
 	order CursorOrder,
 	n int,
-	articles *[]model.Article,
+	articles *[]entity.Article,
 ) error {
 	return u.db.GetArticles(
 		ctx,
@@ -35,8 +35,8 @@ func (u *Impl) GetArticles(
 // GetArticle ...
 func (u *Impl) GetArticle(
 	ctx context.Context,
-	articleID model.ArticleID,
-	article *model.Article,
+	articleID entity.ArticleID,
+	article *entity.Article,
 ) error {
 	return u.db.GetArticle(ctx, articleID, article)
 }
@@ -44,7 +44,7 @@ func (u *Impl) GetArticle(
 // CreateArticle ...
 func (u *Impl) CreateArticle(
 	ctx context.Context,
-	article *model.Article,
+	article *entity.Article,
 ) error {
 	return u.CreateArticle(ctx, article)
 }
@@ -59,7 +59,7 @@ func (u *Impl) UpdateArticle(
 		return xerrors.Errorf("Cannot get file from %s : %w", path, err)
 	}
 	converted := []byte{}
-	article := model.Article{}
+	article := entity.Article{}
 	if err := u.ConvertMD(ctx, source, &article, &converted); err != nil {
 		return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
 	}
@@ -76,13 +76,27 @@ func (u *Impl) UpdateArticle(
 	return nil
 }
 
+func (u *Impl) DeleteArticle(
+	ctx context.Context,
+	articleID entity.ArticleID,
+) error {
+	fmt.Printf("Delete '%s'\n", articleID)
+	if err := u.storage.DeleteArticle(ctx, articleID); err != nil {
+		return xerrors.Errorf("Cannot delete article '%s' : %w", articleID, err)
+	}
+	if err := u.db.DeleteArticle(ctx, articleID); err != nil {
+		return xerrors.Errorf("Cannot delete article '%s' : %w", articleID, err)
+	}
+	return nil
+}
+
 // SyncArticles ...
 // :Deprecated
 func (u *Impl) SyncArticles(
 	ctx context.Context,
 	source ArticleReader,
 ) error {
-	if err := source.Walk(ctx, func(article *model.Article, raw []byte) error {
+	if err := source.Walk(ctx, func(article *entity.Article, raw []byte) error {
 		converted := []byte{}
 		if err := u.ConvertMD(ctx, raw, article, &converted); err != nil {
 			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
@@ -110,7 +124,7 @@ func (u *Impl) WriteArticleHTMLs(
 	ctx context.Context,
 	source ArticleReader,
 ) error {
-	if err := source.Walk(ctx, func(article *model.Article, raw []byte) error {
+	if err := source.Walk(ctx, func(article *entity.Article, raw []byte) error {
 		converted := []byte{}
 		if err := u.ConvertMD(ctx, raw, article, &converted); err != nil {
 			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
@@ -133,7 +147,7 @@ func (u *Impl) WriteArticleHTMLs(
 func (u *Impl) ConvertMD(
 	ctx context.Context,
 	source []byte,
-	article *model.Article,
+	article *entity.Article,
 	converted *[]byte,
 ) error {
 	output := bytes.NewBufferString("")
@@ -143,21 +157,21 @@ func (u *Impl) ConvertMD(
 	if err := u.converterMD.Convert(ctx, source, output, &meta, &tocs, &images); err != nil {
 		return xerrors.Errorf("Cannot convert : %w", err)
 	}
-	article.ID = model.ArticleID(fmt.Sprintf("%s-%s", meta.Date, meta.Title))
+	article.ID = entity.ArticleID(fmt.Sprintf("%s-%s", meta.Date, meta.Title))
 	article.Description = meta.Description
 	article.PublishedAt = meta.DateAsTime().Unix()
-	article.Tags = *model.NewTags(meta.Tags)
+	article.Tags = *entity.NewTags(meta.Tags)
 	article.Title = meta.Title
 	for _, toc := range tocs {
-		articleIndex := model.ArticleIndex{
+		articleIndex := entity.ArticleIndex{
 			ID:    toc.ID,
 			Name:  toc.Name,
-			Level: model.ArticleIndexLevel(toc.Level),
+			Level: entity.ArticleIndexLevel(toc.Level),
 		}
 		article.TOC = append(article.TOC, articleIndex)
 	}
 	for _, image := range images {
-		articleImage := model.ArticleImage{
+		articleImage := entity.ArticleImage{
 			URL: image.URL,
 		}
 		u.refineArticleImage(http.DefaultClient, &articleImage)

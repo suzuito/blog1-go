@@ -1,14 +1,17 @@
 GO_SOURCES := $(shell find . -name '*.go')
 
 uploader.exe: ${GO_SOURCES}
-	go build -o uploader.exe cmd/uploader/main.go
+	go build -o uploader.exe cmd/uploader/*.go
 
 api.exe: ${GO_SOURCES}
-	go build -o api.exe cmd/api/main.go
+	go build -o api.exe cmd/api/*.go
+
+gcf.exe: ${GO_SOURCES}
+	go build -o gcf.exe cmd/gcf/*.go
 
 init:
-	docker-compose up -d
-	until (docker-compose exec -T env /bin/bash -c 'curl http://localhost:8080') do echo "Wait for ready" && sleep 1; done
+	cp ~/.config/gcloud/application_default_credentials.json .
+	docker-compose up
 
 test:
 	echo "FIXME"

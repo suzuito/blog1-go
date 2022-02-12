@@ -6,16 +6,16 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
-	"github.com/suzuito/blog1-go/internal/entity/model"
-	"github.com/suzuito/blog1-go/internal/usecase"
+	"github.com/suzuito/blog1-go/pkg/entity"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 	"golang.org/x/xerrors"
 )
 
 // GetArticle ...
 func (c *Client) GetArticle(
 	ctx context.Context,
-	articleID model.ArticleID,
-	article *model.Article,
+	articleID entity.ArticleID,
+	article *entity.Article,
 ) error {
 	return getDoc(
 		ctx,
@@ -32,7 +32,7 @@ func (c *Client) GetArticles(
 	cursorTitle string,
 	order usecase.CursorOrder,
 	n int,
-	articles *[]model.Article,
+	articles *[]entity.Article,
 ) error {
 	coll := c.cli.Collection(CollArticles)
 	query := coll.
@@ -41,7 +41,7 @@ func (c *Client) GetArticles(
 		StartAfter(cursorPublishedAt, cursorTitle).
 		Limit(n)
 	return getDocs(ctx, &query, func(shp *firestore.DocumentSnapshot) error {
-		article := model.Article{}
+		article := entity.Article{}
 		if err := shp.DataTo(&article); err != nil {
 			return xerrors.Errorf("Cannot data to : %w", err)
 		}
@@ -53,10 +53,10 @@ func (c *Client) GetArticles(
 // CreateArticle ...
 func (c *Client) CreateArticle(
 	ctx context.Context,
-	article *model.Article,
+	article *entity.Article,
 ) error {
 	now := time.Now()
-	article.ID = model.ArticleID(fmt.Sprintf("%d-%s", article.PublishedAt, article.Title))
+	article.ID = entity.ArticleID(fmt.Sprintf("%d-%s", article.PublishedAt, article.Title))
 	article.CreatedAt = now.Unix()
 	article.UpdatedAt = now.Unix()
 	if err := article.Validate(); err != nil {
@@ -64,7 +64,7 @@ func (c *Client) CreateArticle(
 	}
 	return c.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		collArticles := c.cli.Collection(CollArticles)
-		if err := getDocByTx(tx, collArticles, string(article.ID), &model.Article{}); err != nil {
+		if err := getDocByTx(tx, collArticles, string(article.ID), &entity.Article{}); err != nil {
 			if !xerrors.Is(err, usecase.ErrNotFound) {
 				return xerrors.Errorf("Get doc '%+v' is error : %w", article, err)
 			}
@@ -97,13 +97,13 @@ var (
 )
 
 type diffTag struct {
-	Tag  model.Tag
+	Tag  entity.Tag
 	Type diffTagType
 }
 
 func getDiffTags(
-	beforeTags []model.Tag,
-	afterTags []model.Tag,
+	beforeTags []entity.Tag,
+	afterTags []entity.Tag,
 ) *[]diffTag {
 	r := []diffTag{}
 	for _, beforeTag := range beforeTags {
@@ -152,7 +152,7 @@ func getDiffTags(
 // SetArticle ...
 func (c *Client) SetArticle(
 	ctx context.Context,
-	afterArticle *model.Article,
+	afterArticle *entity.Article,
 ) error {
 	now := time.Now()
 	if afterArticle.CreatedAt == 0 {
@@ -164,7 +164,7 @@ func (c *Client) SetArticle(
 	}
 	return c.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		collArticles := c.cli.Collection(CollArticles)
-		beforeArticle := model.Article{}
+		beforeArticle := entity.Article{}
 		if err := getDocByTx(tx, collArticles, string(afterArticle.ID), &beforeArticle); err != nil {
 			if !xerrors.Is(err, usecase.ErrNotFound) {
 				return xerrors.Errorf("Get doc '%+v' is error : %w", afterArticle, err)
@@ -198,6 +198,20 @@ func (c *Client) SetArticle(
 					return xerrors.Errorf("Set doc '%+v' is error : %w", afterArticle, err)
 				}
 			}
+		}
+		return nil
+	})
+}
+
+// DeleteArticle ...
+func (c *Client) DeleteArticle(
+	ctx context.Context,
+	articleID entity.ArticleID,
+) error {
+	return c.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		collArticles := c.cli.Collection(CollArticles)
+		if err := deleteDocByTx(tx, collArticles, string(articleID)); err != nil {
+			return xerrors.Errorf("cannot delete article %s : %w", articleID, err)
 		}
 		return nil
 	})

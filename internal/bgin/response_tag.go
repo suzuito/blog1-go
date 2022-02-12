@@ -1,6 +1,6 @@
 package bgin
 
-import "github.com/suzuito/blog1-go/internal/entity/model"
+import "github.com/suzuito/blog1-go/pkg/entity"
 
 // ResponseTag ...
 type ResponseTag struct {
@@ -8,14 +8,14 @@ type ResponseTag struct {
 }
 
 // NewResponseTag ...
-func NewResponseTag(a *model.Tag) *ResponseTag {
+func NewResponseTag(a *entity.Tag) *ResponseTag {
 	return &ResponseTag{
 		Name: a.Name,
 	}
 }
 
 // NewResponseTags ...
-func NewResponseTags(a *[]model.Tag) *[]ResponseTag {
+func NewResponseTags(a *[]entity.Tag) *[]ResponseTag {
 	b := []ResponseTag{}
 	for _, v := range *a {
 		b = append(b, *NewResponseTag(&v))

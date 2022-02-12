@@ -3,8 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/suzuito/blog1-go/internal/entity/model"
-	"github.com/suzuito/blog1-go/internal/setting"
+	"github.com/suzuito/blog1-go/pkg/entity"
 	"github.com/suzuito/common-go/cmarkdown"
 )
 
@@ -17,8 +16,8 @@ type Usecase interface {
 
 	GetArticle(
 		ctx context.Context,
-		id model.ArticleID,
-		article *model.Article,
+		id entity.ArticleID,
+		article *entity.Article,
 	) error
 	GetArticles(
 		ctx context.Context,
@@ -26,13 +25,13 @@ type Usecase interface {
 		cursorTitle string,
 		order CursorOrder,
 		n int,
-		articles *[]model.Article,
+		articles *[]entity.Article,
 	) error
 
 	ConvertMD(
 		ctx context.Context,
 		source []byte,
-		article *model.Article,
+		article *entity.Article,
 		converted *[]byte,
 	) error
 
@@ -44,13 +43,17 @@ type Usecase interface {
 	GetAdminAuth(
 		ctx context.Context,
 		headerAdminAuth string,
-		adminAuth *model.AdminAuth,
+		adminAuth *entity.AdminAuth,
+	) error
+
+	DeleteArticle(
+		ctx context.Context,
+		articleID entity.ArticleID,
 	) error
 }
 
 // Impl ...
 type Impl struct {
-	env         *setting.Environment
 	db          DB
 	storage     Storage
 	converterMD cmarkdown.Converter
@@ -58,7 +61,6 @@ type Impl struct {
 
 // NewImpl ...
 func NewImpl(
-	env *setting.Environment,
 	db DB,
 	storage Storage,
 	converterMD cmarkdown.Converter,

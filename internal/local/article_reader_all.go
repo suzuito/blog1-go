@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/suzuito/blog1-go/internal/entity/model"
+	"github.com/suzuito/blog1-go/pkg/entity"
 	"golang.org/x/xerrors"
 )
 
@@ -25,7 +25,7 @@ func NewArticleReaderAll(
 }
 
 // Walk ...
-func (r *ArticleReaderAll) Walk(ctx context.Context, each func(article *model.Article, raw []byte) error) error {
+func (r *ArticleReaderAll) Walk(ctx context.Context, each func(article *entity.Article, raw []byte) error) error {
 	err := filepath.Walk(r.dirBase, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
@@ -34,7 +34,7 @@ func (r *ArticleReaderAll) Walk(ctx context.Context, each func(article *model.Ar
 		if err != nil {
 			return xerrors.Errorf("Reading file '%s' is failed : %w", path, err)
 		}
-		article := model.Article{}
+		article := entity.Article{}
 		return each(&article, file)
 	})
 	if err != nil {

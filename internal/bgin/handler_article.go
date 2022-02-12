@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/internal/entity/model"
-	"github.com/suzuito/blog1-go/internal/usecase"
+	"github.com/suzuito/blog1-go/pkg/entity"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 	"github.com/suzuito/common-go/cgin"
 )
 
@@ -19,7 +19,7 @@ func HandlerGetArticles() gin.HandlerFunc {
 		cursorPublishedAt := cgin.DefaultQueryAsInt64(ctx, "cursor_published_at", now.Unix())
 		cursorTitle := ctx.DefaultQuery("cursor_title", "")
 		order := usecase.CursorOrder(ctx.DefaultQuery("order", string(usecase.CursorOrderDesc)))
-		articles := []model.Article{}
+		articles := []entity.Article{}
 		if err := u.GetArticles(ctx, cursorPublishedAt, cursorTitle, order, n, &articles); err != nil {
 			ctx.AbortWithStatusJSON(
 				http.StatusInternalServerError,
