@@ -11,6 +11,7 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/rs/zerolog v1.26.1
 	github.com/suzuito/common-go v0.15.1-0.20220211073048-9923b5039ad8
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/api v0.68.0
@@ -33,6 +34,7 @@ require (
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
+	github.com/google/subcommands v1.2.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
@@ -43,9 +45,9 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/suzuito/common-env v1.1.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
-	github.com/yuin/goldmark v1.3.8 // indirect
+	github.com/yuin/goldmark v1.4.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
-	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
+	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
