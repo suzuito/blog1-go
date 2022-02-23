@@ -4,24 +4,25 @@ go 1.17
 
 require (
 	cloud.google.com/go/firestore v1.6.1
+	cloud.google.com/go/functions v1.1.0
 	cloud.google.com/go/storage v1.18.2
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/validator/v10 v10.4.1
+	github.com/google/subcommands v1.2.0
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/rs/zerolog v1.26.1
 	github.com/suzuito/common-go v1.0.0
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
-	google.golang.org/api v0.68.0
+	google.golang.org/api v0.70.0
 	google.golang.org/grpc v1.44.0
 )
 
 require (
 	cloud.google.com/go v0.100.2 // indirect
-	cloud.google.com/go/compute v1.2.0 // indirect
-	cloud.google.com/go/functions v1.1.0 // indirect
+	cloud.google.com/go/compute v1.3.0 // indirect
 	cloud.google.com/go/iam v0.1.1 // indirect
 	cloud.google.com/go/pubsub v1.18.0 // indirect
 	cloud.google.com/go/secretmanager v1.0.0 // indirect
@@ -35,7 +36,6 @@ require (
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
-	github.com/google/subcommands v1.2.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
@@ -55,7 +55,7 @@ require (
 	golang.org/x/sys v0.0.0-20220209214540-3681064d5158 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220208230804-65c12eb4c068 // indirect
+	google.golang.org/genproto v0.0.0-20220218161850-94dd64e39d7c // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
