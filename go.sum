@@ -282,6 +282,8 @@ github.com/suzuito/common-go v0.15.1-0.20220212034147-7cf0fa997cd2 h1:cx3nEvPEeM
 github.com/suzuito/common-go v0.15.1-0.20220212034147-7cf0fa997cd2/go.mod h1:kFEhPEucqXVgeMBM3ptUctFt7rFrdJmkpGwjaHQ5K80=
 github.com/suzuito/common-go v1.0.0 h1:n5YWn7WwFA/gq9G0syGrKIqapwS5iLdTWGjg+SW0j00=
 github.com/suzuito/common-go v1.0.0/go.mod h1:kFEhPEucqXVgeMBM3ptUctFt7rFrdJmkpGwjaHQ5K80=
+github.com/suzuito/common-go v1.0.1-0.20220308114338-1cf00f2d03d9 h1:xv23woWnBmjIYpB4rLpk6is95klbSy6XRhgxIFcacxk=
+github.com/suzuito/common-go v1.0.1-0.20220308114338-1cf00f2d03d9/go.mod h1:kFEhPEucqXVgeMBM3ptUctFt7rFrdJmkpGwjaHQ5K80=
 github.com/ugorji/go v1.1.7 h1:/68gy2h+1mWMrwZFeD1kQialdSzAb432dtpeJ42ovdo=
 github.com/ugorji/go v1.1.7/go.mod h1:kZn38zHttfInRq0xu/PH0az30d+z6vm202qpg1oXVMw=
 github.com/ugorji/go/codec v1.1.7 h1:2SvQaVZ1ouYrrKKwoSk2pzd4A9evlKJb9oTL+OaLUSs=

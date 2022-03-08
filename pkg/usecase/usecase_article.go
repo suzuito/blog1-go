@@ -63,6 +63,9 @@ func (u *Impl) UpdateArticle(
 	if err := u.ConvertMD(ctx, source, &article, &converted); err != nil {
 		return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
 	}
+	if article.ID == entity.ArticleID("") {
+		return xerrors.Errorf("Empty ID is detected '%+v'", article)
+	}
 	fmt.Printf("Upload '%s'\n", article.ID)
 	if err := u.storage.UploadArticle(ctx, &article, string(converted)); err != nil {
 		return xerrors.Errorf("Cannot upload article '%+v' : %w", article, err)
@@ -157,7 +160,7 @@ func (u *Impl) ConvertMD(
 	if err := u.converterMD.Convert(ctx, source, output, &meta, &tocs, &images); err != nil {
 		return xerrors.Errorf("Cannot convert : %w", err)
 	}
-	article.ID = entity.ArticleID(fmt.Sprintf("%s-%s", meta.Date, meta.Title))
+	article.ID = entity.ArticleID(meta.ID)
 	article.Description = meta.Description
 	article.PublishedAt = meta.DateAsTime().Unix()
 	article.Tags = *entity.NewTags(meta.Tags)
