@@ -22,3 +22,5 @@ main
 .output/*.html
 tmp/
 application_default_credentials.json
+
+coverage.*
