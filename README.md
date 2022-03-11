@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/suzuito/blog1-go/branch/main/graph/badge.svg?token=YCIEOXPNO7)](https://codecov.io/gh/suzuito/blog1-go)
+
 # Blog
 
 BFF for http://blog.tach.dev
