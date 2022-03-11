@@ -14,7 +14,8 @@ init:
 	docker-compose up
 
 test:
-	echo "FIXME"
+	go test -timeout 30s -coverprofile=coverage.txt -covermode=atomic ./...
+	go tool cover -html=coverage.txt -o coverage.html
 
 clean:
 	rm -f *.exe
