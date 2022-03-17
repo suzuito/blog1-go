@@ -1,0 +1,59 @@
+package bgin
+
+import (
+	"net/http"
+	"sort"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/suzuito/blog1-go/pkg/entity"
+	"github.com/suzuito/blog1-go/pkg/usecase"
+	"github.com/suzuito/common-go/cgin"
+)
+
+// HTMLGetArticles ...
+func HTMLGetArticles() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		now := time.Now()
+		u := getCtxUsecase(ctx)
+		n := cgin.DefaultQueryAsInt(ctx, "n", 10)
+		cursorPublishedAt := cgin.DefaultQueryAsInt64(ctx, "cursor_published_at", now.Unix())
+		cursorTitle := ctx.DefaultQuery("cursor_title", "")
+		order := usecase.CursorOrder(ctx.DefaultQuery("order", string(usecase.CursorOrderDesc)))
+		articles := []entity.Article{}
+		if err := u.GetArticles(ctx, cursorPublishedAt, cursorTitle, order, n, &articles); err != nil {
+			ctx.AbortWithStatusJSON(
+				http.StatusInternalServerError,
+				err.Error(),
+			)
+			return
+		}
+		sort.Slice(articles, func(i, j int) bool {
+			return articles[i].PublishedAt > articles[j].PublishedAt
+		})
+		nextPublishedAt := int64(0)
+		nextTitle := ""
+		if len(articles) >= n {
+			nextPublishedAt = articles[len(articles)-1].PublishedAt
+			nextTitle = articles[len(articles)-1].Title
+		}
+		prevPublishedAt := int64(0)
+		prevTitle := ""
+		if len(articles) > 0 {
+			prevPublishedAt = articles[0].PublishedAt
+			prevTitle = articles[0].Title
+		}
+		ctx.HTML(
+			http.StatusOK,
+			"pc_articles.html",
+			gin.H{
+				"Global":          htmlGlobal,
+				"Articles":        articles,
+				"NextPublishedAt": nextPublishedAt,
+				"NextTitle":       nextTitle,
+				"PrevPublishedAt": prevPublishedAt,
+				"PrevTitle":       prevTitle,
+			},
+		)
+	}
+}

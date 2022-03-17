@@ -1,5 +1,5 @@
 root = "."
 
 [build]
-cmd = "make api.exe"
+cmd = "go build -o api.exe cmd/api/*.go"
 bin = "api.exe"

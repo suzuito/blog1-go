@@ -1,6 +1,7 @@
 package bgin
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,9 +19,11 @@ func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalD
 	})
 	root.Use(MiddlewareUsecase(env, gdeps))
 
+	root.Static("css", fmt.Sprintf("%s", env.DirPathCSS))
 	{
+		root.LoadHTMLGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
 		gArticles := root.Group("articles")
-		gArticles.GET("", HandlerGetArticles())
+		gArticles.GET("", HTMLGetArticles())
 		{
 			gArticle := gArticles.Group(":articleID")
 			gArticle.Use(MiddlewareGetArticle())

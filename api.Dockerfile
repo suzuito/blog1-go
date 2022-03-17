@@ -2,7 +2,7 @@ FROM golang:1.17.6-alpine AS builder
 WORKDIR /app
 COPY . ./
 RUN apk --no-cache add make
-RUN make api.exe
+RUN go build -o api.exe cmd/api/*.go
 
 FROM alpine:latest
 ARG COMMIT_SHA=${COMMIT_SHA}

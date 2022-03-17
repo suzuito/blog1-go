@@ -12,6 +12,8 @@ services:
       - ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8080
       - ALLOWED_METHODS=GET,POST,DELETE
       - GOOGLE_APPLICATION_CREDENTIALS=./application_default_credentials.json
+      - DIR_PATH_TEMPLATE=data/template
+      - DIR_PATH_CSS=data/css
     working_dir: /opt/app
     volumes:
       - .:/opt/app
