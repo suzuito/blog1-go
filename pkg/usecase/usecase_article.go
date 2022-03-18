@@ -180,3 +180,17 @@ func (u *Impl) ConvertMD(
 	*converted = output.Bytes()
 	return nil
 }
+
+func (u *Impl) GetArticleHTML(
+	ctx context.Context,
+	id entity.ArticleID,
+	body *[]byte,
+) error {
+	path := fmt.Sprintf("%s.html", id)
+	return u.storage.GetFileAsHTTPResponse(
+		ctx,
+		path,
+		body,
+		&map[string]string{},
+	)
+}

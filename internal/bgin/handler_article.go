@@ -44,3 +44,14 @@ func HandlerGetArticlesByID() gin.HandlerFunc {
 		)
 	}
 }
+
+// HandlerPutArticleByID ...
+func HandlerPutArticleByID() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		article := getCtxArticle(ctx)
+		ctx.JSON(
+			http.StatusOK,
+			NewResponseArticle(article),
+		)
+	}
+}

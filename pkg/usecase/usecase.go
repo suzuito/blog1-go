@@ -28,6 +28,12 @@ type Usecase interface {
 		articles *[]entity.Article,
 	) error
 
+	GetArticleHTML(
+		ctx context.Context,
+		id entity.ArticleID,
+		body *[]byte,
+	) error
+
 	ConvertMD(
 		ctx context.Context,
 		source []byte,

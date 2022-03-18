@@ -27,7 +27,8 @@ func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalD
 		{
 			gArticle := gArticles.Group(":articleID")
 			gArticle.Use(MiddlewareGetArticle())
-			gArticle.GET("", HandlerGetArticlesByID())
+			gArticle.GET("", HTMLGetArticle())
+			gArticle.PUT("", HandlerPutArticleByID())
 		}
 	}
 

@@ -19,7 +19,7 @@ services:
       - .:/opt/app
     command: /bin/bash -c 'air -c .air-api.toml'
     ports:
-      - 8080:8080
+      - 8081:8080
   gcf:
     build:
       context: .
