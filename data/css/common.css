@@ -1,39 +1,80 @@
-.base-header {
-    position: absolute;
-    top: 0px;
-    height: 42px;
-    left: 0px;
-    right: 0px;
-
-    border: 1px solid red;
-    box-sizing: border-box;
+body {
+    margin: 0;
 }
 
-.base-content-with-footer {
-    position: absolute;
-    top: 42px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-}
-
-.base-footer {
+._base-header {
     position: relative;
     height: 42px;
-    left: 0px;
-    right: 0px;
+    width: 100%;
 }
 
-.header {
+._base-content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+._base-footer {
+    position: relative;
+    height: 42px;
+    width: 100%;
+    text-align: center;
+}
+
+@media screen and (max-width: 450px) {
+    ._base-left {
+        position: relative;
+        width: 0px;
+    }
+    ._base-center {
+        position: relative;
+        width: 100%;
+    }
+    ._base-right {
+        position: relative;
+        width: 0px;
+    }
+}
+
+@media screen and (min-width: 450px) and (max-width: 1000px) {
+    ._base-left {
+        position: relative;
+    }
+    ._base-center {
+        position: relative;
+        width: 600px;
+    }
+    ._base-right {
+        position: relative;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    ._base-left {
+        position: relative;
+        width: 20%;
+    }
+    ._base-center {
+        position: relative;
+        width: 60%;
+    }
+    ._base-right {
+        position: relative;
+        width: 20%;
+    }
+}
+
+._header {
     position: absolute;
     left: 0px;
     right: 0px;
     height: 100%;
-    border: 1px solid blue;
-    box-sizing: border-box;
+    border-bottom: 1px solid grey;
 }
 
-.header-title {
+._header-title {
     position: absolute;
     left: 0px;
     width: 200px;
@@ -41,12 +82,9 @@
 
     padding-left: 6px;
     padding-top: 3px;
-
-    border: 1px solid green;
-    box-sizing: border-box;
 }
 
-.header-nav {
+._header-nav {
     position: absolute;
     left: 200px;
     right: 0px;
@@ -56,9 +94,10 @@
     padding-top: 6px;
 
     text-align: right;
+}
 
-    border: 1px solid plum;
-    box-sizing: border-box;
+._article-header {
+    padding: 6px;
 }
 
 a {
@@ -75,4 +114,8 @@ a:link {
 a.disabled {
     opacity: 0.5;
     cursor: inherit;
+}
+
+a._link-title:link {
+    text-decoration: none;
 }

@@ -1,6 +1,6 @@
 version: '3'
 services:
-  api:
+  server:
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,12 +14,14 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=./application_default_credentials.json
       - DIR_PATH_TEMPLATE=data/template
       - DIR_PATH_CSS=data/css
+      - SITE_ORIGIN=http://localhost:8080
+      - GA=
     working_dir: /opt/app
     volumes:
       - .:/opt/app
-    command: /bin/bash -c 'air -c .air-api.toml'
+    command: /bin/bash -c 'air -c .air.server.toml'
     ports:
-      - 8081:8080
+      - 8080:8080
   gcf:
     build:
       context: .

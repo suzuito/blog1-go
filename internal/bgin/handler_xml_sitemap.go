@@ -4,14 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/suzuito/blog1-go/pkg/setting"
 )
 
 // HandlerGetSitemapXML ...
-func HandlerGetSitemapXML() gin.HandlerFunc {
+func HandlerGetSitemapXML(env *setting.Environment) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := getCtxUsecase(ctx)
-		origin := ctx.DefaultQuery("origin", "http://localhost:4200")
-		b, err := u.GenerateBlogSiteMap(ctx, origin)
+		b, err := u.GenerateBlogSiteMap(ctx, env.SiteOrigin)
 		if err != nil {
 			ctx.AbortWithStatus(
 				http.StatusInternalServerError,

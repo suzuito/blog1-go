@@ -7,12 +7,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/suzuito/blog1-go/pkg/entity"
+	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 	"github.com/suzuito/common-go/cgin"
 )
 
-// HTMLGetArticles ...
-func HTMLGetArticles() gin.HandlerFunc {
+// HandlerHTMLGetArticles ...
+func HandlerHTMLGetArticles(
+	env *setting.Environment,
+) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		now := time.Now()
 		u := getCtxUsecase(ctx)
@@ -22,10 +25,7 @@ func HTMLGetArticles() gin.HandlerFunc {
 		order := usecase.CursorOrder(ctx.DefaultQuery("order", string(usecase.CursorOrderDesc)))
 		articles := []entity.Article{}
 		if err := u.GetArticles(ctx, cursorPublishedAt, cursorTitle, order, n, &articles); err != nil {
-			ctx.AbortWithStatusJSON(
-				http.StatusInternalServerError,
-				err.Error(),
-			)
+			html500(ctx, env)
 			return
 		}
 		sort.Slice(articles, func(i, j int) bool {
@@ -47,7 +47,7 @@ func HTMLGetArticles() gin.HandlerFunc {
 			http.StatusOK,
 			"pc_articles.html",
 			gin.H{
-				"Global":          htmlGlobal,
+				"Global":          htmlGlobal(env),
 				"Articles":        articles,
 				"NextPublishedAt": nextPublishedAt,
 				"NextTitle":       nextTitle,

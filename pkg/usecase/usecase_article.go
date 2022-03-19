@@ -49,6 +49,15 @@ func (u *Impl) CreateArticle(
 	return u.CreateArticle(ctx, article)
 }
 
+func (u *Impl) UpdateArticleByID(
+	ctx context.Context,
+	bucket string,
+	articleID entity.ArticleID,
+) error {
+	path := fmt.Sprintf("%s/%s.md", bucket, articleID)
+	return u.UpdateArticle(ctx, path)
+}
+
 func (u *Impl) UpdateArticle(
 	ctx context.Context,
 	path string,

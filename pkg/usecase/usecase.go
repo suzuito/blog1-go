@@ -40,6 +40,11 @@ type Usecase interface {
 		article *entity.Article,
 		converted *[]byte,
 	) error
+	UpdateArticleByID(
+		ctx context.Context,
+		bucket string,
+		articleID entity.ArticleID,
+	) error
 
 	GenerateBlogSiteMap(
 		ctx context.Context,

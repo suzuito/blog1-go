@@ -6,14 +6,7 @@
     {{template "pc__ga" .}}
     <link rel="stylesheet" href="/css/font.css">
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/pc_article.css">
-    <link rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
-    <script type="application/ld+json">
-        {{.LDJSON}}
-    </script>
+    <link rel="stylesheet" href="/css/pc_top.css">
     <title>{{.Global.Title}}</title>
 </head>
 
@@ -25,13 +18,17 @@
         <div class="_base-left">
         </div>
         <div class="_base-center">
-            <div class="article-header">
-                <div class="article-header-2">
-                    {{template "pc__article_header" .Article}}
+            <div class="articles">
+                <div class="title _font-title">
+                    新着記事
                 </div>
-            </div>
-            <div class="content">
-                __QSW#$%FG_CONTENT__
+                {{range .Articles}}
+                <div class="article">
+                    {{template "pc__article_header" .}}
+                </div>
+                <div class="padding">
+                </div>
+                {{end}}
             </div>
         </div>
         <div class="_base-right">
