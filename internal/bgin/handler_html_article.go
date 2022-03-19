@@ -18,7 +18,7 @@ func init() {
 	var err error
 	tmplArticle, err = template.New("hoge").ParseGlob("data/template/*.html")
 	if err != nil {
-		panic(xerrors.Errorf("cannot new template"))
+		panic(xerrors.Errorf("cannot new template : %+v", err))
 	}
 }
 
