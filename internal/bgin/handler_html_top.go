@@ -19,7 +19,7 @@ func HandlerHTMLGetTop(
 		u := getCtxUsecase(ctx)
 		articles := []entity.Article{}
 		if err := u.GetArticles(ctx, now, "", usecase.CursorOrderDesc, 3, &articles); err != nil {
-			html500(ctx, env)
+			html500(ctx, env, err)
 			return
 		}
 		ctx.HTML(

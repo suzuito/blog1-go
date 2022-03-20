@@ -25,7 +25,7 @@ func HandlerHTMLGetArticles(
 		order := usecase.CursorOrder(ctx.DefaultQuery("order", string(usecase.CursorOrderDesc)))
 		articles := []entity.Article{}
 		if err := u.GetArticles(ctx, cursorPublishedAt, cursorTitle, order, n, &articles); err != nil {
-			html500(ctx, env)
+			html500(ctx, env, err)
 			return
 		}
 		sort.Slice(articles, func(i, j int) bool {

@@ -23,7 +23,7 @@ func HTMLMiddlewareGetArticle(
 				return
 			}
 			ctx.Abort()
-			html500(ctx, env)
+			html500(ctx, env, err)
 			return
 		}
 		setCtxArticle(ctx, &article)

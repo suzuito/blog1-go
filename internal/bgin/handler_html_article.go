@@ -30,7 +30,7 @@ func HandlerHTMLGetArticle(
 			}
 		})
 		if errTmpl == nil {
-			html500(ctx, env)
+			html500(ctx, env, errTmpl)
 			return
 		}
 		article := getCtxArticle(ctx)
@@ -62,7 +62,7 @@ func HandlerHTMLGetArticle(
 				},
 			},
 		); err != nil {
-			html500(ctx, env)
+			html500(ctx, env, err)
 			return
 		}
 		body := strings.Replace(buf.String(), "__QSW#$%FG_CONTENT__", string(content), -1)
