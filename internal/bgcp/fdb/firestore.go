@@ -14,9 +14,9 @@ import (
 
 var (
 	// CollArticles ...
-	CollArticles = "articles"
+	CollArticles = "BlogArticles"
 	// CollTags ...
-	CollTags = "tags"
+	CollTags = "BlogTags"
 )
 
 func NewResource(ctx context.Context, env *setting.Environment) (*firestore.Client, error) {
