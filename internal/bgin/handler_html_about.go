@@ -15,9 +15,30 @@ func HandlerHTMLGetAbout(
 		ctx.HTML(
 			http.StatusOK,
 			"pc_about.html",
-			gin.H{
-				"Global": htmlGlobal(env),
-			},
+			newTmplVar(
+				env,
+				newTmplVarMeta(
+					"ブログサイト管理人の自己紹介",
+				),
+				newTmplVarLink(
+					getPageURL(ctx, env),
+				),
+				newTmplVarOGP(
+					"ブログサイト管理人の自己紹介",
+					"ブログサイト管理人の自己紹介",
+					"website",
+					getPageURL(ctx, env),
+					"",
+				),
+				[]tmplVarLDJSON{
+					newTmplVarLDJSONWebSite(
+						getPageURL(ctx, env),
+						"ブログサイト管理人の自己紹介",
+						"ブログサイト管理人の自己紹介",
+					),
+				},
+				map[string]interface{}{},
+			),
 		)
 	}
 }

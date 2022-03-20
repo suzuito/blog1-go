@@ -2,8 +2,7 @@
 <html lang="ja">
 
 <head>
-    {{template "pc__meta"}}
-    {{template "pc__ga" .}}
+    {{template "pc__common_head" .}}
     <link rel="stylesheet" href="/css/font.css">
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/pc_article.css">
@@ -14,7 +13,7 @@
     <script type="application/ld+json">
         {{.LDJSON}}
     </script>
-    <title>{{.Global.Title}}</title>
+    <title>{{._Global.Title}}</title>
 </head>
 
 <body>

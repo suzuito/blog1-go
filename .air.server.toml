@@ -2,7 +2,7 @@ root = "."
 
 [build]
 cmd = "go build -o server.exe cmd/server/*.go"
-include_ext = ["go"]
+include_ext = ["go","html","css"]
 exclude_regex = ["_test.go"]
 bin = "server.exe"
 

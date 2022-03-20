@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/suzuito/blog1-go/pkg/setting"
@@ -40,27 +39,58 @@ func HandlerHTMLGetArticle(
 			html404(ctx, env)
 			return
 		}
+		imageURL := ""
+		if len(article.Images) > 0 {
+			imageURL = article.Images[0].URL
+		}
 		buf := bytes.NewBufferString("")
 		if err := tmplArticle.ExecuteTemplate(
 			buf,
 			"pc_article.html",
-			gin.H{
-				"Global":  htmlGlobal(env),
-				"Article": article,
-				"LDJSON": map[string]interface{}{
-					"@context":      "https://schema.org",
-					"@type":         "Article",
-					"headline":      article.Description,
-					"datePublished": article.PublishedAtAsTime().Format(time.RFC3339),
-					"image": (func() []string {
-						a := []string{}
-						for _, img := range article.Images {
-							a = append(a, img.URL)
-						}
-						return a
-					})(),
+			newTmplVar(
+				env,
+				newTmplVarMeta(
+					article.Description,
+				),
+				newTmplVarLink(
+					getPageURL(ctx, env),
+				),
+				newTmplVarOGP(
+					article.Title,
+					article.Description,
+					"article",
+					getPageURL(ctx, env),
+					imageURL,
+				),
+				[]tmplVarLDJSON{
+					newTmplVarLDJSONArticle(
+						article.Description,
+						article.Description,
+						article.CreatedAtAsTime(),
+						imageURL,
+					),
 				},
-			},
+				map[string]interface{}{
+					"Article": article,
+				},
+			),
+			// gin.H{
+			// 	"Global":  tmplVarGlobal(env),
+			// 	"Article": article,
+			// 	"LDJSON": map[string]interface{}{
+			// 		"@context":      "https://schema.org",
+			// 		"@type":         "Article",
+			// 		"headline":      article.Description,
+			// 		"datePublished": article.PublishedAtAsTime().Format(time.RFC3339),
+			// 		"image": (func() []string {
+			// 			a := []string{}
+			// 			for _, img := range article.Images {
+			// 				a = append(a, img.URL)
+			// 			}
+			// 			return a
+			// 		})(),
+			// 	},
+			// },
 		); err != nil {
 			html500(ctx, env, err)
 			return

@@ -12,9 +12,30 @@ func html404(ctx *gin.Context, env *setting.Environment) {
 	ctx.HTML(
 		http.StatusNotFound,
 		"pc_404.html",
-		gin.H{
-			"Global": htmlGlobal(env),
-		},
+		newTmplVar(
+			env,
+			newTmplVarMeta(
+				metaSiteDescription,
+			),
+			newTmplVarLink(
+				getPageURL(ctx, env),
+			),
+			newTmplVarOGP(
+				"404エラーページ",
+				"404エラーページ",
+				"website",
+				getPageURL(ctx, env),
+				"",
+			),
+			[]tmplVarLDJSON{
+				newTmplVarLDJSONWebSite(
+					getPageURL(ctx, env),
+					"404エラーページ",
+					"404エラーページ",
+				),
+			},
+			map[string]interface{}{},
+		),
 	)
 }
 
@@ -23,8 +44,29 @@ func html500(ctx *gin.Context, env *setting.Environment, err error) {
 	ctx.HTML(
 		http.StatusInternalServerError,
 		"pc_500.html",
-		gin.H{
-			"Global": htmlGlobal(env),
-		},
+		newTmplVar(
+			env,
+			newTmplVarMeta(
+				metaSiteDescription,
+			),
+			newTmplVarLink(
+				getPageURL(ctx, env),
+			),
+			newTmplVarOGP(
+				"500エラーページ",
+				"500エラーページ",
+				"website",
+				getPageURL(ctx, env),
+				"",
+			),
+			[]tmplVarLDJSON{
+				newTmplVarLDJSONWebSite(
+					getPageURL(ctx, env),
+					"500エラーページ",
+					"500エラーページ",
+				),
+			},
+			map[string]interface{}{},
+		),
 	)
 }

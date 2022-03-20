@@ -25,10 +25,32 @@ func HandlerHTMLGetTop(
 		ctx.HTML(
 			http.StatusOK,
 			"pc_top.html",
-			gin.H{
-				"Global":   htmlGlobal(env),
-				"Articles": articles,
-			},
+			newTmplVar(
+				env,
+				newTmplVarMeta(
+					metaSiteDescription,
+				),
+				newTmplVarLink(
+					getPageURL(ctx, env),
+				),
+				newTmplVarOGP(
+					metaSiteName,
+					metaSiteDescription,
+					"website",
+					getPageURL(ctx, env),
+					"",
+				),
+				[]tmplVarLDJSON{
+					newTmplVarLDJSONWebSite(
+						getPageURL(ctx, env),
+						metaSiteName,
+						metaSiteDescription,
+					),
+				},
+				map[string]interface{}{
+					"Articles": articles,
+				},
+			),
 		)
 	}
 }

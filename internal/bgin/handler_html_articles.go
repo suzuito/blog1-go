@@ -46,14 +46,36 @@ func HandlerHTMLGetArticles(
 		ctx.HTML(
 			http.StatusOK,
 			"pc_articles.html",
-			gin.H{
-				"Global":          htmlGlobal(env),
-				"Articles":        articles,
-				"NextPublishedAt": nextPublishedAt,
-				"NextTitle":       nextTitle,
-				"PrevPublishedAt": prevPublishedAt,
-				"PrevTitle":       prevTitle,
-			},
+			newTmplVar(
+				env,
+				newTmplVarMeta(
+					"記事一覧",
+				),
+				newTmplVarLink(
+					getPageURL(ctx, env),
+				),
+				newTmplVarOGP(
+					"記事一覧",
+					"記事一覧",
+					"article",
+					getPageURL(ctx, env),
+					"",
+				),
+				[]tmplVarLDJSON{
+					newTmplVarLDJSONWebSite(
+						getPageURL(ctx, env),
+						"記事一覧",
+						"記事一覧",
+					),
+				},
+				map[string]interface{}{
+					"Articles":        articles,
+					"NextPublishedAt": nextPublishedAt,
+					"NextTitle":       nextTitle,
+					"PrevPublishedAt": prevPublishedAt,
+					"PrevTitle":       prevTitle,
+				},
+			),
 		)
 	}
 }
