@@ -28,11 +28,22 @@ type Usecase interface {
 		articles *[]entity.Article,
 	) error
 
+	GetArticleHTML(
+		ctx context.Context,
+		id entity.ArticleID,
+		body *[]byte,
+	) error
+
 	ConvertMD(
 		ctx context.Context,
 		source []byte,
 		article *entity.Article,
 		converted *[]byte,
+	) error
+	UpdateArticleByID(
+		ctx context.Context,
+		bucket string,
+		articleID entity.ArticleID,
 	) error
 
 	GenerateBlogSiteMap(

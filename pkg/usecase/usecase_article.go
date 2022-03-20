@@ -49,6 +49,15 @@ func (u *Impl) CreateArticle(
 	return u.CreateArticle(ctx, article)
 }
 
+func (u *Impl) UpdateArticleByID(
+	ctx context.Context,
+	bucket string,
+	articleID entity.ArticleID,
+) error {
+	path := fmt.Sprintf("%s/%s.md", bucket, articleID)
+	return u.UpdateArticle(ctx, path)
+}
+
 func (u *Impl) UpdateArticle(
 	ctx context.Context,
 	path string,
@@ -182,4 +191,18 @@ func (u *Impl) ConvertMD(
 	}
 	*converted = output.Bytes()
 	return nil
+}
+
+func (u *Impl) GetArticleHTML(
+	ctx context.Context,
+	id entity.ArticleID,
+	body *[]byte,
+) error {
+	path := fmt.Sprintf("%s.html", id)
+	return u.storage.GetFileAsHTTPResponse(
+		ctx,
+		path,
+		body,
+		&map[string]string{},
+	)
 }

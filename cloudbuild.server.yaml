@@ -3,13 +3,13 @@ steps:
   args:
   - build
   - "--build-arg=COMMIT_SHA=${COMMIT_SHA}"
-  - "--tag=gcr.io/suzuito-${_ENV}/blog-api-go"
-  - "--file=./api.Dockerfile"
+  - "--tag=gcr.io/suzuito-${_ENV}/blog-server-go"
+  - "--file=./server.Dockerfile"
   - .
 - name: "gcr.io/cloud-builders/docker"
   args:
   - push
-  - "gcr.io/suzuito-${_ENV}/blog-api-go"
+  - "gcr.io/suzuito-${_ENV}/blog-server-go"
 - name: "gcr.io/cloud-builders/kubectl"
   env:
   - CLOUDSDK_COMPUTE_REGION=asia-northeast1
@@ -17,7 +17,7 @@ steps:
   args:
   - rollout
   - restart
-  - deployment/api-deployment
+  - deployment/server-deployment
   - --namespace=blog
 images:
-- gcr.io/suzuito-${_ENV}/blog-api-go
+- gcr.io/suzuito-${_ENV}/blog-server-go

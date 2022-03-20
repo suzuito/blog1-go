@@ -1,0 +1,29 @@
+{{define "pc__common_head"}}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="{{._Meta.Description}}">
+
+<meta property="og:title" content="{{._OGP.Title}}">
+<meta property="og:description" content="{{._OGP.Description}}">
+<meta property="og:locale" content="{{._OGP.Locale}}">
+<meta property="og:type" content="{{._OGP.Type}}">
+<meta property="og:url" content="{{._OGP.URL}}">
+<meta property="og:site_name" content="{{._OGP.SiteName}}">
+<meta property="og:image" content="{{._OGP.Image}}">
+
+<link rel="canonical" href="{{._Link.Canonical}}">
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PDBTC7CTM1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{._Global.GA}}');
+</script>
+
+<script type="application/ld+json">
+  {{._LDJSON}}
+</script>
+{{end}}

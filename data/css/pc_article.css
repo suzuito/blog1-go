@@ -1,0 +1,16 @@
+
+
+.content {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.article-header {
+    padding: 6px;
+}
+
+.article-header-2 {
+    border: 1px solid grey;
+}
