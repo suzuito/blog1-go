@@ -71,7 +71,9 @@ func newTmplVarLDJSONArticle(
 	headline string,
 	description string,
 	datePublished time.Time,
-	image string,
+	image []string,
+	authorName string,
+	authorURL string,
 ) tmplVarLDJSON {
 	r := tmplVarLDJSON{
 		"@context":      "https://schema.org",
@@ -79,10 +81,13 @@ func newTmplVarLDJSONArticle(
 		"headline":      headline,
 		"description":   description,
 		"datePublished": datePublished.Format(time.RFC3339),
+		"author": map[string]string{
+			"@type": "Person",
+			"name":  authorName,
+			"url":   authorURL,
+		},
 	}
-	if image != "" {
-		r["image"] = image
-	}
+	r["image"] = image
 	return r
 }
 
