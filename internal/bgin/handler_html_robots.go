@@ -30,8 +30,8 @@ func HandlerHTMLGetRobots(env *setting.Environment) gin.HandlerFunc {
 		c.String(http.StatusOK, strings.Join(
 			[]string{
 				"Sitemap: " + u.String(),
-				// "User-agent: *",
-				// "Disallow: /",
+				"User-agent: *",
+				"Disallow: /",
 			}, "\n"),
 		)
 	}

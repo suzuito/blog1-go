@@ -74,23 +74,6 @@ func HandlerHTMLGetArticle(
 					"Article": article,
 				},
 			),
-			// gin.H{
-			// 	"Global":  tmplVarGlobal(env),
-			// 	"Article": article,
-			// 	"LDJSON": map[string]interface{}{
-			// 		"@context":      "https://schema.org",
-			// 		"@type":         "Article",
-			// 		"headline":      article.Description,
-			// 		"datePublished": article.PublishedAtAsTime().Format(time.RFC3339),
-			// 		"image": (func() []string {
-			// 			a := []string{}
-			// 			for _, img := range article.Images {
-			// 				a = append(a, img.URL)
-			// 			}
-			// 			return a
-			// 		})(),
-			// 	},
-			// },
 		); err != nil {
 			html500(ctx, env, err)
 			return
