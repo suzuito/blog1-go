@@ -22,6 +22,7 @@ func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalD
 	root.GET("robots.txt", HandlerHTMLGetRobots(env))
 	root.GET("", HandlerHTMLGetTop(env))
 	root.GET("about", HandlerHTMLGetAbout(env))
+	root.GET("sandbox", HandlerHTMLGetSandbox(env))
 	{
 		root.LoadHTMLGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
 		gArticles := root.Group("articles")
