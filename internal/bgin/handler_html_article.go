@@ -2,9 +2,11 @@ package bgin
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -12,21 +14,25 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var tmplArticle *template.Template
-
-func init() {
-	var err error
-	tmplArticle, err = template.New("hoge").ParseGlob("data/template/*.html")
-	if err != nil {
-		panic(xerrors.Errorf("cannot new template : %+v", err))
-	}
-}
-
 // HandlerHTMLGetArticle ...
 func HandlerHTMLGetArticle(
 	env *setting.Environment,
 ) gin.HandlerFunc {
+	var once sync.Once
+	var tmplArticle *template.Template
 	return func(ctx *gin.Context) {
+		var errTmpl error
+		once.Do(func() {
+			var err error
+			tmplArticle, errTmpl = template.New("hoge").ParseGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
+			if err != nil {
+				errTmpl = xerrors.Errorf("cannot new template : %+v", err)
+			}
+		})
+		if errTmpl == nil {
+			html500(ctx, env)
+			return
+		}
 		article := getCtxArticle(ctx)
 		u := getCtxUsecase(ctx)
 		content := []byte{}

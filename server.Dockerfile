@@ -9,5 +9,5 @@ ARG COMMIT_SHA=${COMMIT_SHA}
 ENV COMMIT_SHA=${COMMIT_SHA}
 EXPOSE 8080
 COPY --from=builder /app/server.exe ./
-COPY data/ ./
+COPY data/ ./data
 CMD [ "./server.exe" ]
