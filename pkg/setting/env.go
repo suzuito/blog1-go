@@ -14,6 +14,7 @@ type Environment struct {
 	AllowedMethods   []string `envconfig:"ALLOWED_METHODS"`
 	DirPathTemplate  string   `envconfig:"DIR_PATH_TEMPLATE"`
 	DirPathCSS       string   `envconfig:"DIR_PATH_CSS"`
+	DirPathAsset     string   `envconfig:"DIR_PATH_ASSET"`
 	GA               string   `envconfig:"GA"`
 	SiteOrigin       string   `envconfig:"SITE_ORIGIN"`
 }

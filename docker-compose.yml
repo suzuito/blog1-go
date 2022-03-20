@@ -14,6 +14,7 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=./application_default_credentials.json
       - DIR_PATH_TEMPLATE=data/template
       - DIR_PATH_CSS=data/css
+      - DIR_PATH_ASSET=data/asset
       - SITE_ORIGIN=http://localhost:8080
       - GA=
     working_dir: /opt/app

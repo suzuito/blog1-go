@@ -39,9 +39,15 @@ func HandlerHTMLGetArticle(
 			html404(ctx, env)
 			return
 		}
+		imageURLs := []string{
+			getAvatarURL(env),
+		}
+		for _, img := range imageURLs {
+			imageURLs = append(imageURLs, img)
+		}
 		imageURL := ""
-		if len(article.Images) > 0 {
-			imageURL = article.Images[0].URL
+		if len(imageURLs) > 0 {
+			imageURL = imageURLs[0]
 		}
 		buf := bytes.NewBufferString("")
 		if err := tmplArticle.ExecuteTemplate(
@@ -67,7 +73,9 @@ func HandlerHTMLGetArticle(
 						article.Description,
 						article.Description,
 						article.CreatedAtAsTime(),
-						imageURL,
+						imageURLs,
+						"otiuzu",
+						getAboutPageURL(env),
 					),
 				},
 				map[string]interface{}{

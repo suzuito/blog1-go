@@ -19,3 +19,15 @@ func getPageURL(ctx *gin.Context, env *setting.Environment) string {
 	}
 	return u.String()
 }
+
+func getAboutPageURL(env *setting.Environment) string {
+	u, _ := url.Parse(env.SiteOrigin)
+	u.Path = "about"
+	return u.String()
+}
+
+func getAvatarURL(env *setting.Environment) string {
+	u, _ := url.Parse(env.SiteOrigin)
+	u.Path = "asset/avatar.jpg"
+	return u.String()
+}

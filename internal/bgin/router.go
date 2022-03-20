@@ -18,6 +18,7 @@ func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalD
 	})
 	root.Use(MiddlewareUsecase(env, gdeps))
 
+	root.Static("asset", env.DirPathAsset)
 	root.GET("sitemap.xml", HandlerGetSitemapXML(env))
 	root.GET("robots.txt", HandlerHTMLGetRobots(env))
 	root.GET("", HandlerHTMLGetTop(env))
