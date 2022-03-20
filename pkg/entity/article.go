@@ -2,6 +2,7 @@ package entity
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -25,6 +26,14 @@ type Article struct {
 	Tags        []Tag
 	Images      []ArticleImage
 	TOC         []ArticleIndex
+}
+
+func (a *Article) CreatedAtAsTime() time.Time {
+	return time.Unix(a.CreatedAt, 0)
+}
+
+func (a *Article) PublishedAtAsTime() time.Time {
+	return time.Unix(a.PublishedAt, 0)
 }
 
 // Validate ...

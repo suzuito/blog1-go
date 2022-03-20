@@ -1,6 +1,7 @@
 package bgin
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,27 +11,26 @@ import (
 
 // SetUpRoot ...
 func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalDepends) {
-	root.GET("", func(c *gin.Context) {
-		c.Status(http.StatusOK)
-	})
+	root.Static("css", fmt.Sprintf("%s", env.DirPathCSS))
+
 	root.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
 	root.Use(MiddlewareUsecase(env, gdeps))
 
+	root.GET("sitemap.xml", HandlerGetSitemapXML(env))
+	root.GET("robots.txt", HandlerHTMLGetRobots(env))
+	root.GET("", HandlerHTMLGetTop(env))
+	root.GET("about", HandlerHTMLGetAbout(env))
+	root.GET("sandbox", HandlerHTMLGetSandbox(env))
 	{
+		root.LoadHTMLGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
 		gArticles := root.Group("articles")
-		gArticles.GET("", HandlerGetArticles())
+		gArticles.GET("", HandlerHTMLGetArticles(env))
 		{
 			gArticle := gArticles.Group(":articleID")
-			gArticle.Use(MiddlewareGetArticle())
-			gArticle.GET("", HandlerGetArticlesByID())
+			gArticle.Use(HTMLMiddlewareGetArticle(env))
+			gArticle.GET("", HandlerHTMLGetArticle(env))
 		}
-	}
-
-	{
-		gAdmin := root.Group("admin")
-		gAdmin.Use(MiddlewareAdminAuth())
-		gAdmin.GET("sitemap.xml", HandlerGetSitemapXML())
 	}
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    {{template "pc__common_head" .}}
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/pc_articles.css">
+    <title>{{._Global.Title}}</title>
+</head>
+
+<body>
+    <div class="_base-header">
+        {{template "pc__header" .}}
+    </div>
+    <div class="_base-content">
+        <div class="_base-left">
+        </div>
+        <div class="_base-center">
+            <div class="articles">
+                {{range .Articles}}
+                <div class="article">
+                    {{template "pc__article_header" .}}
+                </div>
+                <div class="padding">
+                </div>
+                {{end}}
+            </div>
+            <div class="paging">
+                {{if gt .PrevPublishedAt 0}}
+                <a
+                    href="/articles?cursor_title={{.PrevTitle}}&cursor_published_at={{.PrevPublishedAt}}&order=asc">前へ</a>
+                {{else}}
+                <a class="disabled">前へ</a>
+                {{end}}
+                {{if gt .NextPublishedAt 0}}
+                <a
+                    href="/articles?cursor_title={{.NextTitle}}&cursor_published_at={{.NextPublishedAt}}&order=desc">次へ</a>
+                {{else}}
+                <a class="disabled">次へ</a>
+                {{end}}
+            </div>
+        </div>
+        <div class="_base-right">
+        </div>
+    </div>
+    <div class="_base-footer">
+        {{template "pc__footer"}}
+    </div>
+</body>
+
+</html>

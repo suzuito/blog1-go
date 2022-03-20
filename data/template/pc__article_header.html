@@ -1,0 +1,17 @@
+{{define "pc__article_header"}}
+<div class="_article-header">
+    <div class="_article-header-title">
+        <a href="/articles/{{.ID}}">
+            {{.Title}}
+        </a>
+    </div>
+    <div class="_article-header-tags">
+        {{range .Tags}}
+        <a>{{.Name}}</a>
+        {{end}}
+    </div>
+    <div class="_article-header-created-at">
+        {{.PublishedAtAsTime.Format "2006/01/02"}}
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,127 @@
+body {
+    margin: 0;
+}
+
+._base-header {
+    position: relative;
+    height: 42px;
+    width: 100%;
+}
+
+._base-content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+._base-footer {
+    position: relative;
+    height: 42px;
+    width: 100%;
+    text-align: center;
+}
+
+@media screen and (max-width: 450px) {
+    ._base-left {
+        position: relative;
+        width: 0px;
+    }
+    ._base-center {
+        position: relative;
+        width: 100%;
+    }
+    ._base-right {
+        position: relative;
+        width: 0px;
+    }
+}
+
+@media screen and (min-width: 450px) and (max-width: 1000px) {
+    ._base-left {
+        position: relative;
+    }
+    ._base-center {
+        position: relative;
+        width: 600px;
+    }
+    ._base-right {
+        position: relative;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    ._base-left {
+        position: relative;
+        width: 20%;
+    }
+    ._base-center {
+        position: relative;
+        width: 60%;
+    }
+    ._base-right {
+        position: relative;
+        width: 20%;
+    }
+}
+
+._header {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    height: 100%;
+    border-bottom: 1px solid grey;
+}
+
+._header-title {
+    position: absolute;
+    left: 0px;
+    width: 200px;
+    height: 100%;
+
+    padding-left: 6px;
+    padding-top: 3px;
+}
+
+._header-nav {
+    position: absolute;
+    left: 200px;
+    right: 0px;
+    height: 100%;
+
+    padding-right: 6px;
+    padding-top: 6px;
+
+    text-align: right;
+}
+
+._article-header {
+    padding: 6px;
+}
+
+a {
+    text-decoration: underline;
+}
+a:visited {
+    text-decoration: underline;
+    color: inherit;
+}
+a:link {
+    text-decoration: underline;
+    color: inherit;
+}
+a.disabled {
+    opacity: 0.5;
+    cursor: inherit;
+}
+
+a._link-title:link {
+    text-decoration: none;
+}
+
+pre.code-block {
+    font-size: 16px;
+    border: 1px dashed grey;
+    box-sizing: border-box;
+}

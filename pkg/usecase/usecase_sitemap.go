@@ -39,7 +39,7 @@ type XMLURL struct {
 func newXMLURLFromArticle(a *entity.Article, origin string) *XMLURL {
 	mod := time.Unix(a.UpdatedAt, 0).Format("2006-01-02")
 	return &XMLURL{
-		Loc:     fmt.Sprintf("%s/blog/%s", origin, url.QueryEscape(string(a.ID))),
+		Loc:     fmt.Sprintf("%s/articles/%s", origin, url.QueryEscape(string(a.ID))),
 		Lastmod: mod,
 	}
 }
@@ -75,7 +75,7 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (*XMLURLS
 	})
 	urls.URLs = append(urls.URLs, XMLURL{
 		Lastmod: time.Now().Format("2006-01-02"),
-		Loc:     fmt.Sprintf("%s/blog/", origin),
+		Loc:     fmt.Sprintf("%s/articles/", origin),
 	})
 
 	urls.XMLNSXsi = "http://www.w3.org/2001/XMLSchema-instance"

@@ -1,0 +1,21 @@
+.articles {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.article {
+    border: 1px solid grey;
+}
+
+.padding {
+    padding-bottom: 6px;
+}
+
+.paging {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    {{template "pc__common_head" .}}
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/pc_article.css">
+    <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/vs.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script type="application/ld+json">
+        {{.LDJSON}}
+    </script>
+    <title>{{._Global.Title}}</title>
+</head>
+
+<body>
+    <div class="_base-header">
+        {{template "pc__header" .}}
+    </div>
+    <div class="_base-content">
+        <div class="_base-left">
+        </div>
+        <div class="_base-center">
+            <div class="article-header">
+                <div class="article-header-2">
+                    {{template "pc__article_header" .Article}}
+                </div>
+            </div>
+            <div class="content">
+                __QSW#$%FG_CONTENT__
+            </div>
+        </div>
+        <div class="_base-right">
+        </div>
+    </div>
+    <div class="_base-footer">
+        {{template "pc__footer"}}
+    </div>
+</body>
+
+</html>

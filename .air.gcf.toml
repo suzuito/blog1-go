@@ -1,5 +1,5 @@
 root = "."
 
 [build]
-cmd = "make gcf.exe"
+cmd = "go build -o gcf.exe cmd/gcf/*.go"
 bin = "gcf.exe"
