@@ -29,7 +29,7 @@ func HandlerHTMLGetArticle(
 				errTmpl = xerrors.Errorf("cannot new template : %+v", err)
 			}
 		})
-		if errTmpl == nil {
+		if errTmpl != nil {
 			html500(ctx, env, errTmpl)
 			return
 		}
