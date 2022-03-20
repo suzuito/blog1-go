@@ -8,7 +8,7 @@ require (
 	cloud.google.com/go/storage v1.18.2
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-gonic/gin v1.7.4
+	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/google/subcommands v1.2.0
 	github.com/hashicorp/go-retryablehttp v0.6.8
