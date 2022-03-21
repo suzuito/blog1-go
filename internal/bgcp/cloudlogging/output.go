@@ -55,7 +55,7 @@ func newErrorLogEntryPayload(
 		size := runtime.Stack(buf, false)
 		message = fmt.Sprintf(string(buf[:size]))
 	} else {
-		message = fmt.Sprintf("%+v", errWithStackTrace)
+		message = fmt.Sprintf("%+v", errWithStackTrace.StackTrace())
 	}
 	payload := logEntryPayload{
 		Level: levelError,
