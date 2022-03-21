@@ -1,26 +1,24 @@
 package main
 
 import (
-	"github.com/piprate/json-gold/ld"
+	"fmt"
+
+	"github.com/pkg/errors"
+	"github.com/suzuito/blog1-go/internal/bgcp/cloudlogging"
 )
 
+func f1() error {
+	return errors.New("hoge")
+}
+
+func f2() error {
+	err := f1()
+	return errors.Wrapf(err, "fuga")
+}
+
 func main() {
-	proc := ld.NewJsonLdProcessor()
-	options := ld.NewJsonLdOptions("")
-
-	doc := map[string]interface{}{
-		"headline": "hog",
+	if err := f2(); err != nil {
+		cloudlogging.Error(err)
+		cloudlogging.Error(fmt.Errorf("hoge"))
 	}
-
-	context := map[string]interface{}{
-		"@context": "https://schema.org",
-		"@type":    "Article",
-	}
-
-	compactedDoc, err := proc.Compact(doc, context, options)
-	if err != nil {
-		panic(err)
-	}
-
-	ld.PrintDocument("JSON-LD compation succeeded", compactedDoc)
 }

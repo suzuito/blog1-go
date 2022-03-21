@@ -9,8 +9,8 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/pkg/setting"
-	"golang.org/x/xerrors"
 )
 
 // HandlerHTMLGetArticle ...
@@ -25,7 +25,7 @@ func HandlerHTMLGetArticle(
 			var err error
 			tmplArticle, errTmpl = template.New("hoge").ParseGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
 			if err != nil {
-				errTmpl = xerrors.Errorf("cannot new template : %+v", err)
+				errTmpl = errors.Wrapf(err, "cannot new template")
 			}
 		})
 		if errTmpl != nil {

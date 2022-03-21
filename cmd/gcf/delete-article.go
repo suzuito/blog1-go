@@ -7,10 +7,10 @@ import (
 	"os"
 
 	"github.com/google/subcommands"
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/deployment/gcf"
 	"github.com/suzuito/blog1-go/pkg/inject"
 	"github.com/suzuito/blog1-go/pkg/setting"
-	"golang.org/x/xerrors"
 )
 
 type runBlogDeleteArticleCmd struct {
@@ -38,7 +38,7 @@ func (c *runBlogDeleteArticleCmd) SetFlags(f *flag.FlagSet) {
 func (c *runBlogDeleteArticleCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if err := readDirTest(c.dirBase, func(d *testData) error {
 		if err := gcf.BlogDeleteArticle(ctx, &d.Metadata, d.Event); err != nil {
-			return xerrors.Errorf(": %+v\n", err)
+			return errors.Wrapf(err, "cannot get delete article %+v", d)
 		}
 		return nil
 	}); err != nil {

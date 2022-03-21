@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/pkg/entity"
-	"golang.org/x/xerrors"
 )
 
 // ArticleReaderAll ...
@@ -32,13 +32,13 @@ func (r *ArticleReaderAll) Walk(ctx context.Context, each func(article *entity.A
 		}
 		file, err := ioutil.ReadFile(path)
 		if err != nil {
-			return xerrors.Errorf("Reading file '%s' is failed : %w", path, err)
+			return errors.Wrapf(err, "Reading file '%s' is failed : %w", path)
 		}
 		article := entity.Article{}
 		return each(&article, file)
 	})
 	if err != nil {
-		return xerrors.Errorf("Walk dir '%s' is failed : %w", r.dirBase, err)
+		return errors.Wrapf(err, "Walk dir '%s' is failed : %w", r.dirBase)
 	}
 	return nil
 }

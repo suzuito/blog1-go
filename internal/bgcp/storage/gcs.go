@@ -9,6 +9,7 @@ import (
 
 	"cloud.google.com/go/storage"
 	gstorage "cloud.google.com/go/storage"
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/pkg/entity"
 	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
@@ -19,7 +20,7 @@ import (
 func NewResource(ctx context.Context, env *setting.Environment) (*gstorage.Client, error) {
 	cli, err := gstorage.NewClient(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("%w", err)
+		return nil, errors.Wrapf(err, "storage.NewClient")
 	}
 	return cli, nil
 }
@@ -48,10 +49,10 @@ func (c *GCS) UploadArticle(
 	w.ContentType = "text/html;charset=utf-8"
 	buf := strings.NewReader(raw)
 	if _, err := io.Copy(w, buf); err != nil {
-		return xerrors.Errorf("Cannot upload article '%s' into '%s/%s' : %w", article.ID, c.bucket, p, err)
+		return errors.Wrapf(err, "cannot upload article '%s' into '%s/%s'", article.ID, c.bucket, p)
 	}
 	if err := w.Close(); err != nil {
-		return xerrors.Errorf("Cannot upload article '%s' into '%s/%s' : %w", article.ID, c.bucket, p, err)
+		return errors.Wrapf(err, "cannot upload article '%s' into '%s/%s'", article.ID, c.bucket, p)
 	}
 	return nil
 }
@@ -67,14 +68,14 @@ func (c *GCS) GetFileAsHTTPResponse(
 	reader, err := o.NewReader(ctx)
 	if err != nil {
 		if xerrors.Is(err, storage.ErrObjectNotExist) {
-			return xerrors.Errorf("Not found '%s': %w", p, usecase.ErrNotFound)
+			return errors.Wrapf(usecase.ErrNotFound, "not found '%s'", p)
 		}
-		return xerrors.Errorf("Cannot new reader '%s': %w", p, err)
+		return errors.Wrapf(err, "cannot new reader '%s': %w", p)
 	}
 	defer reader.Close()
 	*body, err = ioutil.ReadAll(reader)
 	if err != nil {
-		return xerrors.Errorf("Cannot read '%s': %w", p, err)
+		return errors.Wrapf(err, "cannot read '%s'", p)
 	}
 	(*headers)["Content-Type"] = fmt.Sprintf("%s", reader.ContentType())
 	return nil
@@ -91,10 +92,10 @@ func (c *GCS) UploadHTML(
 	w.ContentType = "text/html;charset=utf-8"
 	buf := strings.NewReader(body)
 	if _, err := io.Copy(w, buf); err != nil {
-		return xerrors.Errorf("Cannot upload html into '%s/%s' : %w", c.bucket, p, err)
+		return errors.Wrapf(err, "cannot upload html into '%s/%s' : %w", c.bucket, p)
 	}
 	if err := w.Close(); err != nil {
-		return xerrors.Errorf("Cannot upload html into '%s/%s' : %w", c.bucket, p, err)
+		return errors.Wrapf(err, "Cannot upload html into '%s/%s' : %w", c.bucket, p)
 	}
 	return nil
 }
@@ -110,7 +111,7 @@ func (c *GCS) DeleteArticle(
 		if xerrors.Is(err, storage.ErrObjectNotExist) {
 			return nil
 		}
-		return xerrors.Errorf("Cannot delete from '%s/%s' : %w", c.bucket, p, err)
+		return errors.Wrapf(err, "cannot delete from '%s/%s' : %w", c.bucket, p)
 	}
 	return nil
 }

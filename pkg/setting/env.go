@@ -2,7 +2,7 @@ package setting
 
 import (
 	"github.com/kelseyhightower/envconfig"
-	"golang.org/x/xerrors"
+	"github.com/pkg/errors"
 )
 
 // Environment ...
@@ -22,7 +22,7 @@ type Environment struct {
 func NewEnvironment() (*Environment, error) {
 	r := Environment{}
 	if err := envconfig.Process("", &r); err != nil {
-		return nil, xerrors.Errorf("Cannot envconfig.Process : %w", err)
+		return nil, errors.Wrapf(err, "cannot envconfig.Process")
 	}
 	return &r, nil
 }

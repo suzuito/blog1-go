@@ -10,11 +10,11 @@ import (
 
 	"cloud.google.com/go/functions/metadata"
 	"github.com/google/subcommands"
+	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"github.com/suzuito/blog1-go/deployment/gcf"
 	"github.com/suzuito/blog1-go/pkg/inject"
 	"github.com/suzuito/blog1-go/pkg/setting"
-	"golang.org/x/xerrors"
 )
 
 type testData struct {
@@ -25,19 +25,20 @@ type testData struct {
 func readDirTest(dir string, f func(d *testData) error) error {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
-		xerrors.Errorf("cannot read dir %s : %w", dir, err)
+		return errors.Wrapf(err, "cannot read dir %s", dir)
 	}
 	for _, entry := range entries {
-		eventBytes, err := ioutil.ReadFile(path.Join(dir, entry.Name()))
+		filePath := path.Join(dir, entry.Name())
+		eventBytes, err := ioutil.ReadFile(filePath)
 		if err != nil {
-			return xerrors.Errorf("cannot read file : %w", err)
+			return errors.Wrapf(err, "cannot read file %s", filePath)
 		}
 		d := testData{}
 		if err := json.Unmarshal(eventBytes, &d); err != nil {
-			return xerrors.Errorf("unmarshal : %w", err)
+			return errors.Wrapf(err, "unmarshal %s", filePath)
 		}
 		if err := f(&d); err != nil {
-			return xerrors.Errorf("f : %w", err)
+			return errors.Wrapf(err, "Calling f is failed %+v", f)
 		}
 	}
 	return nil
