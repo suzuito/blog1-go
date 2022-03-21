@@ -30,7 +30,7 @@ type logEntryPayloadServiceContext struct {
 }
 
 type logEntryPayloadContext struct {
-	HTTPRequest *logEntryPayloadContextHTTPRequest
+	HTTPRequest *logEntryPayloadContextHTTPRequest `json:"httpRequest,omitempty"`
 }
 
 type logEntryPayloadContextHTTPRequest struct {
