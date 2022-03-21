@@ -18,14 +18,21 @@ func HandlerHTMLGetSandbox(
 		serviceContext := map[string]string{
 			"service": "test001",
 		}
-		log.Error().
-			Err(fmt.Errorf("err1")).
-			Interface("serviceContext", serviceContext).
-			Interface("reportLocation", map[string]interface{}{
-				"filePath":     "hoge.go",
-				"fileNumber":   101,
-				"functionName": "fuga",
-			}).
-			Msgf("dummy error002")
+		// Report to Cloud Logging
+		payload := map[string]interface{}{
+			"serviceContext": map[string]interface{}{
+				"service": "blog",
+				"version": "1.0.0",
+			},
+			"message": "Dummy error is occured",
+			"context": map[string]interface{}{
+				"reportLocation": map[string]interface{}{
+					"filePath":     "hoge.go",
+					"fileNumber":   101,
+					"functionName": "fuga",
+				},
+			},
+		}
+		fmt.Println(payload)
 	}
 }
