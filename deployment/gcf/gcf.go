@@ -26,7 +26,7 @@ func init() {
 		return
 	}
 	if err := sentry.Init(sentry.ClientOptions{
-		Dsn:         "https://a8f88a4c9b2f4a59919194cc29c786da@o336494.ingest.sentry.io/6268870",
+		Dsn:         "https://4344a150d04a4393aa5cb94f1098e1ca@o336494.ingest.sentry.io/6268788",
 		Environment: env.Env,
 		Release:     os.Getenv("COMMIT_SHA"),
 	}); err != nil {
