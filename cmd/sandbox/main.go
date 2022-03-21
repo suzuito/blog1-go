@@ -18,7 +18,7 @@ func f2() error {
 
 func main() {
 	if err := f2(); err != nil {
-		cloudlogging.Error(err)
+		// cloudlogging.Error(err)
 		cloudlogging.Error(fmt.Errorf("hoge"))
 	}
 }
