@@ -365,6 +365,8 @@ github.com/suzuito/common-env v1.1.0 h1:gO03ug4gJbYqDFM9dDjcvZYCOah5NSB+lSKIpviZ
 github.com/suzuito/common-env v1.1.0/go.mod h1:xBr0+Vv8CYl+qu3Cf0OICueUkCRctFP0drGbSRe+HCo=
 github.com/suzuito/common-go v1.0.2-0.20220320061738-7b1ea707f240 h1:5PuxmMYrVbnW7jMhuXObaef/Byvu+XvgD/74+CVFLA4=
 github.com/suzuito/common-go v1.0.2-0.20220320061738-7b1ea707f240/go.mod h1:e8jTNQBkVZX5p8etR0wSqYLCrVAMv8+cyzA/jC/okng=
+github.com/suzuito/common-go v1.0.2-0.20220321232354-fe5d9601f199 h1:azwoe9VmYW6XJybhyjXKp+NLsk8iZBZ5N5f6jlane8o=
+github.com/suzuito/common-go v1.0.2-0.20220321232354-fe5d9601f199/go.mod h1:e8jTNQBkVZX5p8etR0wSqYLCrVAMv8+cyzA/jC/okng=
 github.com/ugorji/go v1.1.7 h1:/68gy2h+1mWMrwZFeD1kQialdSzAb432dtpeJ42ovdo=
 github.com/ugorji/go v1.1.7/go.mod h1:kZn38zHttfInRq0xu/PH0az30d+z6vm202qpg1oXVMw=
 github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljTbGfSG7qAOspJ7OScBnGdDN/yBr0sguwnwf0=
