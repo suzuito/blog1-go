@@ -38,7 +38,7 @@ func readDirTest(dir string, f func(d *testData) error) error {
 			return errors.Wrapf(err, "unmarshal %s", filePath)
 		}
 		if err := f(&d); err != nil {
-			return errors.Wrapf(err, "Calling f is failed %+v", f)
+			return errors.Wrapf(err, "Calling f is failed")
 		}
 	}
 	return nil

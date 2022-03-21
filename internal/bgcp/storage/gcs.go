@@ -70,7 +70,7 @@ func (c *GCS) GetFileAsHTTPResponse(
 		if xerrors.Is(err, storage.ErrObjectNotExist) {
 			return errors.Wrapf(usecase.ErrNotFound, "not found '%s'", p)
 		}
-		return errors.Wrapf(err, "cannot new reader '%s': %w", p)
+		return errors.Wrapf(err, "cannot new reader '%s'", p)
 	}
 	defer reader.Close()
 	*body, err = ioutil.ReadAll(reader)
@@ -92,10 +92,10 @@ func (c *GCS) UploadHTML(
 	w.ContentType = "text/html;charset=utf-8"
 	buf := strings.NewReader(body)
 	if _, err := io.Copy(w, buf); err != nil {
-		return errors.Wrapf(err, "cannot upload html into '%s/%s' : %w", c.bucket, p)
+		return errors.Wrapf(err, "cannot upload html into '%s/%s'", c.bucket, p)
 	}
 	if err := w.Close(); err != nil {
-		return errors.Wrapf(err, "Cannot upload html into '%s/%s' : %w", c.bucket, p)
+		return errors.Wrapf(err, "Cannot upload html into '%s/%s'", c.bucket, p)
 	}
 	return nil
 }
@@ -111,7 +111,7 @@ func (c *GCS) DeleteArticle(
 		if xerrors.Is(err, storage.ErrObjectNotExist) {
 			return nil
 		}
-		return errors.Wrapf(err, "cannot delete from '%s/%s' : %w", c.bucket, p)
+		return errors.Wrapf(err, "cannot delete from '%s/%s'", c.bucket, p)
 	}
 	return nil
 }

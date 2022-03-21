@@ -32,13 +32,13 @@ func (r *ArticleReaderAll) Walk(ctx context.Context, each func(article *entity.A
 		}
 		file, err := ioutil.ReadFile(path)
 		if err != nil {
-			return errors.Wrapf(err, "Reading file '%s' is failed : %w", path)
+			return errors.Wrapf(err, "Reading file '%s' is failed", path)
 		}
 		article := entity.Article{}
 		return each(&article, file)
 	})
 	if err != nil {
-		return errors.Wrapf(err, "Walk dir '%s' is failed : %w", r.dirBase)
+		return errors.Wrapf(err, "Walk dir '%s' is failed", r.dirBase)
 	}
 	return nil
 }

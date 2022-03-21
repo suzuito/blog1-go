@@ -30,7 +30,7 @@ func (r *ArticleReaderFix) Walk(ctx context.Context, each func(article *entity.A
 	for _, filePath := range r.filePaths {
 		file, err := ioutil.ReadFile(filePath)
 		if err != nil {
-			return errors.Wrapf(err, "reading file '%s' is failed : %w", filePath)
+			return errors.Wrapf(err, "reading file '%s' is failed", filePath)
 		}
 		article := entity.Article{}
 		if err := each(&article, file); err != nil {

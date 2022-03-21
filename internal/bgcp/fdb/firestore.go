@@ -56,7 +56,7 @@ func getDoc(
 	shp, err := ref.Get(ctx)
 	if err != nil {
 		if grpc.Code(err) == codes.NotFound {
-			return errors.Wrapf(usecase.ErrNotFound, "Document '%s' is not found")
+			return errors.Wrapf(usecase.ErrNotFound, "Document '%s' is not found", docID)
 		}
 		return errors.Wrapf(err, "document '%s' is failed", docID)
 	}
