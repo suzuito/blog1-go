@@ -20,12 +20,12 @@ func HandlerHTMLGetSandbox(
 		payload := map[string]interface{}{
 			"level": "error", // FIXME required?
 			"serviceContext": map[string]interface{}{
-				"service": "blog",
+				"service": "blog", // required
 				"version": "1.0.0",
 			},
-			"message": "Dummy error is occured",
+			"message": "Dummy error is occured 001", // required
 			"context": map[string]interface{}{
-				"reportLocation": map[string]interface{}{
+				"reportLocation": map[string]interface{}{ // required
 					"filePath":     "hoge.go",
 					"fileNumber":   101,
 					"functionName": "fuga",
@@ -41,7 +41,7 @@ func HandlerHTMLGetSandbox(
 				"service": "blog",
 				"version": "1.0.0",
 			},
-			"message": "Dummy info is occured",
+			"message": "Dummy info is occured 002",
 			"context": map[string]interface{}{
 				"reportLocation": map[string]interface{}{
 					"filePath":     "hoge.go",
