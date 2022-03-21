@@ -18,7 +18,7 @@ func HandlerHTMLGetSandbox(
 		log.Warn().Interface("data", map[string]string{"hoge": "fuga"}).Msgf("dummy warn")
 		// Report to Cloud Logging
 		payload := map[string]interface{}{
-			"level": "error",
+			"level": "error", // FIXME required?
 			"serviceContext": map[string]interface{}{
 				"service": "blog",
 				"version": "1.0.0",
@@ -33,6 +33,24 @@ func HandlerHTMLGetSandbox(
 			},
 		}
 		payloadBytes, _ := json.Marshal(payload)
+		fmt.Println(string(payloadBytes))
+
+		payload = map[string]interface{}{
+			"level": "info", // FIXME required?
+			"serviceContext": map[string]interface{}{
+				"service": "blog",
+				"version": "1.0.0",
+			},
+			"message": "Dummy info is occured",
+			"context": map[string]interface{}{
+				"reportLocation": map[string]interface{}{
+					"filePath":     "hoge.go",
+					"fileNumber":   101,
+					"functionName": "fuga",
+				},
+			},
+		}
+		payloadBytes, _ = json.Marshal(payload)
 		fmt.Println(string(payloadBytes))
 	}
 }
