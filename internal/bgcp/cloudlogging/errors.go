@@ -9,11 +9,6 @@ import (
 )
 
 func NewMessageInPayloadFromError(err error) string {
-	stackString := newStackString(err)
-	return fmt.Sprintf("%s\ngoroutine 1 [running]:\n%s", err.Error(), stackString)
-}
-
-func newStackString(err error) string {
 	type stackTracer interface {
 		StackTrace() errors.StackTrace
 	}
@@ -30,7 +25,7 @@ func newStackString(err error) string {
 			stackLine := fmt.Sprintf("%s()\n\t%s:%d +%#x", funcName, fileName, line, f.Entry())
 			stackLines = append(stackLines, stackLine)
 		}
-		return strings.Join(stackLines, "\n")
+		return fmt.Sprintf("%s\ngoroutine 1 [running]:\n%s", err.Error(), strings.Join(stackLines, "\n"))
 	}
 	buf := make([]byte, 1<<16)
 	size := runtime.Stack(buf, false)
