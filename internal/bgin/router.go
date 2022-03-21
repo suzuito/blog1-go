@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/suzuito/blog1-go/pkg/inject"
 	"github.com/suzuito/blog1-go/pkg/setting"
@@ -11,6 +12,7 @@ import (
 
 // SetUpRoot ...
 func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalDepends) {
+	root.Use(sentrygin.New(sentrygin.Options{}))
 	root.Static("css", fmt.Sprintf("%s", env.DirPathCSS))
 
 	root.GET("/health", func(c *gin.Context) {

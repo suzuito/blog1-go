@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"cloud.google.com/go/firestore"
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
-	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -22,7 +22,7 @@ var (
 func NewResource(ctx context.Context, env *setting.Environment) (*firestore.Client, error) {
 	cli, err := firestore.NewClient(ctx, env.GCPProjectID)
 	if err != nil {
-		return nil, xerrors.Errorf(": %w", err)
+		return nil, errors.Wrapf(err, "cannot firestore.NewClient")
 	}
 	return cli, nil
 }
@@ -56,12 +56,12 @@ func getDoc(
 	shp, err := ref.Get(ctx)
 	if err != nil {
 		if grpc.Code(err) == codes.NotFound {
-			return xerrors.Errorf("Document '%s' is not found : %w", docID, usecase.ErrNotFound)
+			return errors.Wrapf(usecase.ErrNotFound, "Document '%s' is not found", docID)
 		}
-		return xerrors.Errorf("%s : %w", err.Error(), usecase.ErrNotFound)
+		return errors.Wrapf(err, "document '%s' is failed", docID)
 	}
 	if err := shp.DataTo(doc); err != nil {
-		return xerrors.Errorf("%s : %w", err.Error(), err)
+		return errors.Wrapf(err, "cannot DataTo of document '%s'", docID)
 	}
 	return nil
 }
@@ -76,12 +76,12 @@ func getDocByTx(
 	shp, err := tx.Get(ref)
 	if err != nil {
 		if grpc.Code(err) == codes.NotFound {
-			return xerrors.Errorf("Document '%s' is not found : %w", docID, usecase.ErrNotFound)
+			return errors.Wrapf(usecase.ErrNotFound, "Document '%s' is not found", docID)
 		}
-		return xerrors.Errorf("%s : %w", err.Error(), usecase.ErrNotFound)
+		return errors.Wrapf(err, "getting document '%s' is failed", docID)
 	}
 	if err := shp.DataTo(doc); err != nil {
-		return xerrors.Errorf("%s : %w", err.Error(), err)
+		return errors.Wrapf(err, "cannot DataTo of document '%s'", docID)
 	}
 	return nil
 }
@@ -111,7 +111,7 @@ func setDoc(ctx context.Context, coll *firestore.CollectionRef, docid string, v 
 	ref := coll.Doc(docid)
 	_, err := ref.Set(ctx, v)
 	if err != nil {
-		return xerrors.Errorf("Cannot set doc '%s/%s' : %w", coll.Path, docid, err)
+		return errors.Wrapf(err, "cannot set doc '%s/%s'", coll.Path, docid)
 	}
 	return nil
 }
@@ -120,7 +120,7 @@ func setDocByTx(tx *firestore.Transaction, coll *firestore.CollectionRef, docid 
 	ref := coll.Doc(docid)
 	err := tx.Set(ref, v)
 	if err != nil {
-		return xerrors.Errorf("Cannot set doc '%s/%s' : %w", coll.Path, docid, err)
+		return errors.Wrapf(err, "cannot set doc '%s/%s'", coll.Path, docid)
 	}
 	return nil
 }
@@ -129,7 +129,7 @@ func deleteDocByTx(tx *firestore.Transaction, coll *firestore.CollectionRef, doc
 	ref := coll.Doc(docid)
 	err := tx.Delete(ref)
 	if err != nil {
-		return xerrors.Errorf("Cannot delete doc '%s/%s' : %w", coll.Path, docid, err)
+		return errors.Wrapf(err, "cannot delete doc '%s/%s'", coll.Path, docid)
 	}
 	return nil
 }

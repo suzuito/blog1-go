@@ -7,13 +7,14 @@ require (
 	cloud.google.com/go/functions v1.1.0
 	cloud.google.com/go/storage v1.21.0
 	github.com/PuerkitoBio/goquery v1.8.0
+	github.com/getsentry/sentry-go v0.13.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/google/subcommands v1.2.0
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/piprate/json-gold v0.4.1
+	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.26.1
 	github.com/suzuito/common-go v1.0.2-0.20220320061738-7b1ea707f240
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
@@ -42,10 +43,9 @@ require (
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/litao91/goldmark-mathjax v0.0.0-20210217064022-a43cf739a50f // indirect
-	github.com/mattn/go-isatty v0.0.12 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
-	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
 	github.com/suzuito/common-env v1.1.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/yuin/goldmark v1.4.8 // indirect

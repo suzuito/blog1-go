@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/pkg/entity"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 	"golang.org/x/xerrors"
@@ -43,7 +44,7 @@ func (c *Client) GetArticles(
 	return getDocs(ctx, &query, func(shp *firestore.DocumentSnapshot) error {
 		article := entity.Article{}
 		if err := shp.DataTo(&article); err != nil {
-			return xerrors.Errorf("Cannot data to : %w", err)
+			return errors.Wrapf(err, "Cannot DataTo from %s", coll.ID)
 		}
 		*articles = append(*articles, article)
 		return nil
@@ -60,28 +61,28 @@ func (c *Client) CreateArticle(
 	article.CreatedAt = now.Unix()
 	article.UpdatedAt = now.Unix()
 	if err := article.Validate(); err != nil {
-		return xerrors.Errorf("Invalid article '%+v' : %w", article, err)
+		return errors.Wrapf(err, "Invalid article '%+v'", article)
 	}
 	return c.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		collArticles := c.cli.Collection(CollArticles)
 		if err := getDocByTx(tx, collArticles, string(article.ID), &entity.Article{}); err != nil {
 			if !xerrors.Is(err, usecase.ErrNotFound) {
-				return xerrors.Errorf("Get doc '%+v' is error : %w", article, err)
+				return errors.Wrapf(err, "Getting doc '%+v' is error", article)
 			}
 		} else {
-			return xerrors.Errorf("Doc '%+v' already exists error : %w", article, usecase.ErrAlreadyExists)
+			return errors.Wrapf(usecase.ErrAlreadyExists, "Doc '%+v' already exists error", article)
 		}
 		if err := setDocByTx(tx, collArticles, string(article.ID), article); err != nil {
-			return xerrors.Errorf("Set doc '%+v' is error : %w", article, err)
+			return errors.Wrapf(err, "Setting doc '%+v' is error", article)
 		}
 		collTags := c.cli.Collection(CollTags)
 		for _, tag := range article.Tags {
 			if err := setDocByTx(tx, collTags, string(tag.Name), tag); err != nil {
-				return xerrors.Errorf("Set doc '%+v' is error : %w", tag, err)
+				return errors.Wrapf(err, "Setting doc '%+v' is error", tag)
 			}
 			collTagArticles := collTags.Doc(tag.Name).Collection(CollArticles)
 			if err := setDocByTx(tx, collTagArticles, string(article.ID), article); err != nil {
-				return xerrors.Errorf("Set doc '%+v' is error : %w", tag, err)
+				return errors.Wrapf(err, "Setting doc '%+v' is error", tag)
 			}
 		}
 		return nil
@@ -160,42 +161,42 @@ func (c *Client) SetArticle(
 	}
 	afterArticle.UpdatedAt = now.Unix()
 	if err := afterArticle.Validate(); err != nil {
-		return xerrors.Errorf("Invalid article '%+v' : %w", afterArticle, err)
+		return errors.Wrapf(err, "Invalid article '%+v'", afterArticle)
 	}
 	return c.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		collArticles := c.cli.Collection(CollArticles)
 		beforeArticle := entity.Article{}
 		if err := getDocByTx(tx, collArticles, string(afterArticle.ID), &beforeArticle); err != nil {
 			if !xerrors.Is(err, usecase.ErrNotFound) {
-				return xerrors.Errorf("Get doc '%+v' is error : %w", afterArticle, err)
+				return errors.Wrapf(err, "Get doc '%+v' is error", afterArticle)
 			}
 		}
 		diffs := getDiffTags(beforeArticle.Tags, afterArticle.Tags)
 		if err := setDocByTx(tx, collArticles, string(afterArticle.ID), afterArticle); err != nil {
-			return xerrors.Errorf("Set doc '%+v' is error : %w", afterArticle, err)
+			return errors.Wrapf(err, "Setting doc '%+v' is error", afterArticle)
 		}
 		collTags := c.cli.Collection(CollTags)
 		for _, diff := range *diffs {
 			collTagsArticles := collTags.Doc(diff.Tag.Name).Collection(CollArticles)
 			if diff.Type == diffTagTypeCreated {
 				if err := setDocByTx(tx, collTags, string(diff.Tag.Name), diff.Tag); err != nil {
-					return xerrors.Errorf("Set doc '%+v' is error : %w", diff.Tag, err)
+					return errors.Wrapf(err, "Setting doc '%+v' is error", diff.Tag)
 				}
 				if err := setDocByTx(tx, collTagsArticles, string(afterArticle.ID), afterArticle); err != nil {
-					return xerrors.Errorf("Set doc '%+v' is error : %w", afterArticle, err)
+					return errors.Wrapf(err, "Setting doc '%+v' is error", afterArticle)
 				}
 			}
 			if diff.Type == diffTagTypeDeleted {
 				if err := deleteDocByTx(tx, collTags, string(diff.Tag.Name)); err != nil {
-					return xerrors.Errorf("Set doc '%+v' is error : %w", diff.Tag, err)
+					return errors.Wrapf(err, "Set doc '%+v' is error", diff.Tag)
 				}
 				if err := deleteDocByTx(tx, collTagsArticles, string(afterArticle.ID)); err != nil {
-					return xerrors.Errorf("Set doc '%+v' is error : %w", afterArticle, err)
+					return errors.Wrapf(err, "Set doc '%+v' is error", afterArticle)
 				}
 			}
 			if diff.Type == diffTagTypeUpdated {
 				if err := setDocByTx(tx, collTagsArticles, string(afterArticle.ID), afterArticle); err != nil {
-					return xerrors.Errorf("Set doc '%+v' is error : %w", afterArticle, err)
+					return errors.Wrapf(err, "Set doc '%+v' is error", afterArticle)
 				}
 			}
 		}
@@ -211,7 +212,7 @@ func (c *Client) DeleteArticle(
 	return c.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		collArticles := c.cli.Collection(CollArticles)
 		if err := deleteDocByTx(tx, collArticles, string(articleID)); err != nil {
-			return xerrors.Errorf("cannot delete article %s : %w", articleID, err)
+			return errors.Wrapf(err, "cannot delete article %s", articleID)
 		}
 		return nil
 	})

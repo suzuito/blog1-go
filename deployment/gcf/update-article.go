@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"cloud.google.com/go/functions/metadata"
+	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"github.com/suzuito/blog1-go/pkg/entity"
 	"github.com/suzuito/blog1-go/pkg/usecase"
-	"golang.org/x/xerrors"
 )
 
 type GCSEvent struct {
@@ -57,7 +57,7 @@ func BlogUpdateArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 		return nil
 	}
 	if ev.Bucket != env.GCPBucketArticle {
-		return xerrors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
+		return errors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
 	}
 	if filepath.Ext(ev.Name) != ".md" {
 		return nil
@@ -67,7 +67,7 @@ func BlogUpdateArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 		"file", fmt.Sprintf("%s/%s", ev.Bucket, ev.Name),
 	).Send()
 	if err := u.UpdateArticle(ctx, ev.Name); err != nil {
-		return xerrors.Errorf("Cannot u.UpdateArticle : %w", err)
+		return errors.Wrapf(err, "Cannot u.UpdateArticle : %s", ev.Name)
 	}
 	return nil
 }
@@ -77,7 +77,7 @@ func BlogDeleteArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 		return nil
 	}
 	if ev.Bucket != env.GCPBucketArticle {
-		return xerrors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
+		return errors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
 	}
 	if filepath.Ext(ev.Name) != ".md" {
 		return nil
@@ -88,7 +88,7 @@ func BlogDeleteArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 	).Send()
 	u := usecase.NewImpl(gdeps.DB, gdeps.Storage, gdeps.MDConverter)
 	if err := u.DeleteArticle(ctx, articleID); err != nil {
-		return xerrors.Errorf("cannot delete article '%s' : %w", articleID, err)
+		return errors.Wrapf(err, "cannot delete article '%s'", articleID)
 	}
 	return nil
 }

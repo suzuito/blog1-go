@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/pkg/entity"
 	"github.com/suzuito/common-go/cmarkdown"
-	"golang.org/x/xerrors"
 )
 
 // GetArticles ...
@@ -65,25 +65,25 @@ func (u *Impl) UpdateArticle(
 	source := []byte{}
 	headers := map[string]string{}
 	if err := u.storage.GetFileAsHTTPResponse(ctx, path, &source, &headers); err != nil {
-		return xerrors.Errorf("Cannot get file from %s : %w", path, err)
+		return errors.Wrapf(err, "cannot get file from %s", path)
 	}
 	converted := []byte{}
 	article := entity.Article{}
 	if err := u.ConvertMD(ctx, source, &article, &converted); err != nil {
-		return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
+		return errors.Wrapf(err, "cannot convert article '%+v'", article)
 	}
 	if article.ID == entity.ArticleID("") {
-		return xerrors.Errorf("Empty ID is detected '%+v'", article)
+		return errors.Errorf("Empty ID is detected '%+v'", article)
 	}
 	fmt.Printf("Upload '%s'\n", article.ID)
 	if err := u.storage.UploadArticle(ctx, &article, string(converted)); err != nil {
-		return xerrors.Errorf("Cannot upload article '%+v' : %w", article, err)
+		return errors.Wrapf(err, "cannot upload article '%+v'", article)
 	}
 	if err := u.attacheArticleImages(&article, converted); err != nil {
-		return xerrors.Errorf("Cannot attacheArticleImages : %w", err)
+		return errors.Wrapf(err, "cannot attacheArticleImages")
 	}
 	if err := u.db.SetArticle(ctx, &article); err != nil {
-		return xerrors.Errorf("Cannot set article '%+v' : %w", article, err)
+		return errors.Wrapf(err, "cannot set article '%+v'", article)
 	}
 	return nil
 }
@@ -94,10 +94,10 @@ func (u *Impl) DeleteArticle(
 ) error {
 	fmt.Printf("Delete '%s'\n", articleID)
 	if err := u.storage.DeleteArticle(ctx, articleID); err != nil {
-		return xerrors.Errorf("Cannot delete article '%s' : %w", articleID, err)
+		return errors.Wrapf(err, "cannot delete article '%s'", articleID)
 	}
 	if err := u.db.DeleteArticle(ctx, articleID); err != nil {
-		return xerrors.Errorf("Cannot delete article '%s' : %w", articleID, err)
+		return errors.Wrapf(err, "cannot delete article '%s'", articleID)
 	}
 	return nil
 }
@@ -111,21 +111,21 @@ func (u *Impl) SyncArticles(
 	if err := source.Walk(ctx, func(article *entity.Article, raw []byte) error {
 		converted := []byte{}
 		if err := u.ConvertMD(ctx, raw, article, &converted); err != nil {
-			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
+			return errors.Wrapf(err, "cannot convert article '%+v'", article)
 		}
 		fmt.Printf("Upload '%s'\n", article.ID)
 		if err := u.storage.UploadArticle(ctx, article, string(converted)); err != nil {
-			return xerrors.Errorf("Cannot upload article '%+v' : %w", article, err)
+			return errors.Wrapf(err, "cannot upload article '%+v'", article)
 		}
 		if err := u.attacheArticleImages(article, converted); err != nil {
-			return xerrors.Errorf("Cannot attacheArticleImages : %w", err)
+			return errors.Wrapf(err, "cannot attacheArticleImages")
 		}
 		if err := u.db.SetArticle(ctx, article); err != nil {
-			return xerrors.Errorf("Cannot set article '%+v' : %w", article, err)
+			return errors.Wrapf(err, "cannot set article '%+v'", article)
 		}
 		return nil
 	}); err != nil {
-		return xerrors.Errorf("ArticleReader walk is failed : %w", err)
+		return errors.Wrapf(err, "ArticleReader walk is failed")
 	}
 	return nil
 }
@@ -139,19 +139,19 @@ func (u *Impl) WriteArticleHTMLs(
 	if err := source.Walk(ctx, func(article *entity.Article, raw []byte) error {
 		converted := []byte{}
 		if err := u.ConvertMD(ctx, raw, article, &converted); err != nil {
-			return xerrors.Errorf("Cannot convert article '%+v' : %w", article, err)
+			return errors.Wrapf(err, "cannot convert article '%+v'", article)
 		}
 		filePath := fmt.Sprintf(".output/%s.html", article.Title)
 		fmt.Printf("Write '%s' into '%s'", article.ID, filePath)
 		if err := os.RemoveAll(filePath); err != nil {
-			return xerrors.Errorf("Cannot remove '%s'", filePath)
+			return errors.Errorf("cannot remove '%s'", filePath)
 		}
 		if err := ioutil.WriteFile(filePath, converted, 0644); err != nil {
-			return xerrors.Errorf("Cannot write '%s'", filePath)
+			return errors.Errorf("cannot write '%s'", filePath)
 		}
 		return nil
 	}); err != nil {
-		return xerrors.Errorf("ArticleReader walk is failed : %w", err)
+		return errors.Wrapf(err, "ArticleReader walk is failed")
 	}
 	return nil
 }
@@ -167,7 +167,7 @@ func (u *Impl) ConvertMD(
 	images := []cmarkdown.CMImage{}
 	meta := cmarkdown.CMMeta{}
 	if err := u.converterMD.Convert(ctx, source, output, &meta, &tocs, &images); err != nil {
-		return xerrors.Errorf("Cannot convert : %w", err)
+		return errors.Wrapf(err, "cannot convert")
 	}
 	article.ID = entity.ArticleID(meta.ID)
 	article.Description = meta.Description

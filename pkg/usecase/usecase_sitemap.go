@@ -7,8 +7,8 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/pkg/entity"
-	"golang.org/x/xerrors"
 )
 
 type XMLURLSet struct {
@@ -22,7 +22,7 @@ type XMLURLSet struct {
 func (x *XMLURLSet) Marshal() (string, error) {
 	b, err := xml.MarshalIndent(x, "", "    ")
 	if err != nil {
-		return "", xerrors.Errorf("Cannot marshal xml : %w", err)
+		return "", errors.Wrapf(err, "Cannot marshal xml")
 	}
 
 	c := string(b)
@@ -55,7 +55,7 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (*XMLURLS
 	for {
 		articles := []entity.Article{}
 		if err := u.db.GetArticles(ctx, cursorPublishedAt, cursorTitle, CursorOrderAsc, 100, &articles); err != nil {
-			return nil, xerrors.Errorf("Cannot get articles : %w", err)
+			return nil, errors.Wrapf(err, "cannot get articles")
 		}
 		if len(articles) <= 0 {
 			break
