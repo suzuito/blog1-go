@@ -23,10 +23,6 @@ func main() {
 		Dsn:         "https://4344a150d04a4393aa5cb94f1098e1ca@o336494.ingest.sentry.io/6268788",
 		Environment: env.Env,
 		Release:     os.Getenv("COMMIT_SHA"),
-		BeforeSend: func(event *sentry.Event, hint *sentry.EventHint) *sentry.Event {
-			event.Tags["app"] = "api"
-			return event
-		},
 	}); err != nil {
 		panic(err)
 	}
