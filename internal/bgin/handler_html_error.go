@@ -12,8 +12,15 @@ func HandlerHTMLGetSandbox(
 	env *setting.Environment,
 ) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Error().Err(fmt.Errorf("err1")).Msgf("dummy error")
+		log.Error().Err(fmt.Errorf("err1")).Msgf("dummy error001")
 		log.Info().Interface("data", map[string]string{"hoge": "fuga"}).Msgf("dummy info")
 		log.Warn().Interface("data", map[string]string{"hoge": "fuga"}).Msgf("dummy warn")
+		serviceContext := map[string]string{
+			"service": "test001",
+		}
+		log.Error().
+			Err(fmt.Errorf("err1")).
+			Interface("serviceContext", serviceContext).
+			Msgf("dummy error002")
 	}
 }
