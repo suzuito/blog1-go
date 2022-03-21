@@ -15,9 +15,6 @@ func HandlerHTMLGetSandbox(
 		log.Error().Err(fmt.Errorf("err1")).Msgf("dummy error001")
 		log.Info().Interface("data", map[string]string{"hoge": "fuga"}).Msgf("dummy info")
 		log.Warn().Interface("data", map[string]string{"hoge": "fuga"}).Msgf("dummy warn")
-		serviceContext := map[string]string{
-			"service": "test001",
-		}
 		// Report to Cloud Logging
 		payload := map[string]interface{}{
 			"serviceContext": map[string]interface{}{
