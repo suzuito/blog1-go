@@ -8,9 +8,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/internal/bgcp/fdb"
 	"github.com/suzuito/blog1-go/internal/bgcp/storage"
+	"github.com/suzuito/blog1-go/internal/cmarkdown"
 	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
-	"github.com/suzuito/common-go/cmarkdown"
 )
 
 type GlobalDepends struct {
