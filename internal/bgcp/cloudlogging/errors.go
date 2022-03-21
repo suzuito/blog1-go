@@ -16,6 +16,7 @@ func NewMessageInPayloadFromError(err error) string {
 	if ok {
 		// Mimic github.com/pkg/errors stack into runtime.Stack
 		// https://github.com/googleapis/google-cloud-go/issues/1084#issuecomment-474565019
+		// To send error log into errorreporting, message in payload is must be matched to runtime.Stack output.
 		stackLines := []string{}
 		for _, st := range werr.StackTrace() {
 			pc := uintptr(st) - 1
