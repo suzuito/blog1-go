@@ -21,35 +21,24 @@ func HandlerHTMLGetSandbox(
 			"level": "error", // FIXME required?
 			"serviceContext": map[string]interface{}{
 				"service": "blog", // required
+				"version": "1.0.1",
 			},
 			"message": "Dummy error is occured 001", // required
 			"context": map[string]interface{}{
-				"reportLocation": map[string]interface{}{ // FIXME required?
-					"filePath":     "hoge.go",
-					"fileNumber":   102,
-					"functionName": "fuga",
+				"httpRequest": map[string]interface{}{
+					"method":    c.Request.Method,
+					"url":       c.Request.URL.String(),
+					"userAgent": c.Request.UserAgent(),
+					"referrer":  c.Request.Referer(),
 				},
+				// "reportLocation": map[string]interface{}{ // FIXME required?
+				// 	"filePath":     "hoge.go",
+				// 	"fileNumber":   102,
+				// 	"functionName": "fuga",
+				// },
 			},
 		}
-		payloadBytes, _ := json.Marshal(payload)
-		fmt.Println(string(payloadBytes))
-
-		payload = map[string]interface{}{
-			"level": "info", // FIXME required?
-			"serviceContext": map[string]interface{}{
-				"service": "blog",
-				"version": "1.0.0",
-			},
-			"message": "Dummy info is occured 002",
-			"context": map[string]interface{}{
-				"reportLocation": map[string]interface{}{
-					"filePath":     "hoge.go",
-					"fileNumber":   103,
-					"functionName": "fuga",
-				},
-			},
-		}
-		payloadBytes, _ = json.Marshal(payload)
+		payloadBytes, _ := json.MarshalIndent(payload, "", " ")
 		fmt.Println(string(payloadBytes))
 	}
 }
