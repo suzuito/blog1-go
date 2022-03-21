@@ -1,12 +1,12 @@
 package main
 
 import (
-	"context"
-	"fmt"
+	"log"
+	"os"
+	"time"
 
-	"cloud.google.com/go/errorreporting"
+	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
-	"github.com/suzuito/blog1-go/internal/bgcp/cloudlogging"
 )
 
 func f1() error {
@@ -24,23 +24,17 @@ func f3() error {
 }
 
 func main() {
-	ctx := context.Background()
-	cli, err := errorreporting.NewClient(ctx, "suzuito-minilla", errorreporting.Config{
-		ServiceName: "blog",
-		OnError: func(err error) {
-			fmt.Println(err)
-		},
+	err := sentry.Init(sentry.ClientOptions{
+		Environment: "minilla",
+		Release:     os.Getenv("COMMIT_SHA"),
 	})
 	if err != nil {
-		panic(err)
+		log.Fatalf("sentry.Init: %s", err)
 	}
-	defer cli.Close()
+	// Flush buffered events before the program terminates.
+	// Set the timeout to the maximum duration the program can afford to wait.
+	defer sentry.Flush(2 * time.Second)
 	if err := f3(); err != nil {
-		// cloudlogging.Error(err)
-		v := cloudlogging.NewMessageInPayloadFromError(err)
-		cli.Report(errorreporting.Entry{
-			Error: err,
-			Stack: []byte(v),
-		})
+		sentry.CaptureException(err)
 	}
 }
