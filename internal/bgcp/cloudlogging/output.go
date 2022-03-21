@@ -5,9 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"runtime"
-
-	"github.com/pkg/errors"
 )
 
 type logEntryLevel string
@@ -45,18 +42,7 @@ type logEntryPayloadContextHTTPRequest struct {
 func newErrorLogEntryPayload(
 	err error,
 ) *logEntryPayload {
-	type stackTracer interface {
-		StackTrace() errors.StackTrace
-	}
-	message := ""
-	errWithStackTrace, ok := errors.Cause(err).(stackTracer)
-	if !ok {
-		buf := make([]byte, 1<<16)
-		size := runtime.Stack(buf, false)
-		message = fmt.Sprintf(string(buf[:size]))
-	} else {
-		message = fmt.Sprintf("%s:%+v", err.Error(), errWithStackTrace.StackTrace())
-	}
+	message := NewMessageInPayloadFromError(err)
 	payload := logEntryPayload{
 		Level: levelError,
 		ServiceContext: &logEntryPayloadServiceContext{
