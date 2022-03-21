@@ -1,6 +1,7 @@
 package bgin
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ func HandlerHTMLGetSandbox(
 		log.Warn().Interface("data", map[string]string{"hoge": "fuga"}).Msgf("dummy warn")
 		// Report to Cloud Logging
 		payload := map[string]interface{}{
+			"level": "error",
 			"serviceContext": map[string]interface{}{
 				"service": "blog",
 				"version": "1.0.0",
@@ -30,6 +32,7 @@ func HandlerHTMLGetSandbox(
 				},
 			},
 		}
-		fmt.Println(payload)
+		payloadBytes, _ := json.Marshal(payload)
+		fmt.Println(string(payloadBytes))
 	}
 }
