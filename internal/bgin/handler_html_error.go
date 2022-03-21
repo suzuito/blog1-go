@@ -21,6 +21,11 @@ func HandlerHTMLGetSandbox(
 		log.Error().
 			Err(fmt.Errorf("err1")).
 			Interface("serviceContext", serviceContext).
+			Interface("reportLocation", map[string]interface{}{
+				"filePath":     "hoge.go",
+				"fileNumber":   101,
+				"functionName": "fuga",
+			}).
 			Msgf("dummy error002")
 	}
 }
