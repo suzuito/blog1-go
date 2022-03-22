@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 
+	"github.com/suzuito/blog1-go/internal/cmarkdown"
 	"github.com/suzuito/blog1-go/pkg/entity"
-	"github.com/suzuito/common-go/cmarkdown"
 )
 
 // Usecase ...
