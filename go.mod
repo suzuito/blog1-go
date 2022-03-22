@@ -16,7 +16,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.26.1
-	github.com/suzuito/common-go v1.0.2-0.20220321232354-fe5d9601f199
+	github.com/suzuito/common-go v1.0.2-0.20220322045054-eb41e7074a5f
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/api v0.70.0
 	google.golang.org/grpc v1.44.0
