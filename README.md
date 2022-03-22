@@ -2,17 +2,9 @@
 
 # Blog
 
-BFF for http://blog.tach.dev
+http://blog.tach.dev
 
 ## Set up development environment
-
-Gcloud set up
-
-```bash
-gcloud auth login
-gcloud auth application-default login
-gcloud config set project suzuito-minilla
-```
 
 ```bash
 make init
@@ -26,9 +18,5 @@ docker-compose exec gcf /bin/bash -c './gcf.exe delete-article -input-dir=./depl
 ```
 
 ```bash
-curl http://localhost:8080/articles
+open http://localhost:8080/articles
 ```
-
-## Design
-
-- https://github.com/suzuito/private/blob/main/hack/blog
