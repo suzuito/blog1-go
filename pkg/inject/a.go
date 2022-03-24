@@ -3,13 +3,14 @@ package inject
 import (
 	"context"
 
+	"cloud.google.com/go/firestore"
+	gstorage "cloud.google.com/go/storage"
 	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/internal/bgcp/fdb"
 	"github.com/suzuito/blog1-go/internal/bgcp/storage"
+	"github.com/suzuito/blog1-go/internal/cmarkdown"
 	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
-	"github.com/suzuito/common-go/cgcp"
-	"github.com/suzuito/common-go/cmarkdown"
 )
 
 type GlobalDepends struct {
@@ -27,16 +28,17 @@ func NewGlobalDepends(ctx context.Context, env *setting.Environment) (*GlobalDep
 	}
 	r := GlobalDepends{}
 	r.MDConverter = cmarkdown.NewV1()
-	gcpResources, err := cgcp.NewGCPResourceGenerator().
-		GCPS(env.GCPProjectID).
-		GCS().
-		GCF(env.GCPProjectID).
-		Gen(ctx)
+	gcli, err := gstorage.NewClient(ctx)
 	if err != nil {
-		return nil, closeFunc, errors.Wrapf(err, "cannot generate google resource clients")
+		return nil, nil, errors.Wrapf(err, "cannot storage.NewClient")
 	}
-	closeFuncs = append(closeFuncs, func() { gcpResources.Close() })
-	r.Storage = storage.New(gcpResources.GCS, env.GCPBucketArticle)
-	r.DB = fdb.NewClient(gcpResources.GCF)
+	closeFuncs = append(closeFuncs, func() { gcli.Close() })
+	fcli, err := firestore.NewClient(ctx, env.GCPProjectID)
+	if err != nil {
+		return nil, nil, errors.Wrapf(err, "cannot storage.NewClient")
+	}
+	closeFuncs = append(closeFuncs, func() { fcli.Close() })
+	r.Storage = storage.New(gcli, env.GCPBucketArticle)
+	r.DB = fdb.NewClient(fcli)
 	return &r, closeFunc, nil
 }
