@@ -9,11 +9,6 @@ import (
 
 // Usecase ...
 type Usecase interface {
-	SyncArticles(
-		ctx context.Context,
-		source ArticleReader,
-	) error
-
 	GetArticle(
 		ctx context.Context,
 		id entity.ArticleID,

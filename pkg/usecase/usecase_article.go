@@ -4,9 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"os"
 
 	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/internal/cmarkdown"
@@ -98,60 +96,6 @@ func (u *Impl) DeleteArticle(
 	}
 	if err := u.db.DeleteArticle(ctx, articleID); err != nil {
 		return errors.Wrapf(err, "cannot delete article '%s'", articleID)
-	}
-	return nil
-}
-
-// SyncArticles ...
-// :Deprecated
-func (u *Impl) SyncArticles(
-	ctx context.Context,
-	source ArticleReader,
-) error {
-	if err := source.Walk(ctx, func(article *entity.Article, raw []byte) error {
-		converted := []byte{}
-		if err := u.ConvertMD(ctx, raw, article, &converted); err != nil {
-			return errors.Wrapf(err, "cannot convert article '%+v'", article)
-		}
-		fmt.Printf("Upload '%s'\n", article.ID)
-		if err := u.storage.UploadArticle(ctx, article, string(converted)); err != nil {
-			return errors.Wrapf(err, "cannot upload article '%+v'", article)
-		}
-		if err := u.attacheArticleImages(article, converted); err != nil {
-			return errors.Wrapf(err, "cannot attacheArticleImages")
-		}
-		if err := u.db.SetArticle(ctx, article); err != nil {
-			return errors.Wrapf(err, "cannot set article '%+v'", article)
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrapf(err, "ArticleReader walk is failed")
-	}
-	return nil
-}
-
-// WriteArticleHTMLs ...
-// :Deprecated
-func (u *Impl) WriteArticleHTMLs(
-	ctx context.Context,
-	source ArticleReader,
-) error {
-	if err := source.Walk(ctx, func(article *entity.Article, raw []byte) error {
-		converted := []byte{}
-		if err := u.ConvertMD(ctx, raw, article, &converted); err != nil {
-			return errors.Wrapf(err, "cannot convert article '%+v'", article)
-		}
-		filePath := fmt.Sprintf(".output/%s.html", article.Title)
-		fmt.Printf("Write '%s' into '%s'", article.ID, filePath)
-		if err := os.RemoveAll(filePath); err != nil {
-			return errors.Errorf("cannot remove '%s'", filePath)
-		}
-		if err := ioutil.WriteFile(filePath, converted, 0644); err != nil {
-			return errors.Errorf("cannot write '%s'", filePath)
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrapf(err, "ArticleReader walk is failed")
 	}
 	return nil
 }
