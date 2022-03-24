@@ -19,7 +19,7 @@ type GlobalDepends struct {
 	Storage     usecase.Storage
 }
 
-func NewGlobalDepends(ctx context.Context, env *setting.Environment) (*GlobalDepends, func(), error) {
+func NewGlobalDepends(ctx context.Context) (*GlobalDepends, func(), error) {
 	closeFuncs := []func(){}
 	closeFunc := func() {
 		for _, cf := range closeFuncs {
@@ -33,12 +33,12 @@ func NewGlobalDepends(ctx context.Context, env *setting.Environment) (*GlobalDep
 		return nil, nil, errors.Wrapf(err, "cannot storage.NewClient")
 	}
 	closeFuncs = append(closeFuncs, func() { gcli.Close() })
-	fcli, err := firestore.NewClient(ctx, env.GCPProjectID)
+	fcli, err := firestore.NewClient(ctx, setting.E.GCPProjectID)
 	if err != nil {
 		return nil, nil, errors.Wrapf(err, "cannot storage.NewClient")
 	}
 	closeFuncs = append(closeFuncs, func() { fcli.Close() })
-	r.Storage = storage.New(gcli, env.GCPBucketArticle)
+	r.Storage = storage.New(gcli, setting.E.GCPBucketArticle)
 	r.DB = fdb.NewClient(fcli)
 	return &r, closeFunc, nil
 }

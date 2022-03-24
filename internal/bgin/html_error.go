@@ -6,31 +6,29 @@ import (
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/pkg/setting"
 )
 
-func html404(ctx *gin.Context, env *setting.Environment) {
+func html404(ctx *gin.Context) {
 	ctx.HTML(
 		http.StatusNotFound,
 		"pc_404.html",
 		newTmplVar(
-			env,
 			newTmplVarMeta(
 				metaSiteDescription,
 			),
 			newTmplVarLink(
-				getPageURL(ctx, env),
+				getPageURL(ctx),
 			),
 			newTmplVarOGP(
 				"404エラーページ",
 				"404エラーページ",
 				"website",
-				getPageURL(ctx, env),
+				getPageURL(ctx),
 				"",
 			),
 			[]tmplVarLDJSON{
 				newTmplVarLDJSONWebSite(
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 					"404エラーページ",
 					"404エラーページ",
 				),
@@ -40,28 +38,27 @@ func html404(ctx *gin.Context, env *setting.Environment) {
 	)
 }
 
-func html500(ctx *gin.Context, env *setting.Environment, err error) {
+func html500(ctx *gin.Context, err error) {
 	ctx.HTML(
 		http.StatusInternalServerError,
 		"pc_500.html",
 		newTmplVar(
-			env,
 			newTmplVarMeta(
 				metaSiteDescription,
 			),
 			newTmplVarLink(
-				getPageURL(ctx, env),
+				getPageURL(ctx),
 			),
 			newTmplVarOGP(
 				"500エラーページ",
 				"500エラーページ",
 				"website",
-				getPageURL(ctx, env),
+				getPageURL(ctx),
 				"",
 			),
 			[]tmplVarLDJSON{
 				newTmplVarLDJSONWebSite(
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 					"500エラーページ",
 					"500エラーページ",
 				),

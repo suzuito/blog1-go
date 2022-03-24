@@ -6,43 +6,39 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/suzuito/blog1-go/pkg/entity"
-	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 // HandlerHTMLGetTop ...
-func HandlerHTMLGetTop(
-	env *setting.Environment,
-) gin.HandlerFunc {
+func HandlerHTMLGetTop() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		now := time.Now().Unix()
 		u := getCtxUsecase(ctx)
 		articles := []entity.Article{}
 		if err := u.GetArticles(ctx, now, "", usecase.CursorOrderDesc, 3, &articles); err != nil {
-			html500(ctx, env, err)
+			html500(ctx, err)
 			return
 		}
 		ctx.HTML(
 			http.StatusOK,
 			"pc_top.html",
 			newTmplVar(
-				env,
 				newTmplVarMeta(
 					metaSiteDescription,
 				),
 				newTmplVarLink(
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 				),
 				newTmplVarOGP(
 					metaSiteName,
 					metaSiteDescription,
 					"website",
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 					"",
 				),
 				[]tmplVarLDJSON{
 					newTmplVarLDJSONWebSite(
-						getPageURL(ctx, env),
+						getPageURL(ctx),
 						metaSiteName,
 						metaSiteDescription,
 					),

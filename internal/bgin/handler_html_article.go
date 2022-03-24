@@ -14,33 +14,31 @@ import (
 )
 
 // HandlerHTMLGetArticle ...
-func HandlerHTMLGetArticle(
-	env *setting.Environment,
-) gin.HandlerFunc {
+func HandlerHTMLGetArticle() gin.HandlerFunc {
 	var once sync.Once
 	var tmplArticle *template.Template
 	return func(ctx *gin.Context) {
 		var errTmpl error
 		once.Do(func() {
 			var err error
-			tmplArticle, errTmpl = template.New("hoge").ParseGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
+			tmplArticle, errTmpl = template.New("hoge").ParseGlob(fmt.Sprintf("%s/*.html", setting.E.DirPathTemplate))
 			if err != nil {
 				errTmpl = errors.Wrapf(err, "cannot new template")
 			}
 		})
 		if errTmpl != nil {
-			html500(ctx, env, errTmpl)
+			html500(ctx, errTmpl)
 			return
 		}
 		article := getCtxArticle(ctx)
 		u := getCtxUsecase(ctx)
 		content := []byte{}
 		if err := u.GetArticleHTML(ctx, article.ID, &content); err != nil {
-			html404(ctx, env)
+			html404(ctx)
 			return
 		}
 		imageURLs := []string{
-			getAvatarURL(env),
+			getAvatarURL(),
 		}
 		for _, img := range imageURLs {
 			imageURLs = append(imageURLs, img)
@@ -54,18 +52,17 @@ func HandlerHTMLGetArticle(
 			buf,
 			"pc_article.html",
 			newTmplVar(
-				env,
 				newTmplVarMeta(
 					article.Description,
 				),
 				newTmplVarLink(
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 				),
 				newTmplVarOGP(
 					article.Title,
 					article.Description,
 					"article",
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 					imageURL,
 				),
 				[]tmplVarLDJSON{
@@ -75,7 +72,7 @@ func HandlerHTMLGetArticle(
 						article.CreatedAtAsTime(),
 						imageURLs,
 						"otiuzu",
-						getAboutPageURL(env),
+						getAboutPageURL(),
 					),
 				},
 				map[string]interface{}{
@@ -83,7 +80,7 @@ func HandlerHTMLGetArticle(
 				},
 			),
 		); err != nil {
-			html500(ctx, env, err)
+			html500(ctx, err)
 			return
 		}
 		body := strings.Replace(buf.String(), "__QSW#$%FG_CONTENT__", string(content), -1)

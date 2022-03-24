@@ -7,15 +7,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/suzuito/blog1-go/pkg/entity"
-	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 	"github.com/suzuito/common-go/cgin"
 )
 
 // HandlerHTMLGetArticles ...
-func HandlerHTMLGetArticles(
-	env *setting.Environment,
-) gin.HandlerFunc {
+func HandlerHTMLGetArticles() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		now := time.Now()
 		u := getCtxUsecase(ctx)
@@ -25,7 +22,7 @@ func HandlerHTMLGetArticles(
 		order := usecase.CursorOrder(ctx.DefaultQuery("order", string(usecase.CursorOrderDesc)))
 		articles := []entity.Article{}
 		if err := u.GetArticles(ctx, cursorPublishedAt, cursorTitle, order, n, &articles); err != nil {
-			html500(ctx, env, err)
+			html500(ctx, err)
 			return
 		}
 		sort.Slice(articles, func(i, j int) bool {
@@ -47,23 +44,22 @@ func HandlerHTMLGetArticles(
 			http.StatusOK,
 			"pc_articles.html",
 			newTmplVar(
-				env,
 				newTmplVarMeta(
 					"記事一覧",
 				),
 				newTmplVarLink(
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 				),
 				newTmplVarOGP(
 					"記事一覧",
 					"記事一覧",
 					"article",
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 					"",
 				),
 				[]tmplVarLDJSON{
 					newTmplVarLDJSONWebSite(
-						getPageURL(ctx, env),
+						getPageURL(ctx),
 						"記事一覧",
 						"記事一覧",
 					),

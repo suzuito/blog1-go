@@ -11,6 +11,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"github.com/suzuito/blog1-go/pkg/entity"
+	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
@@ -56,8 +57,8 @@ func BlogUpdateArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 	if meta.EventType != "google.storage.object.finalize" {
 		return nil
 	}
-	if ev.Bucket != env.GCPBucketArticle {
-		return errors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
+	if ev.Bucket != setting.E.GCPBucketArticle {
+		return errors.Errorf("Invalid backet name exp:%s != real:%s", setting.E.GCPBucketArticle, ev.Bucket)
 	}
 	if filepath.Ext(ev.Name) != ".md" {
 		return nil
@@ -76,8 +77,8 @@ func BlogDeleteArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 	if meta.EventType != "google.storage.object.delete" {
 		return nil
 	}
-	if ev.Bucket != env.GCPBucketArticle {
-		return errors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
+	if ev.Bucket != setting.E.GCPBucketArticle {
+		return errors.Errorf("Invalid backet name exp:%s != real:%s", setting.E.GCPBucketArticle, ev.Bucket)
 	}
 	if filepath.Ext(ev.Name) != ".md" {
 		return nil

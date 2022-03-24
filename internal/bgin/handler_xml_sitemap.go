@@ -8,10 +8,10 @@ import (
 )
 
 // HandlerGetSitemapXML ...
-func HandlerGetSitemapXML(env *setting.Environment) gin.HandlerFunc {
+func HandlerGetSitemapXML() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := getCtxUsecase(ctx)
-		b, err := u.GenerateBlogSiteMap(ctx, env.SiteOrigin)
+		b, err := u.GenerateBlogSiteMap(ctx, setting.E.SiteOrigin)
 		if err != nil {
 			ctx.AbortWithStatus(
 				http.StatusInternalServerError,

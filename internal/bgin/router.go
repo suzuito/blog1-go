@@ -11,29 +11,29 @@ import (
 )
 
 // SetUpRoot ...
-func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalDepends) {
+func SetUpRoot(root *gin.Engine, gdeps *inject.GlobalDepends) {
 	root.Use(sentrygin.New(sentrygin.Options{}))
-	root.Static("css", fmt.Sprintf("%s", env.DirPathCSS))
+	root.Static("css", fmt.Sprintf("%s", setting.E.DirPathCSS))
 
 	root.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
-	root.Use(MiddlewareUsecase(env, gdeps))
+	root.Use(MiddlewareUsecase(gdeps))
 
-	root.Static("asset", env.DirPathAsset)
-	root.GET("sitemap.xml", HandlerGetSitemapXML(env))
-	root.GET("robots.txt", HandlerHTMLGetRobots(env))
-	root.GET("", HandlerHTMLGetTop(env))
-	root.GET("about", HandlerHTMLGetAbout(env))
-	root.GET("sandbox", HandlerHTMLGetSandbox(env))
+	root.Static("asset", setting.E.DirPathAsset)
+	root.GET("sitemap.xml", HandlerGetSitemapXML())
+	root.GET("robots.txt", HandlerHTMLGetRobots())
+	root.GET("", HandlerHTMLGetTop())
+	root.GET("about", HandlerHTMLGetAbout())
+	root.GET("sandbox", HandlerHTMLGetSandbox())
 	{
-		root.LoadHTMLGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
+		root.LoadHTMLGlob(fmt.Sprintf("%s/*.html", setting.E.DirPathTemplate))
 		gArticles := root.Group("articles")
-		gArticles.GET("", HandlerHTMLGetArticles(env))
+		gArticles.GET("", HandlerHTMLGetArticles())
 		{
 			gArticle := gArticles.Group(":articleID")
-			gArticle.Use(HTMLMiddlewareGetArticle(env))
-			gArticle.GET("", HandlerHTMLGetArticle(env))
+			gArticle.Use(HTMLMiddlewareGetArticle())
+			gArticle.GET("", HandlerHTMLGetArticle())
 		}
 	}
 }

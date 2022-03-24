@@ -10,17 +10,15 @@ import (
 	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/deployment/gcf"
 	"github.com/suzuito/blog1-go/pkg/inject"
-	"github.com/suzuito/blog1-go/pkg/setting"
 )
 
 type runBlogDeleteArticleCmd struct {
 	gdeps   *inject.GlobalDepends
-	env     *setting.Environment
 	dirBase string
 }
 
-func newRunBlogDeleteArticleCmd(gdeps *inject.GlobalDepends, env *setting.Environment) *runBlogDeleteArticleCmd {
-	return &runBlogDeleteArticleCmd{gdeps: gdeps, env: env}
+func newRunBlogDeleteArticleCmd(gdeps *inject.GlobalDepends) *runBlogDeleteArticleCmd {
+	return &runBlogDeleteArticleCmd{gdeps: gdeps}
 }
 
 func (c *runBlogDeleteArticleCmd) Name() string { return "delete-article" }

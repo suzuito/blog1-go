@@ -12,22 +12,22 @@ var (
 	metaSiteName        = "otiuzu pages"
 )
 
-func getPageURL(ctx *gin.Context, env *setting.Environment) string {
-	u, _ := url.Parse(env.SiteOrigin)
+func getPageURL(ctx *gin.Context) string {
+	u, _ := url.Parse(setting.E.SiteOrigin)
 	if ctx.Request != nil {
 		u.Path = ctx.Request.URL.Path
 	}
 	return u.String()
 }
 
-func getAboutPageURL(env *setting.Environment) string {
-	u, _ := url.Parse(env.SiteOrigin)
+func getAboutPageURL() string {
+	u, _ := url.Parse(setting.E.SiteOrigin)
 	u.Path = "about"
 	return u.String()
 }
 
-func getAvatarURL(env *setting.Environment) string {
-	u, _ := url.Parse(env.SiteOrigin)
+func getAvatarURL() string {
+	u, _ := url.Parse(setting.E.SiteOrigin)
 	u.Path = "asset/avatar.jpg"
 	return u.String()
 }
