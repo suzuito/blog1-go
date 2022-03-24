@@ -51,12 +51,6 @@ type Usecase interface {
 		origin string,
 	) (*XMLURLSet, error)
 
-	GetAdminAuth(
-		ctx context.Context,
-		headerAdminAuth string,
-		adminAuth *entity.AdminAuth,
-	) error
-
 	DeleteArticle(
 		ctx context.Context,
 		articleID entity.ArticleID,
