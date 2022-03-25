@@ -3,12 +3,10 @@ package cmarkdown
 import (
 	"bytes"
 	"context"
-	"fmt"
-	"io"
-	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	mathjax "github.com/litao91/goldmark-mathjax"
+	"github.com/pkg/errors"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
@@ -82,14 +80,12 @@ func NewV1() *V1 {
 
 func (g *V1) Convert(
 	ctx context.Context,
-	source []byte,
-	w io.Writer,
+	src string,
+	dst *string,
 	meta *CMMeta,
-	tocs *[]CMTOC,
-	images *[]CMImage,
 ) error {
 	sourceWithoutMeta := []byte{}
-	if err := parseMeta(source, meta, &sourceWithoutMeta); err != nil {
+	if err := parseMeta(src, meta, &sourceWithoutMeta); err != nil {
 		return xerrors.Errorf("parseMeta : %w", err)
 	}
 	tempHTML := bytes.NewBufferString("")
@@ -106,24 +102,11 @@ func (g *V1) Convert(
 	})
 	tempDoc.Find("img.md-image").Each(func(i int, s *goquery.Selection) {
 		s.SetAttr("style", "width: 100%;")
-		*images = append(*images, CMImage{
-			URL: s.AttrOr("src", ""),
-		})
-	})
-	tempDoc.Find(".md-heading").Each(func(i int, s *goquery.Selection) {
-		toc := CMTOC{
-			Name:  s.Text(),
-			ID:    s.AttrOr("id", ""),
-			Level: NewTOCLevel(goquery.NodeName(s)),
-		}
-		*tocs = append(*tocs, toc)
 	})
 	returned, err := tempDoc.Html()
 	if err != nil {
-		return xerrors.Errorf("Cannot HTML : %w", err)
+		return errors.Errorf("cannot HTML : %+v", err)
 	}
-	returned = strings.Replace(returned, "<html><head></head><body>", "", 1)
-	returned = strings.Replace(returned, "</body></html>", "", 1)
-	fmt.Fprint(w, returned)
+	*dst = returned
 	return nil
 }

@@ -2,7 +2,6 @@ package cmarkdown
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"strings"
 	"time"
@@ -26,8 +25,8 @@ func (c *CMMeta) DateAsTime() time.Time {
 	return r
 }
 
-func parseMeta(source []byte, embedMeta *CMMeta, sourceWithOutMeta *[]byte) error {
-	s := bufio.NewScanner(bytes.NewReader(source))
+func parseMeta(source string, embedMeta *CMMeta, sourceWithOutMeta *[]byte) error {
+	s := bufio.NewScanner(strings.NewReader(source))
 	isMetaBlock := false
 	isMetaBlockDone := false
 	metaBlock := ""

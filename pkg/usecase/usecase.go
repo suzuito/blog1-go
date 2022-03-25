@@ -29,11 +29,11 @@ type Usecase interface {
 		body *[]byte,
 	) error
 
-	ConvertMD(
+	Convert(
 		ctx context.Context,
-		source []byte,
-		article *entity.Article,
-		converted *[]byte,
+		src string,
+		dst *string,
+		meta *cmarkdown.CMMeta,
 	) error
 	UpdateArticleByID(
 		ctx context.Context,
@@ -54,9 +54,11 @@ type Usecase interface {
 
 // Impl ...
 type Impl struct {
-	db          DB
-	storage     Storage
-	converterMD cmarkdown.Converter
+	db               DB
+	storage          Storage
+	converterMD      cmarkdown.Converter
+	htmlMediaFetcher HTMLMediaFetcher
+	htmlEditor       HTMLEditor
 }
 
 // NewImpl ...
