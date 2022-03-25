@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/internal/cmarkdown"
@@ -66,21 +65,28 @@ func (u *Impl) UpdateArticle(
 		return errors.Wrapf(err, "cannot get file from %s", path)
 	}
 	converted := []byte{}
-	article := entity.Article{}
-	if err := u.ConvertMD(ctx, source, &article, &converted); err != nil {
-		return errors.Wrapf(err, "cannot convert article '%+v'", article)
+	output := bytes.NewBufferString("")
+	tocs := []cmarkdown.CMTOC{}
+	images := []cmarkdown.CMImage{}
+	meta := cmarkdown.CMMeta{}
+	if err := u.converterMD.Convert(ctx, source, output, &meta, &tocs, &images); err != nil {
+		return errors.Wrapf(err, "cannot convert")
 	}
+	article := newArticleFromCMeta(&meta, tocs, images)
+	converted = output.Bytes()
+	// FIXME into usecase
+	// u.refineArticleImage(http.DefaultClient, &articleImage)
 	if article.ID == entity.ArticleID("") {
 		return errors.Errorf("Empty ID is detected '%+v'", article)
 	}
 	fmt.Printf("Upload '%s'\n", article.ID)
-	if err := u.storage.UploadArticle(ctx, &article, string(converted)); err != nil {
+	if err := u.storage.UploadArticle(ctx, article, string(converted)); err != nil {
 		return errors.Wrapf(err, "cannot upload article '%+v'", article)
 	}
-	if err := u.attacheArticleImages(&article, converted); err != nil {
+	if err := u.attacheArticleImages(article, converted); err != nil {
 		return errors.Wrapf(err, "cannot attacheArticleImages")
 	}
-	if err := u.db.SetArticle(ctx, &article); err != nil {
+	if err := u.db.SetArticle(ctx, article); err != nil {
 		return errors.Wrapf(err, "cannot set article '%+v'", article)
 	}
 	return nil
@@ -113,26 +119,7 @@ func (u *Impl) ConvertMD(
 	if err := u.converterMD.Convert(ctx, source, output, &meta, &tocs, &images); err != nil {
 		return errors.Wrapf(err, "cannot convert")
 	}
-	article.ID = entity.ArticleID(meta.ID)
-	article.Description = meta.Description
-	article.PublishedAt = meta.DateAsTime().Unix()
-	article.Tags = *entity.NewTags(meta.Tags)
-	article.Title = meta.Title
-	for _, toc := range tocs {
-		articleIndex := entity.ArticleIndex{
-			ID:    toc.ID,
-			Name:  toc.Name,
-			Level: entity.ArticleIndexLevel(toc.Level),
-		}
-		article.TOC = append(article.TOC, articleIndex)
-	}
-	for _, image := range images {
-		articleImage := entity.ArticleImage{
-			URL: image.URL,
-		}
-		u.refineArticleImage(http.DefaultClient, &articleImage)
-		article.Images = append(article.Images, articleImage)
-	}
+	*article = *newArticleFromCMeta(&meta, tocs, images)
 	*converted = output.Bytes()
 	return nil
 }
@@ -149,4 +136,32 @@ func (u *Impl) GetArticleHTML(
 		body,
 		&map[string]string{},
 	)
+}
+
+func newArticleFromCMeta(
+	meta *cmarkdown.CMMeta,
+	tocs []cmarkdown.CMTOC,
+	images []cmarkdown.CMImage,
+) *entity.Article {
+	a := entity.Article{}
+	a.ID = entity.ArticleID(meta.ID)
+	a.Description = meta.Description
+	a.PublishedAt = meta.DateAsTime().Unix()
+	a.Tags = *entity.NewTags(meta.Tags)
+	a.Title = meta.Title
+	for _, toc := range tocs {
+		articleIndex := entity.ArticleIndex{
+			ID:    toc.ID,
+			Name:  toc.Name,
+			Level: entity.ArticleIndexLevel(toc.Level),
+		}
+		a.TOC = append(a.TOC, articleIndex)
+	}
+	for _, image := range images {
+		articleImage := entity.ArticleImage{
+			URL: image.URL,
+		}
+		a.Images = append(a.Images, articleImage)
+	}
+	return &a
 }
