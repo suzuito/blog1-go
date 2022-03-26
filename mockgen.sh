@@ -1,13 +1,7 @@
 #!/bin/sh
 
-file=$1
+pkg=$1
+file=$2
 
-echo ${file}
-
-dir=`dirname ${file}`/mock
-base=`basename ${file}`
-mkdir -p ${dir}
-mockfile=${dir}/${base}
-
-rm ${mockfile}
-mockgen -source ${file} > ${mockfile}
+mockfile=`echo ${file} | sed s/.go$/_mock.go/g`
+mockgen -source ${file} -package `basename ${pkg}` -self_package ${pkg} > ${mockfile}

@@ -13,12 +13,12 @@ import (
 )
 
 type runBlogDeleteArticleCmd struct {
-	gdeps   *usecase.GlobalDepends
+	u       usecase.Usecase
 	dirBase string
 }
 
-func newRunBlogDeleteArticleCmd(gdeps *usecase.GlobalDepends) *runBlogDeleteArticleCmd {
-	return &runBlogDeleteArticleCmd{gdeps: gdeps}
+func newRunBlogDeleteArticleCmd(u usecase.Usecase) *runBlogDeleteArticleCmd {
+	return &runBlogDeleteArticleCmd{u: u}
 }
 
 func (c *runBlogDeleteArticleCmd) Name() string { return "delete-article" }

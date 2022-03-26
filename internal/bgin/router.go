@@ -11,14 +11,14 @@ import (
 )
 
 // SetUpRoot ...
-func SetUpRoot(root *gin.Engine, gdeps *usecase.GlobalDepends) {
+func SetUpRoot(root *gin.Engine, u usecase.Usecase) {
 	root.Use(sentrygin.New(sentrygin.Options{}))
 	root.Static("css", fmt.Sprintf("%s", setting.E.DirPathCSS))
 
 	root.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
-	root.Use(MiddlewareUsecase(gdeps))
+	root.Use(MiddlewareUsecase(u))
 
 	root.Static("asset", setting.E.DirPathAsset)
 	root.GET("sitemap.xml", HandlerGetSitemapXML())

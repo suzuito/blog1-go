@@ -6,16 +6,8 @@ import (
 )
 
 // MiddlewareUsecase ...
-func MiddlewareUsecase(gdeps *usecase.GlobalDepends) gin.HandlerFunc {
+func MiddlewareUsecase(u usecase.Usecase) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		u := usecase.NewImpl(
-			gdeps.DB,
-			gdeps.Storage,
-			gdeps.MDConverter,
-			gdeps.HTMLMediaFetcher,
-			gdeps.HTMLEditor,
-			gdeps.HTMLTOCExtractor,
-		)
 		setCtxUsecase(ctx, u)
 		ctx.Next()
 	}

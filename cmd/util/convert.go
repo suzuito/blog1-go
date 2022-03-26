@@ -47,15 +47,23 @@ func (c *runConvertCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...inter
 		return subcommands.ExitFailure
 	}
 	var u usecase.Usecase
-	u = usecase.NewImpl(
-		nil, nil,
-		cmarkdown.NewV1(),
-		&bhtml.MediaFetcher{
+	u = &usecase.Impl{
+		MDConverter: cmarkdown.NewV1(),
+		HTMLMediaFetcher: &bhtml.MediaFetcher{
 			Cli: http.DefaultClient,
 		},
-		&bhtml.Editor{},
-		&bhtml.TOCExtractor{},
-	)
+		HTMLEditor:       &bhtml.Editor{},
+		HTMLTOCExtractor: &bhtml.TOCExtractor{},
+	}
+	// u = usecase(
+	// 	nil, nil,
+	// 	cmarkdown.NewV1(),
+	// 	&bhtml.MediaFetcher{
+	// 		Cli: http.DefaultClient,
+	// 	},
+	// 	&bhtml.Editor{},
+	// 	&bhtml.TOCExtractor{},
+	// )
 	dstHTML := ""
 	article := entity.Article{}
 	if err := u.ConvertFromMarkdownToHTML(ctx, []byte(srcMD), &dstHTML, &article); err != nil {

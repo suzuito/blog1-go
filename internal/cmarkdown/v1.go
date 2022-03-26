@@ -7,6 +7,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	mathjax "github.com/litao91/goldmark-mathjax"
 	"github.com/pkg/errors"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
@@ -82,7 +83,7 @@ func (g *V1) Convert(
 	ctx context.Context,
 	src string,
 	dst *string,
-	meta *CMMeta,
+	meta *usecase.CMMeta,
 ) error {
 	sourceWithoutMeta := []byte{}
 	if err := parseMeta(src, meta, &sourceWithoutMeta); err != nil {

@@ -3,18 +3,8 @@ package usecase
 import (
 	"context"
 
-	"github.com/suzuito/blog1-go/internal/cmarkdown"
 	"github.com/suzuito/blog1-go/pkg/entity"
 )
-
-type GlobalDepends struct {
-	MDConverter      cmarkdown.Converter
-	DB               DB
-	Storage          Storage
-	HTMLEditor       HTMLEditor
-	HTMLMediaFetcher HTMLMediaFetcher
-	HTMLTOCExtractor HTMLTOCExtractor
-}
 
 // Usecase ...
 type Usecase interface {
@@ -71,29 +61,10 @@ type Usecase interface {
 
 // Impl ...
 type Impl struct {
-	db               DB
-	storage          Storage
-	converterMD      cmarkdown.Converter
-	htmlMediaFetcher HTMLMediaFetcher
-	htmlEditor       HTMLEditor
-	htmlTOCExtractor HTMLTOCExtractor
-}
-
-// NewImpl ...
-func NewImpl(
-	db DB,
-	storage Storage,
-	converterMD cmarkdown.Converter,
-	htmlMediaFetcher HTMLMediaFetcher,
-	htmlEditor HTMLEditor,
-	htmlTOCExtractor HTMLTOCExtractor,
-) *Impl {
-	return &Impl{
-		db:               db,
-		storage:          storage,
-		converterMD:      converterMD,
-		htmlMediaFetcher: htmlMediaFetcher,
-		htmlEditor:       htmlEditor,
-		htmlTOCExtractor: htmlTOCExtractor,
-	}
+	MDConverter      MDConverter
+	DB               DB
+	Storage          Storage
+	HTMLEditor       HTMLEditor
+	HTMLMediaFetcher HTMLMediaFetcher
+	HTMLTOCExtractor HTMLTOCExtractor
 }

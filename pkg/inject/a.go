@@ -15,14 +15,14 @@ import (
 	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
-func NewGlobalDepends(ctx context.Context) (*usecase.GlobalDepends, func(), error) {
+func NewUsecaseImpl(ctx context.Context) (*usecase.Impl, func(), error) {
 	closeFuncs := []func(){}
 	closeFunc := func() {
 		for _, cf := range closeFuncs {
 			cf()
 		}
 	}
-	r := usecase.GlobalDepends{}
+	r := usecase.Impl{}
 	r.MDConverter = cmarkdown.NewV1()
 	gcli, err := gstorage.NewClient(ctx)
 	if err != nil {

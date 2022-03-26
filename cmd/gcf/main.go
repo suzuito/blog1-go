@@ -45,7 +45,7 @@ func readDirTest(dir string, f func(d *testData) error) error {
 
 func main() {
 	ctx := context.Background()
-	gdeps, closeFunc, err := inject.NewGlobalDepends(ctx)
+	u, closeFunc, err := inject.NewUsecaseImpl(ctx)
 	if err != nil {
 		log.Error().AnErr("message", err).Send()
 		os.Exit(1)
@@ -54,8 +54,8 @@ func main() {
 	subcommands.Register(subcommands.HelpCommand(), "")
 	subcommands.Register(subcommands.FlagsCommand(), "")
 	subcommands.Register(subcommands.CommandsCommand(), "")
-	subcommands.Register(newRunBlogUpdateArticleCmd(gdeps), "")
-	subcommands.Register(newRunBlogDeleteArticleCmd(gdeps), "")
+	subcommands.Register(newRunBlogUpdateArticleCmd(u), "")
+	subcommands.Register(newRunBlogDeleteArticleCmd(u), "")
 	flag.Parse()
 	os.Exit(int(subcommands.Execute(ctx)))
 }

@@ -54,7 +54,7 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (*XMLURLS
 	cursorTitle := ""
 	for {
 		articles := []entity.Article{}
-		if err := u.db.GetArticles(ctx, cursorPublishedAt, cursorTitle, CursorOrderAsc, 100, &articles); err != nil {
+		if err := u.DB.GetArticles(ctx, cursorPublishedAt, cursorTitle, CursorOrderAsc, 100, &articles); err != nil {
 			return nil, errors.Wrapf(err, "cannot get articles")
 		}
 		if len(articles) <= 0 {

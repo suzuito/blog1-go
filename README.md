@@ -10,6 +10,10 @@ http://blog.tach.dev
 make init
 ```
 
+```bash
+make mockgen
+```
+
 Put test articles
 
 ```bash

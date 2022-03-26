@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
-	"github.com/suzuito/blog1-go/internal/cmarkdown"
 	"github.com/suzuito/blog1-go/pkg/entity"
 )
 
@@ -18,7 +17,7 @@ func (u *Impl) GetArticles(
 	n int,
 	articles *[]entity.Article,
 ) error {
-	return u.db.GetArticles(
+	return u.DB.GetArticles(
 		ctx,
 		cursorPublishedAt,
 		cursorTitle,
@@ -34,7 +33,7 @@ func (u *Impl) GetArticle(
 	articleID entity.ArticleID,
 	article *entity.Article,
 ) error {
-	return u.db.GetArticle(ctx, articleID, article)
+	return u.DB.GetArticle(ctx, articleID, article)
 }
 
 // CreateArticle ...
@@ -53,7 +52,7 @@ func (u *Impl) GetArticleMarkdown(
 ) error {
 	path := fmt.Sprintf("%s/%s.md", bucket, articleID)
 	headers := map[string]string{}
-	if err := u.storage.GetFileAsHTTPResponse(ctx, path, dst, &headers); err != nil {
+	if err := u.Storage.GetFileAsHTTPResponse(ctx, path, dst, &headers); err != nil {
 		return errors.Wrapf(err, "cannot get file from %s", path)
 	}
 	return nil
@@ -66,19 +65,19 @@ func (u *Impl) ConvertFromMarkdownToHTML(
 	article *entity.Article,
 ) error {
 	dstHTML := ""
-	meta := cmarkdown.CMMeta{}
-	if err := u.converterMD.Convert(ctx, string(srcMD), &dstHTML, &meta); err != nil {
+	meta := CMMeta{}
+	if err := u.MDConverter.Convert(ctx, string(srcMD), &dstHTML, &meta); err != nil {
 		return errors.Wrapf(err, "cannot convert")
 	}
 	*article = *newArticleFromCMeta(&meta)
 	modifiedHTML := ""
-	if err := u.htmlEditor.ModifyHTML(ctx, dstHTML, &modifiedHTML); err != nil {
+	if err := u.HTMLEditor.ModifyHTML(ctx, dstHTML, &modifiedHTML); err != nil {
 		return errors.Wrapf(err, "cannot ModifyHTML")
 	}
-	if err := u.htmlMediaFetcher.Fetch(ctx, modifiedHTML, &article.Images); err != nil {
+	if err := u.HTMLMediaFetcher.Fetch(ctx, modifiedHTML, &article.Images); err != nil {
 		return errors.Wrapf(err, "cannot fetch image")
 	}
-	if err := u.htmlTOCExtractor.Extract(modifiedHTML, &article.TOC); err != nil {
+	if err := u.HTMLTOCExtractor.Extract(modifiedHTML, &article.TOC); err != nil {
 		return errors.Wrapf(err, "cannot extract toc")
 	}
 	if article.ID == entity.ArticleID("") {
@@ -94,10 +93,10 @@ func (u *Impl) UpdateArticle(
 	htmlString string,
 ) error {
 	fmt.Printf("Update '%s'\n", article.ID)
-	if err := u.storage.UploadArticle(ctx, article, htmlString); err != nil {
+	if err := u.Storage.UploadArticle(ctx, article, htmlString); err != nil {
 		return errors.Wrapf(err, "cannot upload article '%+v'", article)
 	}
-	if err := u.db.SetArticle(ctx, article); err != nil {
+	if err := u.DB.SetArticle(ctx, article); err != nil {
 		return errors.Wrapf(err, "cannot set article '%+v'", article)
 	}
 	return nil
@@ -108,10 +107,10 @@ func (u *Impl) DeleteArticle(
 	articleID entity.ArticleID,
 ) error {
 	fmt.Printf("Delete '%s'\n", articleID)
-	if err := u.storage.DeleteArticle(ctx, articleID); err != nil {
+	if err := u.Storage.DeleteArticle(ctx, articleID); err != nil {
 		return errors.Wrapf(err, "cannot delete article '%s'", articleID)
 	}
-	if err := u.db.DeleteArticle(ctx, articleID); err != nil {
+	if err := u.DB.DeleteArticle(ctx, articleID); err != nil {
 		return errors.Wrapf(err, "cannot delete article '%s'", articleID)
 	}
 	return nil
@@ -123,7 +122,7 @@ func (u *Impl) GetArticleHTML(
 	body *[]byte,
 ) error {
 	path := fmt.Sprintf("%s.html", id)
-	return u.storage.GetFileAsHTTPResponse(
+	return u.Storage.GetFileAsHTTPResponse(
 		ctx,
 		path,
 		body,
@@ -132,7 +131,7 @@ func (u *Impl) GetArticleHTML(
 }
 
 func newArticleFromCMeta(
-	meta *cmarkdown.CMMeta,
+	meta *CMMeta,
 ) *entity.Article {
 	a := entity.Article{}
 	a.ID = entity.ArticleID(meta.ID)

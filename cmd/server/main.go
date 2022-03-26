@@ -23,7 +23,7 @@ func main() {
 		panic(err)
 	}
 	defer sentry.Flush(2 * time.Second)
-	gdeps, closeFunc, err := inject.NewGlobalDepends(ctx)
+	u, closeFunc, err := inject.NewUsecaseImpl(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -36,7 +36,7 @@ func main() {
 		ExposeHeaders:    []string{},
 		AllowCredentials: false,
 	}))
-	bgin.SetUpRoot(root, gdeps)
+	bgin.SetUpRoot(root, u)
 	if err := root.Run(); err != nil {
 		panic(err)
 	}

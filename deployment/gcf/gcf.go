@@ -13,7 +13,6 @@ import (
 )
 
 var closeFunc func()
-var gdeps *usecase.GlobalDepends
 var u usecase.Usecase
 
 func init() {
@@ -28,10 +27,9 @@ func init() {
 	}); err != nil {
 		panic(err)
 	}
-	gdeps, closeFunc, err = inject.NewGlobalDepends(ctxGlobal)
+	u, closeFunc, err = inject.NewUsecaseImpl(ctxGlobal)
 	if err != nil {
 		log.Error().AnErr("message", err).Send()
 		return
 	}
-	u = usecase.NewImpl(gdeps.DB, gdeps.Storage, gdeps.MDConverter, gdeps.HTMLMediaFetcher, gdeps.HTMLEditor, gdeps.HTMLTOCExtractor)
 }
