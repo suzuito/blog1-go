@@ -29,12 +29,6 @@ type Usecase interface {
 		body *[]byte,
 	) error
 
-	Convert(
-		ctx context.Context,
-		src string,
-		dst *string,
-		meta *cmarkdown.CMMeta,
-	) error
 	UpdateArticleByID(
 		ctx context.Context,
 		bucket string,

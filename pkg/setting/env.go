@@ -22,6 +22,7 @@ type Environment struct {
 var E *Environment
 
 func init() {
+	E = &Environment{}
 	if err := envconfig.Process("", E); err != nil {
 		panic(errors.Wrapf(err, "cannot envconfig.Process"))
 	}
