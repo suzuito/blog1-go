@@ -53,6 +53,22 @@ const (
 	ArticleIndexLevel5 ArticleIndexLevel = 5
 )
 
+func NewArticleIndexLevel(tag string) ArticleIndexLevel {
+	switch tag {
+	case "h1":
+		return ArticleIndexLevel1
+	case "h2":
+		return ArticleIndexLevel2
+	case "h3":
+		return ArticleIndexLevel3
+	case "h4":
+		return ArticleIndexLevel4
+	case "h5":
+		return ArticleIndexLevel5
+	}
+	return ArticleIndexLevel5
+}
+
 // ArticleIndex ...
 type ArticleIndex struct {
 	ID    string

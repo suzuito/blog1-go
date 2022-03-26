@@ -17,3 +17,10 @@ type HTMLMediaFetcher interface {
 		images *[]entity.ArticleImage,
 	) error
 }
+
+type HTMLTOCExtractor interface {
+	Extract(
+		src string,
+		idx *[]entity.ArticleIndex,
+	) error
+}

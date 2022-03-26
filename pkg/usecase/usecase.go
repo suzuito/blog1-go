@@ -29,10 +29,24 @@ type Usecase interface {
 		body *[]byte,
 	) error
 
-	UpdateArticleByID(
+	GetArticleMarkdown(
 		ctx context.Context,
 		bucket string,
 		articleID entity.ArticleID,
+		dst *[]byte,
+	) error
+
+	UpdateArticle(
+		ctx context.Context,
+		article *entity.Article,
+		htmlString string,
+	) error
+
+	ConvertFromMarkdownToHTML(
+		ctx context.Context,
+		srcMD []byte,
+		retHTML *string,
+		article *entity.Article,
 	) error
 
 	GenerateBlogSiteMap(
@@ -53,6 +67,7 @@ type Impl struct {
 	converterMD      cmarkdown.Converter
 	htmlMediaFetcher HTMLMediaFetcher
 	htmlEditor       HTMLEditor
+	htmlTOCExtractor HTMLTOCExtractor
 }
 
 // NewImpl ...
@@ -60,10 +75,16 @@ func NewImpl(
 	db DB,
 	storage Storage,
 	converterMD cmarkdown.Converter,
+	htmlMediaFetcher HTMLMediaFetcher,
+	htmlEditor HTMLEditor,
+	htmlTOCExtractor HTMLTOCExtractor,
 ) *Impl {
 	return &Impl{
-		db:          db,
-		storage:     storage,
-		converterMD: converterMD,
+		db:               db,
+		storage:          storage,
+		converterMD:      converterMD,
+		htmlMediaFetcher: htmlMediaFetcher,
+		htmlEditor:       htmlEditor,
+		htmlTOCExtractor: htmlTOCExtractor,
 	}
 }

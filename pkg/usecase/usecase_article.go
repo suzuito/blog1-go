@@ -45,69 +45,32 @@ func (u *Impl) CreateArticle(
 	return u.CreateArticle(ctx, article)
 }
 
-func (u *Impl) UpdateArticleByID(
+func (u *Impl) GetArticleMarkdown(
 	ctx context.Context,
 	bucket string,
 	articleID entity.ArticleID,
+	dst *[]byte,
 ) error {
 	path := fmt.Sprintf("%s/%s.md", bucket, articleID)
-	return u.UpdateArticle(ctx, path)
-}
-
-/*
-func (u *Impl) UpdateArticle(
-	ctx context.Context,
-	path string,
-) error {
-	source := []byte{}
 	headers := map[string]string{}
-	if err := u.storage.GetFileAsHTTPResponse(ctx, path, &source, &headers); err != nil {
+	if err := u.storage.GetFileAsHTTPResponse(ctx, path, dst, &headers); err != nil {
 		return errors.Wrapf(err, "cannot get file from %s", path)
-	}
-	converted := []byte{}
-	output := bytes.NewBufferString("")
-	tocs := []cmarkdown.CMTOC{}
-	images := []cmarkdown.CMImage{}
-	meta := cmarkdown.CMMeta{}
-	if err := u.converterMD.Convert(ctx, source, output, &meta, &tocs, &images); err != nil {
-		return errors.Wrapf(err, "cannot convert")
-	}
-	article := newArticleFromCMeta(&meta, tocs, images)
-	converted = output.Bytes()
-	// FIXME into usecase
-	// u.refineArticleImage(http.DefaultClient, &articleImage)
-	if article.ID == entity.ArticleID("") {
-		return errors.Errorf("Empty ID is detected '%+v'", article)
-	}
-	fmt.Printf("Upload '%s'\n", article.ID)
-	if err := u.storage.UploadArticle(ctx, article, string(converted)); err != nil {
-		return errors.Wrapf(err, "cannot upload article '%+v'", article)
-	}
-	if err := u.attacheArticleImages(article, converted); err != nil {
-		return errors.Wrapf(err, "cannot attacheArticleImages")
-	}
-	if err := u.db.SetArticle(ctx, article); err != nil {
-		return errors.Wrapf(err, "cannot set article '%+v'", article)
 	}
 	return nil
 }
-*/
 
-func (u *Impl) UpdateArticle(
+func (u *Impl) ConvertFromMarkdownToHTML(
 	ctx context.Context,
-	path string,
+	srcMD []byte,
+	retHTML *string,
+	article *entity.Article,
 ) error {
-	srcMD := []byte{}
-	headers := map[string]string{}
-	if err := u.storage.GetFileAsHTTPResponse(ctx, path, &srcMD, &headers); err != nil {
-		return errors.Wrapf(err, "cannot get file from %s", path)
-	}
 	dstHTML := ""
 	meta := cmarkdown.CMMeta{}
 	if err := u.converterMD.Convert(ctx, string(srcMD), &dstHTML, &meta); err != nil {
 		return errors.Wrapf(err, "cannot convert")
 	}
-	article := newArticleFromCMeta(&meta)
+	*article = *newArticleFromCMeta(&meta)
 	modifiedHTML := ""
 	if err := u.htmlEditor.ModifyHTML(ctx, dstHTML, &modifiedHTML); err != nil {
 		return errors.Wrapf(err, "cannot ModifyHTML")
@@ -115,11 +78,23 @@ func (u *Impl) UpdateArticle(
 	if err := u.htmlMediaFetcher.Fetch(ctx, modifiedHTML, &article.Images); err != nil {
 		return errors.Wrapf(err, "cannot fetch image")
 	}
+	if err := u.htmlTOCExtractor.Extract(modifiedHTML, &article.TOC); err != nil {
+		return errors.Wrapf(err, "cannot extract toc")
+	}
 	if article.ID == entity.ArticleID("") {
 		return errors.Errorf("Empty ID is detected '%+v'", article)
 	}
-	fmt.Printf("Upload '%s'\n", article.ID)
-	if err := u.storage.UploadArticle(ctx, article, modifiedHTML); err != nil {
+	*retHTML = modifiedHTML
+	return nil
+}
+
+func (u *Impl) UpdateArticle(
+	ctx context.Context,
+	article *entity.Article,
+	htmlString string,
+) error {
+	fmt.Printf("Update '%s'\n", article.ID)
+	if err := u.storage.UploadArticle(ctx, article, htmlString); err != nil {
 		return errors.Wrapf(err, "cannot upload article '%+v'", article)
 	}
 	if err := u.db.SetArticle(ctx, article); err != nil {

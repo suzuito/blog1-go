@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -16,7 +18,7 @@ import (
 )
 
 type MediaFetcher struct {
-	cli *http.Client
+	Cli *http.Client
 }
 
 func (m *MediaFetcher) Fetch(
@@ -41,7 +43,7 @@ func (m *MediaFetcher) Fetch(
 	})
 
 	for _, srcURL := range srcURLs {
-		img, err := fetchSrcURL(ctx, m.cli, srcURL)
+		img, err := fetchSrcURL(ctx, m.Cli, srcURL)
 		if err != nil {
 			continue
 		}
