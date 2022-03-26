@@ -7,6 +7,15 @@ import (
 	"github.com/suzuito/blog1-go/pkg/entity"
 )
 
+type GlobalDepends struct {
+	MDConverter      cmarkdown.Converter
+	DB               DB
+	Storage          Storage
+	HTMLEditor       HTMLEditor
+	HTMLMediaFetcher HTMLMediaFetcher
+	HTMLTOCExtractor HTMLTOCExtractor
+}
+
 // Usecase ...
 type Usecase interface {
 	GetArticle(

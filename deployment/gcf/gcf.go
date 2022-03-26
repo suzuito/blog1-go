@@ -13,7 +13,7 @@ import (
 )
 
 var closeFunc func()
-var gdeps *inject.GlobalDepends
+var gdeps *usecase.GlobalDepends
 var u usecase.Usecase
 
 func init() {

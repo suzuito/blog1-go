@@ -15,23 +15,14 @@ import (
 	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
-type GlobalDepends struct {
-	MDConverter      cmarkdown.Converter
-	DB               usecase.DB
-	Storage          usecase.Storage
-	HTMLEditor       usecase.HTMLEditor
-	HTMLMediaFetcher usecase.HTMLMediaFetcher
-	HTMLTOCExtractor usecase.HTMLTOCExtractor
-}
-
-func NewGlobalDepends(ctx context.Context) (*GlobalDepends, func(), error) {
+func NewGlobalDepends(ctx context.Context) (*usecase.GlobalDepends, func(), error) {
 	closeFuncs := []func(){}
 	closeFunc := func() {
 		for _, cf := range closeFuncs {
 			cf()
 		}
 	}
-	r := GlobalDepends{}
+	r := usecase.GlobalDepends{}
 	r.MDConverter = cmarkdown.NewV1()
 	gcli, err := gstorage.NewClient(ctx)
 	if err != nil {
