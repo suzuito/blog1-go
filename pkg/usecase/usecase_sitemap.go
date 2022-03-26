@@ -19,17 +19,6 @@ type XMLURLSet struct {
 	XsiSchemaLocation string   `xml:"xsi:schemaLocation,attr"`
 }
 
-func (x *XMLURLSet) Marshal() (string, error) {
-	b, err := xml.MarshalIndent(x, "", "    ")
-	if err != nil {
-		return "", errors.Wrapf(err, "Cannot marshal xml")
-	}
-
-	c := string(b)
-	c = `<?xml version="1.0" encoding="UTF-8"?>` + "\n" + c
-	return c, nil
-}
-
 type XMLURL struct {
 	XMLName xml.Name `xml:"url"`
 	Loc     string   `xml:"loc"`
