@@ -13,7 +13,9 @@ func MiddlewareUsecase(gdeps *inject.GlobalDepends) gin.HandlerFunc {
 			gdeps.DB,
 			gdeps.Storage,
 			gdeps.MDConverter,
-			nil, nil, nil,
+			gdeps.HTMLMediaFetcher,
+			gdeps.HTMLEditor,
+			gdeps.HTMLTOCExtractor,
 		)
 		setCtxUsecase(ctx, u)
 		ctx.Next()
