@@ -105,7 +105,7 @@ func fetchSrcURL(
 	defer r.Body.Close()
 	if r.StatusCode != http.StatusOK {
 		body, _ := ioutil.ReadAll(r.Body)
-		return nil, errors.Wrapf(httpErrorErr, "%s status=%d body=%s", srcURL, string(body))
+		return nil, errors.Wrapf(httpErrorErr, "%s status=%d body=%s", srcURL, r.StatusCode, string(body))
 	}
 	img, _, err := image.Decode(r.Body)
 	if err != nil {
