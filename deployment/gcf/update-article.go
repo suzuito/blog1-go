@@ -13,7 +13,6 @@ import (
 	"github.com/suzuito/blog1-go/internal/bgcp/storage"
 	"github.com/suzuito/blog1-go/pkg/entity"
 	"github.com/suzuito/blog1-go/pkg/setting"
-	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 type GCSEvent struct {
@@ -65,8 +64,6 @@ func BlogUpdateArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 		return nil
 	}
 	articleID := storage.ExtractArticleIDFromPath(ev.Name)
-	var u usecase.Usecase
-	u = usecase.NewImpl(gdeps.DB, gdeps.Storage, gdeps.MDConverter)
 	log.Info().Str(
 		"file", fmt.Sprintf("%s/%s", ev.Bucket, ev.Name),
 	).Send()
@@ -99,7 +96,6 @@ func BlogDeleteArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 	log.Info().Str(
 		"file", fmt.Sprintf("%s/%s", ev.Bucket, ev.Name),
 	).Send()
-	u := usecase.NewImpl(gdeps.DB, gdeps.Storage, gdeps.MDConverter)
 	if err := u.DeleteArticle(ctx, articleID); err != nil {
 		return errors.Wrapf(err, "cannot delete article '%s'", articleID)
 	}

@@ -9,10 +9,12 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/suzuito/blog1-go/pkg/inject"
 	"github.com/suzuito/blog1-go/pkg/setting"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 var closeFunc func()
 var gdeps *inject.GlobalDepends
+var u usecase.Usecase
 
 func init() {
 	zerolog.LevelFieldName = "severity"
@@ -31,4 +33,5 @@ func init() {
 		log.Error().AnErr("message", err).Send()
 		return
 	}
+	u = usecase.NewImpl(gdeps.DB, gdeps.Storage, gdeps.MDConverter, gdeps.HTMLMediaFetcher, gdeps.HTMLEditor, gdeps.HTMLTOCExtractor)
 }

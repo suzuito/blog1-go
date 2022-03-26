@@ -2,21 +2,26 @@ package inject
 
 import (
 	"context"
+	"net/http"
 
 	"cloud.google.com/go/firestore"
 	gstorage "cloud.google.com/go/storage"
 	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/internal/bgcp/fdb"
 	"github.com/suzuito/blog1-go/internal/bgcp/storage"
+	"github.com/suzuito/blog1-go/internal/bhtml"
 	"github.com/suzuito/blog1-go/internal/cmarkdown"
 	"github.com/suzuito/blog1-go/pkg/setting"
 	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 type GlobalDepends struct {
-	MDConverter cmarkdown.Converter
-	DB          usecase.DB
-	Storage     usecase.Storage
+	MDConverter      cmarkdown.Converter
+	DB               usecase.DB
+	Storage          usecase.Storage
+	HTMLEditor       usecase.HTMLEditor
+	HTMLMediaFetcher usecase.HTMLMediaFetcher
+	HTMLTOCExtractor usecase.HTMLTOCExtractor
 }
 
 func NewGlobalDepends(ctx context.Context) (*GlobalDepends, func(), error) {
@@ -40,5 +45,8 @@ func NewGlobalDepends(ctx context.Context) (*GlobalDepends, func(), error) {
 	closeFuncs = append(closeFuncs, func() { fcli.Close() })
 	r.Storage = storage.New(gcli, setting.E.GCPBucketArticle)
 	r.DB = fdb.NewClient(fcli)
+	r.HTMLEditor = &bhtml.Editor{}
+	r.HTMLMediaFetcher = &bhtml.MediaFetcher{Cli: http.DefaultClient}
+	r.HTMLTOCExtractor = &bhtml.TOCExtractor{}
 	return &r, closeFunc, nil
 }
