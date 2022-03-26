@@ -8,6 +8,7 @@ mockgen:
 	sh mockgen.sh pkg/usecase/usecase.go
 	sh mockgen.sh pkg/usecase/db.go
 	sh mockgen.sh pkg/usecase/storage.go
+	sh mockgen.sh pkg/usecase/bhtml.go
 
 test:
 	go test -timeout 30s -coverprofile=coverage.txt -covermode=atomic ./...

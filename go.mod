@@ -11,6 +11,7 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/validator/v10 v10.4.1
+	github.com/golang/mock v1.6.0
 	github.com/google/subcommands v1.2.0
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/kelseyhightower/envconfig v1.4.0
