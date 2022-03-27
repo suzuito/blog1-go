@@ -344,3 +344,157 @@ func TestConvertFromMarkdownToHTML(t *testing.T) {
 		})
 	}
 }
+
+func TestUpdateArticle(t *testing.T) {
+	testCases := []struct {
+		desc         string
+		setup        func(*Mocks)
+		inputArticle entity.Article
+		inputHTML    string
+		expectedErr  string
+	}{
+		{
+			desc:         "Success",
+			inputArticle: entity.Article{ID: "a1"},
+			inputHTML:    "input html",
+			setup: func(mocks *Mocks) {
+				mocks.Storage.EXPECT().
+					UploadArticle(gomock.All(), gomock.Any(), "input html")
+				mocks.DB.EXPECT().
+					SetArticle(gomock.Any(), gomock.Any())
+			},
+		},
+		{
+			desc:         "Failed cannot set article",
+			inputArticle: entity.Article{ID: "a1"},
+			inputHTML:    "input html",
+			setup: func(mocks *Mocks) {
+				mocks.Storage.EXPECT().
+					UploadArticle(gomock.All(), gomock.Any(), "input html")
+				mocks.DB.EXPECT().
+					SetArticle(gomock.Any(), gomock.Any()).
+					Return(fmt.Errorf("dummy error"))
+			},
+			expectedErr: "cannot set article '&{ID:a1 Title: Description: CreatedAt:0 UpdatedAt:0 PublishedAt:0 Tags:[] Images:[] TOC:[]}': dummy error",
+		},
+		{
+			desc:         "Failed cannot upload article",
+			inputArticle: entity.Article{ID: "a1"},
+			inputHTML:    "input html",
+			setup: func(mocks *Mocks) {
+				mocks.Storage.EXPECT().
+					UploadArticle(gomock.All(), gomock.Any(), "input html").
+					Return(fmt.Errorf("dummy error"))
+			},
+			expectedErr: "cannot upload article '&{ID:a1 Title: Description: CreatedAt:0 UpdatedAt:0 PublishedAt:0 Tags:[] Images:[] TOC:[]}': dummy error",
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			ctx := context.Background()
+			mocks, impl, closeFunc := NewMockDepends(t)
+			defer closeFunc()
+			tC.setup(mocks)
+			err := impl.UpdateArticle(ctx, &tC.inputArticle, tC.inputHTML)
+			if tC.expectedErr != "" {
+				assert.NotNil(t, err)
+			}
+			if err != nil {
+				assert.Equal(t, tC.expectedErr, err.Error())
+				return
+			}
+		})
+	}
+}
+
+func TestDeleteArticle(t *testing.T) {
+	testCases := []struct {
+		desc           string
+		setup          func(*Mocks)
+		inputArticleID entity.ArticleID
+		expectedErr    string
+	}{
+		{
+			desc:           "Success",
+			inputArticleID: "a1",
+			setup: func(mocks *Mocks) {
+				mocks.Storage.EXPECT().
+					DeleteArticle(gomock.Any(), entity.ArticleID("a1"))
+				mocks.DB.EXPECT().
+					DeleteArticle(gomock.Any(), entity.ArticleID("a1"))
+			},
+		},
+		{
+			desc:           "Failed cannot delete article",
+			inputArticleID: "a1",
+			setup: func(mocks *Mocks) {
+				mocks.Storage.EXPECT().
+					DeleteArticle(gomock.Any(), entity.ArticleID("a1"))
+				mocks.DB.EXPECT().
+					DeleteArticle(gomock.Any(), entity.ArticleID("a1")).
+					Return(fmt.Errorf("dummy error"))
+			},
+			expectedErr: "cannot delete article 'a1': dummy error",
+		},
+		{
+			desc:           "Failed cannot delete article",
+			inputArticleID: "a1",
+			setup: func(mocks *Mocks) {
+				mocks.Storage.EXPECT().
+					DeleteArticle(gomock.All(), entity.ArticleID("a1")).
+					Return(fmt.Errorf("dummy error"))
+			},
+			expectedErr: "cannot delete article 'a1': dummy error",
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			ctx := context.Background()
+			mocks, impl, closeFunc := NewMockDepends(t)
+			defer closeFunc()
+			tC.setup(mocks)
+			err := impl.DeleteArticle(ctx, tC.inputArticleID)
+			if tC.expectedErr != "" {
+				assert.NotNil(t, err)
+			}
+			if err != nil {
+				assert.Equal(t, tC.expectedErr, err.Error())
+				return
+			}
+		})
+	}
+}
+
+func TestGetArticleHTML(t *testing.T) {
+	testCases := []struct {
+		desc           string
+		setup          func(*Mocks)
+		inputArticleID entity.ArticleID
+		expectedErr    string
+	}{
+		{
+			desc:           "Success",
+			inputArticleID: "a1",
+			setup: func(mocks *Mocks) {
+				mocks.Storage.EXPECT().
+					GetFileAsHTTPResponse(gomock.Any(), "a1.html", gomock.Any(), gomock.Any())
+			},
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			ctx := context.Background()
+			mocks, impl, closeFunc := NewMockDepends(t)
+			defer closeFunc()
+			tC.setup(mocks)
+			err := impl.GetArticleHTML(ctx, tC.inputArticleID, &[]byte{})
+			if tC.expectedErr != "" {
+				assert.NotNil(t, err)
+			}
+			if err != nil {
+				assert.Equal(t, tC.expectedErr, err.Error())
+				return
+			}
+		})
+	}
+}
