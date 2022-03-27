@@ -2,39 +2,26 @@ package bgin
 
 import (
 	"bytes"
-	"fmt"
-	"html/template"
 	"net/http"
 	"strings"
-	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/suzuito/blog1-go/pkg/setting"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 // HandlerHTMLGetArticle ...
 func HandlerHTMLGetArticle() gin.HandlerFunc {
-	var once sync.Once
-	var tmplArticle *template.Template
 	return func(ctx *gin.Context) {
-		var errTmpl error
-		once.Do(func() {
-			var err error
-			tmplArticle, errTmpl = template.New("hoge").ParseGlob(fmt.Sprintf("%s/*.html", setting.E.DirPathTemplate))
-			if err != nil {
-				errTmpl = errors.Wrapf(err, "cannot new template")
-			}
-		})
-		if errTmpl != nil {
-			html500(ctx, errTmpl)
-			return
-		}
 		article := getCtxArticle(ctx)
 		u := getCtxUsecase(ctx)
 		content := []byte{}
 		if err := u.GetArticleHTML(ctx, article.ID, &content); err != nil {
-			html404(ctx)
+			if errors.Is(err, usecase.ErrNotFound) {
+				html404(ctx)
+				return
+			}
+			html500(ctx, err)
 			return
 		}
 		imageURLs := []string{
