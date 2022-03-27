@@ -10,6 +10,7 @@ import (
 	"github.com/suzuito/blog1-go/pkg/usecase"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/text"
@@ -22,7 +23,7 @@ type astTransformerAddLinkBlank struct {
 
 func (a *astTransformerAddLinkBlank) Transform(node *ast.Document, reader text.Reader, pc parser.Context) {
 	ast.Walk(node, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
-		if n.Kind() != ast.KindLink {
+		if n.Kind() != ast.KindLink && n.Kind() != ast.KindAutoLink {
 			return ast.WalkContinue, nil
 		}
 		n.SetAttributeString("target", []byte("blank"))
@@ -63,7 +64,10 @@ type V1 struct {
 func NewV1() *V1 {
 	r := V1{}
 	r.md = goldmark.New(
-		goldmark.WithExtensions(mathjax.MathJax),
+		goldmark.WithExtensions(
+			mathjax.MathJax,
+			extension.Linkify,
+		),
 		goldmark.WithParserOptions(
 			parser.WithAutoHeadingID(),
 			parser.WithASTTransformers(
