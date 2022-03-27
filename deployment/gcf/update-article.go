@@ -10,8 +10,9 @@ import (
 	"cloud.google.com/go/functions/metadata"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
+	"github.com/suzuito/blog1-go/internal/bgcp/storage"
 	"github.com/suzuito/blog1-go/pkg/entity"
-	"github.com/suzuito/blog1-go/pkg/usecase"
+	"github.com/suzuito/blog1-go/pkg/setting"
 )
 
 type GCSEvent struct {
@@ -56,18 +57,27 @@ func BlogUpdateArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 	if meta.EventType != "google.storage.object.finalize" {
 		return nil
 	}
-	if ev.Bucket != env.GCPBucketArticle {
-		return errors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
+	if ev.Bucket != setting.E.GCPBucketArticle {
+		return errors.Errorf("Invalid backet name exp:%s != real:%s", setting.E.GCPBucketArticle, ev.Bucket)
 	}
 	if filepath.Ext(ev.Name) != ".md" {
 		return nil
 	}
-	u := usecase.NewImpl(gdeps.DB, gdeps.Storage, gdeps.MDConverter)
+	articleID := storage.ExtractArticleIDFromPath(ev.Name)
 	log.Info().Str(
 		"file", fmt.Sprintf("%s/%s", ev.Bucket, ev.Name),
 	).Send()
-	if err := u.UpdateArticle(ctx, ev.Name); err != nil {
-		return errors.Wrapf(err, "Cannot u.UpdateArticle : %s", ev.Name)
+	md := []byte{}
+	if err := u.GetArticleMarkdown(ctx, setting.E.GCPBucketArticle, articleID, &md); err != nil {
+		return errors.Wrapf(err, "cannot GetArticleMarkdown : %+v", err)
+	}
+	htmlString := ""
+	article := entity.Article{}
+	if err := u.ConvertFromMarkdownToHTML(ctx, md, &htmlString, &article); err != nil {
+		return errors.Wrapf(err, "cannot ConvertFromMarkdownToHTML : %+v", err)
+	}
+	if err := u.UpdateArticle(ctx, &article, htmlString); err != nil {
+		return errors.Wrapf(err, "cannot u.UpdateArticle : %s", ev.Name)
 	}
 	return nil
 }
@@ -76,8 +86,8 @@ func BlogDeleteArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 	if meta.EventType != "google.storage.object.delete" {
 		return nil
 	}
-	if ev.Bucket != env.GCPBucketArticle {
-		return errors.Errorf("Invalid backet name exp:%s != real:%s", env.GCPBucketArticle, ev.Bucket)
+	if ev.Bucket != setting.E.GCPBucketArticle {
+		return errors.Errorf("Invalid backet name exp:%s != real:%s", setting.E.GCPBucketArticle, ev.Bucket)
 	}
 	if filepath.Ext(ev.Name) != ".md" {
 		return nil
@@ -86,7 +96,6 @@ func BlogDeleteArticle(ctx context.Context, meta *metadata.Metadata, ev GCSEvent
 	log.Info().Str(
 		"file", fmt.Sprintf("%s/%s", ev.Bucket, ev.Name),
 	).Send()
-	u := usecase.NewImpl(gdeps.DB, gdeps.Storage, gdeps.MDConverter)
 	if err := u.DeleteArticle(ctx, articleID); err != nil {
 		return errors.Wrapf(err, "cannot delete article '%s'", articleID)
 	}

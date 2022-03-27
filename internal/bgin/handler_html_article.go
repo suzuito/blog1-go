@@ -2,45 +2,30 @@ package bgin
 
 import (
 	"bytes"
-	"fmt"
-	"html/template"
 	"net/http"
 	"strings"
-	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/suzuito/blog1-go/pkg/setting"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 // HandlerHTMLGetArticle ...
-func HandlerHTMLGetArticle(
-	env *setting.Environment,
-) gin.HandlerFunc {
-	var once sync.Once
-	var tmplArticle *template.Template
+func HandlerHTMLGetArticle() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var errTmpl error
-		once.Do(func() {
-			var err error
-			tmplArticle, errTmpl = template.New("hoge").ParseGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
-			if err != nil {
-				errTmpl = errors.Wrapf(err, "cannot new template")
-			}
-		})
-		if errTmpl != nil {
-			html500(ctx, env, errTmpl)
-			return
-		}
 		article := getCtxArticle(ctx)
 		u := getCtxUsecase(ctx)
 		content := []byte{}
 		if err := u.GetArticleHTML(ctx, article.ID, &content); err != nil {
-			html404(ctx, env)
+			if errors.Is(err, usecase.ErrNotFound) {
+				html404(ctx)
+				return
+			}
+			html500(ctx, err)
 			return
 		}
 		imageURLs := []string{
-			getAvatarURL(env),
+			getAvatarURL(),
 		}
 		for _, img := range imageURLs {
 			imageURLs = append(imageURLs, img)
@@ -54,18 +39,17 @@ func HandlerHTMLGetArticle(
 			buf,
 			"pc_article.html",
 			newTmplVar(
-				env,
 				newTmplVarMeta(
 					article.Description,
 				),
 				newTmplVarLink(
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 				),
 				newTmplVarOGP(
 					article.Title,
 					article.Description,
 					"article",
-					getPageURL(ctx, env),
+					getPageURL(ctx),
 					imageURL,
 				),
 				[]tmplVarLDJSON{
@@ -75,7 +59,7 @@ func HandlerHTMLGetArticle(
 						article.CreatedAtAsTime(),
 						imageURLs,
 						"otiuzu",
-						getAboutPageURL(env),
+						getAboutPageURL(),
 					),
 				},
 				map[string]interface{}{
@@ -83,7 +67,7 @@ func HandlerHTMLGetArticle(
 				},
 			),
 		); err != nil {
-			html500(ctx, env, err)
+			html500(ctx, err)
 			return
 		}
 		body := strings.Replace(buf.String(), "__QSW#$%FG_CONTENT__", string(content), -1)

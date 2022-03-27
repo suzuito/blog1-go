@@ -14,7 +14,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/suzuito/blog1-go/deployment/gcf"
 	"github.com/suzuito/blog1-go/pkg/inject"
-	"github.com/suzuito/blog1-go/pkg/setting"
 )
 
 type testData struct {
@@ -46,12 +45,7 @@ func readDirTest(dir string, f func(d *testData) error) error {
 
 func main() {
 	ctx := context.Background()
-	env, err := setting.NewEnvironment()
-	if err != nil {
-		log.Error().AnErr("message", err).Send()
-		os.Exit(1)
-	}
-	gdeps, closeFunc, err := inject.NewGlobalDepends(ctx, env)
+	u, closeFunc, err := inject.NewUsecaseImpl(ctx)
 	if err != nil {
 		log.Error().AnErr("message", err).Send()
 		os.Exit(1)
@@ -60,8 +54,8 @@ func main() {
 	subcommands.Register(subcommands.HelpCommand(), "")
 	subcommands.Register(subcommands.FlagsCommand(), "")
 	subcommands.Register(subcommands.CommandsCommand(), "")
-	subcommands.Register(newRunBlogUpdateArticleCmd(gdeps, env), "")
-	subcommands.Register(newRunBlogDeleteArticleCmd(gdeps, env), "")
+	subcommands.Register(newRunBlogUpdateArticleCmd(u), "")
+	subcommands.Register(newRunBlogDeleteArticleCmd(u), "")
 	flag.Parse()
 	os.Exit(int(subcommands.Execute(ctx)))
 }

@@ -1,6 +1,7 @@
 package bgin
 
 import (
+	"encoding/xml"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,10 +9,10 @@ import (
 )
 
 // HandlerGetSitemapXML ...
-func HandlerGetSitemapXML(env *setting.Environment) gin.HandlerFunc {
+func HandlerGetSitemapXML() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := getCtxUsecase(ctx)
-		b, err := u.GenerateBlogSiteMap(ctx, env.SiteOrigin)
+		b, err := u.GenerateBlogSiteMap(ctx, setting.E.SiteOrigin)
 		if err != nil {
 			ctx.AbortWithStatus(
 				http.StatusInternalServerError,
@@ -19,13 +20,15 @@ func HandlerGetSitemapXML(env *setting.Environment) gin.HandlerFunc {
 			return
 		}
 		ctx.Header("Content-type", "application/xml")
-		body, err := b.Marshal()
+		bb, err := xml.MarshalIndent(b, "", "    ")
 		if err != nil {
 			ctx.AbortWithStatus(
 				http.StatusInternalServerError,
 			)
 			return
 		}
-		ctx.String(http.StatusOK, body)
+		c := string(bb)
+		c = `<?xml version="1.0" encoding="UTF-8"?>` + "\n" + c
+		ctx.String(http.StatusOK, c)
 	}
 }

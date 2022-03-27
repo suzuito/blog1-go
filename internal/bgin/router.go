@@ -2,38 +2,50 @@ package bgin
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 
 	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
-	"github.com/suzuito/blog1-go/pkg/inject"
+	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/pkg/setting"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
+var tmplArticle *template.Template
+
+func init() {
+	var err error
+	tmplArticle, _ = template.New("hoge").ParseGlob(fmt.Sprintf("%s/*.html", setting.E.DirPathTemplate))
+	if err != nil {
+		panic(errors.Wrapf(err, "cannot new template"))
+	}
+}
+
 // SetUpRoot ...
-func SetUpRoot(root *gin.Engine, env *setting.Environment, gdeps *inject.GlobalDepends) {
+func SetUpRoot(root *gin.Engine, u usecase.Usecase) {
 	root.Use(sentrygin.New(sentrygin.Options{}))
-	root.Static("css", fmt.Sprintf("%s", env.DirPathCSS))
+	root.Static("css", fmt.Sprintf("%s", setting.E.DirPathCSS))
 
 	root.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
-	root.Use(MiddlewareUsecase(env, gdeps))
+	root.Use(MiddlewareUsecase(u))
 
-	root.Static("asset", env.DirPathAsset)
-	root.GET("sitemap.xml", HandlerGetSitemapXML(env))
-	root.GET("robots.txt", HandlerHTMLGetRobots(env))
-	root.GET("", HandlerHTMLGetTop(env))
-	root.GET("about", HandlerHTMLGetAbout(env))
-	root.GET("sandbox", HandlerHTMLGetSandbox(env))
+	root.Static("asset", setting.E.DirPathAsset)
+	root.GET("sitemap.xml", HandlerGetSitemapXML())
+	root.GET("robots.txt", HandlerHTMLGetRobots())
+	root.GET("", HandlerHTMLGetTop())
+	root.GET("about", HandlerHTMLGetAbout())
+	root.GET("sandbox", HandlerHTMLGetSandbox())
 	{
-		root.LoadHTMLGlob(fmt.Sprintf("%s/*.html", env.DirPathTemplate))
+		root.LoadHTMLGlob(fmt.Sprintf("%s/*.html", setting.E.DirPathTemplate))
 		gArticles := root.Group("articles")
-		gArticles.GET("", HandlerHTMLGetArticles(env))
+		gArticles.GET("", HandlerHTMLGetArticles())
 		{
 			gArticle := gArticles.Group(":articleID")
-			gArticle.Use(HTMLMiddlewareGetArticle(env))
-			gArticle.GET("", HandlerHTMLGetArticle(env))
+			gArticle.Use(HTMLMiddlewareGetArticle())
+			gArticle.GET("", HandlerHTMLGetArticle())
 		}
 	}
 }

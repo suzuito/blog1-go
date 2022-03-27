@@ -9,9 +9,9 @@ import (
 	"github.com/suzuito/blog1-go/pkg/setting"
 )
 
-func HandlerHTMLGetRobots(env *setting.Environment) gin.HandlerFunc {
+func HandlerHTMLGetRobots() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		u, err := url.Parse(env.SiteOrigin)
+		u, err := url.Parse(setting.E.SiteOrigin)
 		if err != nil {
 			u = &url.URL{
 				Scheme: "http",
@@ -19,7 +19,7 @@ func HandlerHTMLGetRobots(env *setting.Environment) gin.HandlerFunc {
 			}
 		}
 		u.Path = "sitemap.xml"
-		if env.Env == "godzilla" {
+		if setting.E.Env == "godzilla" {
 			c.String(http.StatusOK, strings.Join(
 				[]string{
 					"Sitemap: " + u.String(),

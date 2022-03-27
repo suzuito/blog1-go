@@ -9,18 +9,16 @@ import (
 	"github.com/google/subcommands"
 	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/deployment/gcf"
-	"github.com/suzuito/blog1-go/pkg/inject"
-	"github.com/suzuito/blog1-go/pkg/setting"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 type runBlogDeleteArticleCmd struct {
-	gdeps   *inject.GlobalDepends
-	env     *setting.Environment
+	u       usecase.Usecase
 	dirBase string
 }
 
-func newRunBlogDeleteArticleCmd(gdeps *inject.GlobalDepends, env *setting.Environment) *runBlogDeleteArticleCmd {
-	return &runBlogDeleteArticleCmd{gdeps: gdeps, env: env}
+func newRunBlogDeleteArticleCmd(u usecase.Usecase) *runBlogDeleteArticleCmd {
+	return &runBlogDeleteArticleCmd{u: u}
 }
 
 func (c *runBlogDeleteArticleCmd) Name() string { return "delete-article" }

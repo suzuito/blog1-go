@@ -3,17 +3,11 @@ package usecase
 import (
 	"context"
 
-	"github.com/suzuito/blog1-go/internal/cmarkdown"
 	"github.com/suzuito/blog1-go/pkg/entity"
 )
 
 // Usecase ...
 type Usecase interface {
-	SyncArticles(
-		ctx context.Context,
-		source ArticleReader,
-	) error
-
 	GetArticle(
 		ctx context.Context,
 		id entity.ArticleID,
@@ -34,28 +28,30 @@ type Usecase interface {
 		body *[]byte,
 	) error
 
-	ConvertMD(
-		ctx context.Context,
-		source []byte,
-		article *entity.Article,
-		converted *[]byte,
-	) error
-	UpdateArticleByID(
+	GetArticleMarkdown(
 		ctx context.Context,
 		bucket string,
 		articleID entity.ArticleID,
+		dst *[]byte,
+	) error
+
+	UpdateArticle(
+		ctx context.Context,
+		article *entity.Article,
+		htmlString string,
+	) error
+
+	ConvertFromMarkdownToHTML(
+		ctx context.Context,
+		srcMD []byte,
+		retHTML *string,
+		article *entity.Article,
 	) error
 
 	GenerateBlogSiteMap(
 		ctx context.Context,
 		origin string,
 	) (*XMLURLSet, error)
-
-	GetAdminAuth(
-		ctx context.Context,
-		headerAdminAuth string,
-		adminAuth *entity.AdminAuth,
-	) error
 
 	DeleteArticle(
 		ctx context.Context,
@@ -65,20 +61,10 @@ type Usecase interface {
 
 // Impl ...
 type Impl struct {
-	db          DB
-	storage     Storage
-	converterMD cmarkdown.Converter
-}
-
-// NewImpl ...
-func NewImpl(
-	db DB,
-	storage Storage,
-	converterMD cmarkdown.Converter,
-) *Impl {
-	return &Impl{
-		db:          db,
-		storage:     storage,
-		converterMD: converterMD,
-	}
+	MDConverter      MDConverter
+	DB               DB
+	Storage          Storage
+	HTMLEditor       HTMLEditor
+	HTMLMediaFetcher HTMLMediaFetcher
+	HTMLTOCExtractor HTMLTOCExtractor
 }

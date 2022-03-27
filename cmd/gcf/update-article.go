@@ -9,18 +9,16 @@ import (
 	"github.com/google/subcommands"
 	"github.com/pkg/errors"
 	"github.com/suzuito/blog1-go/deployment/gcf"
-	"github.com/suzuito/blog1-go/pkg/inject"
-	"github.com/suzuito/blog1-go/pkg/setting"
+	"github.com/suzuito/blog1-go/pkg/usecase"
 )
 
 type runBlogUpdateArticleCmd struct {
-	gdeps   *inject.GlobalDepends
-	env     *setting.Environment
+	u       usecase.Usecase
 	dirBase string
 }
 
-func newRunBlogUpdateArticleCmd(gdeps *inject.GlobalDepends, env *setting.Environment) *runBlogUpdateArticleCmd {
-	return &runBlogUpdateArticleCmd{gdeps: gdeps, env: env}
+func newRunBlogUpdateArticleCmd(u usecase.Usecase) *runBlogUpdateArticleCmd {
+	return &runBlogUpdateArticleCmd{u: u}
 }
 
 func (c *runBlogUpdateArticleCmd) Name() string { return "update-article" }

@@ -92,7 +92,6 @@ func newTmplVarLDJSONArticle(
 }
 
 func newTmplVar(
-	env *setting.Environment,
 	meta tmplVarMeta,
 	link tmplVarLink,
 	ogp tmplVarOGP,
@@ -102,7 +101,7 @@ func newTmplVar(
 	ret := map[string]interface{}{
 		"_Global": map[string]interface{}{
 			"Title": "otiuzu pages",
-			"GA":    env.GA,
+			"GA":    setting.E.GA,
 		},
 		"_LDJSON": ldjson,
 		"_Link":   link,

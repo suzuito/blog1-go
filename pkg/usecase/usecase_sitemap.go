@@ -19,17 +19,6 @@ type XMLURLSet struct {
 	XsiSchemaLocation string   `xml:"xsi:schemaLocation,attr"`
 }
 
-func (x *XMLURLSet) Marshal() (string, error) {
-	b, err := xml.MarshalIndent(x, "", "    ")
-	if err != nil {
-		return "", errors.Wrapf(err, "Cannot marshal xml")
-	}
-
-	c := string(b)
-	c = `<?xml version="1.0" encoding="UTF-8"?>` + "\n" + c
-	return c, nil
-}
-
 type XMLURL struct {
 	XMLName xml.Name `xml:"url"`
 	Loc     string   `xml:"loc"`
@@ -54,7 +43,7 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (*XMLURLS
 	cursorTitle := ""
 	for {
 		articles := []entity.Article{}
-		if err := u.db.GetArticles(ctx, cursorPublishedAt, cursorTitle, CursorOrderAsc, 100, &articles); err != nil {
+		if err := u.DB.GetArticles(ctx, cursorPublishedAt, cursorTitle, CursorOrderAsc, 100, &articles); err != nil {
 			return nil, errors.Wrapf(err, "cannot get articles")
 		}
 		if len(articles) <= 0 {
@@ -70,12 +59,16 @@ func (u *Impl) GenerateBlogSiteMap(ctx context.Context, origin string) (*XMLURLS
 	}
 
 	urls.URLs = append(urls.URLs, XMLURL{
-		Lastmod: time.Now().Format("2006-01-02"),
+		Lastmod: "2022-03-20",
 		Loc:     fmt.Sprintf("%s/", origin),
 	})
 	urls.URLs = append(urls.URLs, XMLURL{
-		Lastmod: time.Now().Format("2006-01-02"),
+		Lastmod: "2022-03-20",
 		Loc:     fmt.Sprintf("%s/articles/", origin),
+	})
+	urls.URLs = append(urls.URLs, XMLURL{
+		Lastmod: "2022-03-20",
+		Loc:     fmt.Sprintf("%s/about/", origin),
 	})
 
 	urls.XMLNSXsi = "http://www.w3.org/2001/XMLSchema-instance"

@@ -2,32 +2,15 @@ package cmarkdown
 
 import (
 	"bufio"
-	"bytes"
-	"fmt"
 	"strings"
-	"time"
 
+	"github.com/suzuito/blog1-go/pkg/usecase"
 	"golang.org/x/xerrors"
 	"gopkg.in/yaml.v2"
 )
 
-var ErrMetaNotFound = fmt.Errorf("Meta not found")
-
-type CMMeta struct {
-	ID          string   `yaml:"id"`
-	Title       string   `yaml:"title"`
-	Tags        []string `yaml:"tags"`
-	Description string   `yaml:"description"`
-	Date        string   `yaml:"date"`
-}
-
-func (c *CMMeta) DateAsTime() time.Time {
-	r, _ := time.Parse("2006-01-02", c.Date)
-	return r
-}
-
-func parseMeta(source []byte, embedMeta *CMMeta, sourceWithOutMeta *[]byte) error {
-	s := bufio.NewScanner(bytes.NewReader(source))
+func parseMeta(source string, embedMeta *usecase.CMMeta, sourceWithOutMeta *[]byte) error {
+	s := bufio.NewScanner(strings.NewReader(source))
 	isMetaBlock := false
 	isMetaBlockDone := false
 	metaBlock := ""
@@ -50,7 +33,7 @@ func parseMeta(source []byte, embedMeta *CMMeta, sourceWithOutMeta *[]byte) erro
 		}
 	}
 	if !isMetaBlockDone {
-		return xerrors.Errorf("Meta data is not found : %w", ErrMetaNotFound)
+		return xerrors.Errorf("Meta data is not found : %w", usecase.ErrMetaNotFound)
 	}
 	if err := yaml.Unmarshal([]byte(metaBlock), &embedMeta); err != nil {
 		return xerrors.Errorf("Cannot parse yaml block '%s' : %w", metaBlock, err)

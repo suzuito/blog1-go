@@ -19,10 +19,11 @@ type Environment struct {
 	SiteOrigin       string   `envconfig:"SITE_ORIGIN"`
 }
 
-func NewEnvironment() (*Environment, error) {
-	r := Environment{}
-	if err := envconfig.Process("", &r); err != nil {
-		return nil, errors.Wrapf(err, "cannot envconfig.Process")
+var E *Environment
+
+func init() {
+	E = &Environment{}
+	if err := envconfig.Process("", E); err != nil {
+		panic(errors.Wrapf(err, "cannot envconfig.Process"))
 	}
-	return &r, nil
 }

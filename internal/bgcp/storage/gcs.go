@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"path/filepath"
+	"regexp"
 	"strings"
 
 	"cloud.google.com/go/storage"
@@ -114,4 +116,10 @@ func (c *GCS) DeleteArticle(
 		return errors.Wrapf(err, "cannot delete from '%s/%s'", c.bucket, p)
 	}
 	return nil
+}
+
+var extractArticleIDFromPathRegexp = regexp.MustCompile(".md$")
+
+func ExtractArticleIDFromPath(p string) entity.ArticleID {
+	return entity.ArticleID(extractArticleIDFromPathRegexp.ReplaceAll([]byte(filepath.Base(p)), []byte("")))
 }
