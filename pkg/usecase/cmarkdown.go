@@ -17,7 +17,10 @@ type CMMeta struct {
 }
 
 func (c *CMMeta) DateAsTime() time.Time {
-	r, _ := time.Parse("2006-01-02", c.Date)
+	r, err := time.Parse("2006-01-02", c.Date)
+	if err != nil {
+		return time.Unix(0, 0)
+	}
 	return r
 }
 

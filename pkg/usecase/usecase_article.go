@@ -36,14 +36,6 @@ func (u *Impl) GetArticle(
 	return u.DB.GetArticle(ctx, articleID, article)
 }
 
-// CreateArticle ...
-func (u *Impl) CreateArticle(
-	ctx context.Context,
-	article *entity.Article,
-) error {
-	return u.CreateArticle(ctx, article)
-}
-
 func (u *Impl) GetArticleMarkdown(
 	ctx context.Context,
 	bucket string,
