@@ -26,10 +26,12 @@ func runTest(t *testing.T, tC *testCase) {
 	beforeDirPathTemplate := setting.E.DirPathTemplate
 	beforeDirPathCSS := setting.E.DirPathCSS
 	beforeDirPathAsset := setting.E.DirPathAsset
+	gin.SetMode(gin.ReleaseMode)
 	defer func() {
 		setting.E.DirPathTemplate = beforeDirPathTemplate
 		setting.E.DirPathCSS = beforeDirPathCSS
 		setting.E.DirPathAsset = beforeDirPathAsset
+		gin.SetMode(gin.DebugMode)
 	}()
 	setting.E.DirPathTemplate = filepath.Join(dd, "../../data/template")
 	setting.E.DirPathCSS = filepath.Join(dd, "../../data/css")

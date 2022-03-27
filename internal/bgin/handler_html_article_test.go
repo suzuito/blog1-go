@@ -24,7 +24,8 @@ func TestHandlerHTMLGetArticle(t *testing.T) {
 					GetArticle(gomock.Any(), entity.ArticleID("a1"), gomock.Any()).
 					SetArg(2, entity.Article{ID: "a1"})
 				mu.EXPECT().
-					GetArticleHTML(gomock.Any(), entity.ArticleID("a1"), gomock.Any())
+					GetArticleHTML(gomock.Any(), entity.ArticleID("a1"), gomock.Any()).
+					SetArg(2, []byte(""))
 			},
 			ExpectedStatusCode: http.StatusOK,
 		},
@@ -62,6 +63,8 @@ func TestHandlerHTMLGetArticle(t *testing.T) {
 		},
 	}
 	for _, tC := range testCases {
-		runTest(t, &tC)
+		t.Run(tC.Desc, func(t *testing.T) {
+			runTest(t, &tC)
+		})
 	}
 }

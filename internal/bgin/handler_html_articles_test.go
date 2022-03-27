@@ -56,6 +56,8 @@ func TestHandlerHTMLGetArticles(t *testing.T) {
 		},
 	}
 	for _, tC := range testCases {
-		runTest(t, &tC)
+		t.Run(tC.Desc, func(t *testing.T) {
+			runTest(t, &tC)
+		})
 	}
 }
