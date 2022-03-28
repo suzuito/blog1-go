@@ -30,7 +30,6 @@ type Usecase interface {
 
 	GetArticleMarkdown(
 		ctx context.Context,
-		bucket string,
 		articleID entity.ArticleID,
 		dst *[]byte,
 	) error
