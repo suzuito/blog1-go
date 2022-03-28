@@ -107,17 +107,17 @@ func (mr *MockUsecaseMockRecorder) GetArticleHTML(ctx, id, body interface{}) *go
 }
 
 // GetArticleMarkdown mocks base method.
-func (m *MockUsecase) GetArticleMarkdown(ctx context.Context, bucket string, articleID entity.ArticleID, dst *[]byte) error {
+func (m *MockUsecase) GetArticleMarkdown(ctx context.Context, articleID entity.ArticleID, dst *[]byte) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetArticleMarkdown", ctx, bucket, articleID, dst)
+	ret := m.ctrl.Call(m, "GetArticleMarkdown", ctx, articleID, dst)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // GetArticleMarkdown indicates an expected call of GetArticleMarkdown.
-func (mr *MockUsecaseMockRecorder) GetArticleMarkdown(ctx, bucket, articleID, dst interface{}) *gomock.Call {
+func (mr *MockUsecaseMockRecorder) GetArticleMarkdown(ctx, articleID, dst interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArticleMarkdown", reflect.TypeOf((*MockUsecase)(nil).GetArticleMarkdown), ctx, bucket, articleID, dst)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArticleMarkdown", reflect.TypeOf((*MockUsecase)(nil).GetArticleMarkdown), ctx, articleID, dst)
 }
 
 // GetArticles mocks base method.

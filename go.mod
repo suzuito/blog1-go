@@ -18,9 +18,9 @@ require (
 	github.com/litao91/goldmark-mathjax v0.0.0-20210217064022-a43cf739a50f
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.26.1
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/suzuito/common-go v1.0.2-0.20220322111232-a6b166985a11
-	github.com/yuin/goldmark v1.4.8
+	github.com/yuin/goldmark v1.4.11
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/api v0.73.0
 	google.golang.org/grpc v1.45.0
@@ -47,6 +47,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/stretchr/objx v0.1.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e // indirect

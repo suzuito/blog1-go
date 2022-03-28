@@ -108,27 +108,24 @@ func TestGetGetArticleMarkdown(t *testing.T) {
 	testCases := []struct {
 		desc           string
 		setup          func(*Mocks)
-		inputBucket    string
 		inputArticleID entity.ArticleID
 		expectedErr    string
 	}{
 		{
 			desc:           "Success",
-			inputBucket:    "b1",
 			inputArticleID: entity.ArticleID("a01"),
 			setup: func(mocks *Mocks) {
 				mocks.Storage.EXPECT().
-					GetFileAsHTTPResponse(gomock.Any(), "b1/a01.md", gomock.Any(), gomock.Any())
+					GetFileAsHTTPResponse(gomock.Any(), "a01.md", gomock.Any(), gomock.Any())
 			},
 		},
 		{
 			desc:           "Failed",
-			inputBucket:    "b1",
 			inputArticleID: entity.ArticleID("a01"),
-			expectedErr:    "cannot get file from b1/a01.md: dummy error",
+			expectedErr:    "cannot get file from a01.md: dummy error",
 			setup: func(mocks *Mocks) {
 				mocks.Storage.EXPECT().
-					GetFileAsHTTPResponse(gomock.Any(), "b1/a01.md", gomock.Any(), gomock.Any()).
+					GetFileAsHTTPResponse(gomock.Any(), "a01.md", gomock.Any(), gomock.Any()).
 					Return(fmt.Errorf("dummy error"))
 			},
 		},
@@ -140,7 +137,7 @@ func TestGetGetArticleMarkdown(t *testing.T) {
 			defer closeFunc()
 			tC.setup(mocks)
 			real := []byte{}
-			err := impl.GetArticleMarkdown(ctx, tC.inputBucket, tC.inputArticleID, &real)
+			err := impl.GetArticleMarkdown(ctx, tC.inputArticleID, &real)
 			if tC.expectedErr != "" {
 				assert.NotNil(t, err)
 			}

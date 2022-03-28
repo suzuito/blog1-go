@@ -38,11 +38,10 @@ func (u *Impl) GetArticle(
 
 func (u *Impl) GetArticleMarkdown(
 	ctx context.Context,
-	bucket string,
 	articleID entity.ArticleID,
 	dst *[]byte,
 ) error {
-	path := fmt.Sprintf("%s/%s.md", bucket, articleID)
+	path := fmt.Sprintf("%s.md", articleID)
 	headers := map[string]string{}
 	if err := u.Storage.GetFileAsHTTPResponse(ctx, path, dst, &headers); err != nil {
 		return errors.Wrapf(err, "cannot get file from %s", path)
