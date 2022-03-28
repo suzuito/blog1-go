@@ -13,12 +13,11 @@ require (
 	github.com/go-playground/validator/v10 v10.10.1
 	github.com/golang/mock v1.6.0
 	github.com/google/subcommands v1.2.0
-	github.com/hashicorp/go-retryablehttp v0.7.0
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/litao91/goldmark-mathjax v0.0.0-20210217064022-a43cf739a50f
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.26.1
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/suzuito/common-go v1.0.2-0.20220322111232-a6b166985a11
 	github.com/yuin/goldmark v1.4.8
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
@@ -40,7 +39,6 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
-	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
@@ -57,6 +55,5 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220310185008-1973136f34c6 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
