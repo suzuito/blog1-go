@@ -36,5 +36,12 @@ make mockgen
 Run test
 
 ```bash
-make test
+# Run test not using GCP resource
+go test -timeout 30s ./pkg/usecase
+# Run test using GCP resource
+make run-ut
+docker-compose exec server go test -timeout 30s ./internal/bgcp/fdb
+# Run all test and coverage
+make run-ut
+docker-compose exec server make test
 ```

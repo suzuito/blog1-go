@@ -9,6 +9,9 @@ run-server:
 run-gcf:
 	docker-compose up gcf
 
+run-ut:
+	docker-compose up ut
+
 mockgen:
 	sh mockgen.sh github.com/suzuito/blog1-go/pkg/usecase pkg/usecase/usecase.go
 	sh mockgen.sh github.com/suzuito/blog1-go/pkg/usecase pkg/usecase/db.go

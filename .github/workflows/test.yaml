@@ -15,8 +15,7 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
-      - run: docker-compose version
-      - run: make test
+      - run: docker-compose run ut make test
       - uses: codecov/codecov-action@v2
         with:
           verbose: true
