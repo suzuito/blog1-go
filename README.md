@@ -10,17 +10,31 @@ http://blog.tach.dev
 make init
 ```
 
+### Run server
+
 ```bash
-make mockgen
+make run-server
+open http://localhost:8080/articles
 ```
 
-Put test articles
+### Put test articles
 
 ```bash
+make run-gcf
 docker-compose exec gcf /bin/bash -c './gcf.exe update-article -input-dir=./deployment/gcf/testdata'
 docker-compose exec gcf /bin/bash -c './gcf.exe delete-article -input-dir=./deployment/gcf/testdata'
 ```
 
+# Unit test
+
+Regenerate gomock
+
 ```bash
-open http://localhost:8080/articles
+make mockgen
+```
+
+Run test
+
+```bash
+make test
 ```

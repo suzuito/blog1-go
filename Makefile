@@ -2,7 +2,12 @@ GO_SOURCES := $(shell find . -name '*.go')
 
 init:
 	cp ~/.config/gcloud/application_default_credentials.json .
-	docker-compose up
+
+run-server:
+	docker-compose up server
+
+run-gcf:
+	docker-compose up gcf
 
 mockgen:
 	sh mockgen.sh github.com/suzuito/blog1-go/pkg/usecase pkg/usecase/usecase.go
